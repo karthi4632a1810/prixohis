@@ -8,6 +8,7 @@ services:
       POSTGRES_USER: prixo
       POSTGRES_PASSWORD: ${DB_PASSWORD:-prixo_dev_password}
     ports:
+      - "5432:5432"
       - "33333:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
@@ -28,8 +29,10 @@ services:
       Cors__AllowedOrigins__0: http://localhost:11111
       Cors__AllowedOrigins__1: http://localhost:3000
       Cors__AllowedOrigins__2: http://localhost:22222
+      Cors__AllowedOrigins__3: http://localhost:5000
       Seed__SpeedMulti: "true"
     ports:
+      - "5000:8080"
       - "22222:8080"
     depends_on:
       db:
@@ -40,6 +43,7 @@ services:
       context: ../frontend
       dockerfile: ../docker/web.Dockerfile
     ports:
+      - "3000:80"
       - "11111:80"
     depends_on:
       - api
@@ -50,6 +54,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@prixo.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-prixo_dev_password}
     ports:
+      - "5050:80"
       - "44444:80"
     depends_on:
       - db
