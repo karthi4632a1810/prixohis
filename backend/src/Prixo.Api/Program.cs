@@ -159,7 +159,7 @@ try
 
     var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
     builder.Services.AddCors(options => options.AddPolicy("Frontend", policy => policy
-        .WithOrigins(corsOrigins)
+        .SetIsOriginAllowed(origin => builder.Environment.IsDevelopment() || corsOrigins.Contains(origin))
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials()));
@@ -211,6 +211,7 @@ try
     if (app.Environment.IsDevelopment())
     {
         using var scope = app.Services.CreateScope();
+        await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
         await scope.ServiceProvider.GetRequiredService<DbSeeder>().SeedAsync();
 
         // Demo/dummy transactional data — strictly opt-in (Seed:DemoData=true) and Development-only.
