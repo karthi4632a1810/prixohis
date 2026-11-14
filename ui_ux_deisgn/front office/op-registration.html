@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pravo Hospital OS — OP Registration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{color-scheme:light}
+  body{margin:0;text-align:left;background:#eef1f7;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0f1e33;-webkit-font-smoothing:antialiased}
+  :root{
+    --bg:#eef1f7; --card:#ffffff; --ink:#0e1b33; --muted:#67748e; --faint:#8a94ad;
+    --line:#e5e9f2; --line2:#eef1f7;
+    --brand:#2348ff; --brand2:#1a34c8; --teal:#0eb7a2; --gold:#c6a15b;
+    --sidebar:#0a1330; --sidebar2:#101d48;
+    --radius:18px; --shadow:0 1px 2px rgba(16,24,64,.06),0 12px 32px -12px rgba(16,24,64,.18);
+    --shadow-sm:0 1px 2px rgba(16,24,64,.07),0 8px 20px -10px rgba(16,24,64,.18);
+  }
+  button{font-family:inherit}
+  input,select{font-family:inherit}
+
+  .bgGlow{position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(700px 380px at 18% -8%, rgba(35,72,255,.12), transparent 60%),
+      radial-gradient(600px 420px at 88% 0%, rgba(14,183,162,.12), transparent 60%),
+      radial-gradient(900px 600px at 50% 110%, rgba(198,161,91,.10), transparent 60%);
+  }
+  .bgGrid{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(rgba(15,30,60,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(15,30,60,.045) 1px,transparent 1px);
+    background-size:28px 28px;mask-image:radial-gradient(90% 70% at 50% 0%,black 30%,transparent 100%);
+  }
+
+  .app{position:relative;z-index:1;display:flex;min-height:100vh}
+  /* ============ SIDEBAR ============ */
+  .sidebar{width:288px;flex:0 0 288px;background:linear-gradient(180deg,#0a1330 0%,#0d1a41 55%,#0b1537 100%);color:#dbe3ff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;border-right:1px solid rgba(255,255,255,.08);overflow:hidden}
+  .sidebar::before{content:"";position:absolute;inset:0;background:radial-gradient(420px 220px at 20% 0%,rgba(35,72,255,.35),transparent 70%),radial-gradient(360px 260px at 90% 30%,rgba(14,183,162,.18),transparent 70%);pointer-events:none}
+  .sidebar::after{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent)}
+  .brandRow{display:flex;align-items:center;gap:12px;padding:18px 16px 14px;position:relative}
+  .logoMark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,#3b62ff,#7a5bff 55%,#0eb7a2 110%);box-shadow:0 8px 20px -6px rgba(59,98,255,.7),inset 0 1px 0 rgba(255,255,255,.5);font-family:'Sora';font-size:18px}
+  .brandName{line-height:1.05}
+  .brandName b{display:block;font-size:15.5px;letter-spacing:.1px;color:#fff}
+  .brandName span{font-size:10px;letter-spacing:.28em;color:#8fa0d6;font-weight:700}
+  .collapseBtn{margin-left:auto;width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#cdd8ff;cursor:pointer;display:grid;place-items:center}
+  .sideSearch{margin:2px 14px 12px;position:relative}
+  .sideSearch input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#e8eeff;border-radius:11px;padding:10px 36px 10px 34px;font-size:13px;outline:none}
+  .sideSearch input::placeholder{color:#8b99c8}
+  .sideSearch input:focus{border-color:rgba(122,143,255,.7);box-shadow:0 0 0 3px rgba(59,98,255,.25)}
+  .sideSearch svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.7}
+  .kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10.5px;color:#a9b6e2;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:2px 6px;border-radius:6px}
+  .nav{flex:1;overflow:auto;padding:2px 10px 10px;position:relative;scrollbar-width:thin}
+  .navSec{font-size:10px;letter-spacing:.22em;color:#7c8cc0;font-weight:800;padding:14px 10px 7px}
+  .navItem{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:transparent;border:0;color:#c2cdf3;padding:9px 10px;border-radius:11px;font-size:13.2px;font-weight:500;cursor:pointer;position:relative;transition:.15s}
+  .navItem:hover{background:rgba(255,255,255,.06);color:#fff}
+  .navItem svg{flex:0 0 auto;opacity:.85}
+  .navItem .chev{margin-left:auto;opacity:.5}
+  .navItem.active{background:linear-gradient(90deg,rgba(59,98,255,.95),rgba(59,98,255,.55));color:#fff;box-shadow:0 10px 22px -10px rgba(59,98,255,.8),inset 0 1px 0 rgba(255,255,255,.35)}
+  .navItem.active::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:99px;background:#7df0dd;box-shadow:0 0 12px #2dd4bf}
+  .countBadge{margin-left:auto;font-size:11px;font-weight:800;background:rgba(45,212,191,.18);color:#7df0dd;border:1px solid rgba(45,212,191,.35);padding:1px 7px;border-radius:99px}
+  .countBadge.blue{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.18)}
+  .dotLive{width:7px;height:7px;border-radius:99px;background:#2dd4bf;box-shadow:0 0 0 4px rgba(45,212,191,.2);margin-left:auto}
+  .sideFoot{padding:12px 14px 14px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.18);position:relative}
+  .adminCard{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px}
+  .avatar{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:12px;color:#0a1330;background:linear-gradient(135deg,#ffe9b8,#c6a15b);flex:0 0 auto}
+  .avatar.teal{background:linear-gradient(135deg,#b8fff3,#2dd4bf)}
+  .adminCard b{display:block;font-size:12.5px;color:#fff}
+  .adminCard span{font-size:11px;color:#93a2d1}
+  .sysStatus{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#8fa0d6}
+  .pulse{width:8px;height:8px;border-radius:99px;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 7px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+
+  /* ============ MAIN ============ */
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:11px 22px}
+  .crumb{display:flex;align-items:center;gap:12px;min-width:0}
+  .crumbIcon{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#2348ff,#6d5bff);color:#fff;display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+  .crumb b{font-size:14px;display:block;line-height:1.1}
+  .crumb small{color:var(--muted);font-size:11.5px}
+  .envPill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#0c6b5f;background:#d9f9f1;border:1px solid #a7e9d8;padding:3px 9px;border-radius:99px;margin-left:8px;vertical-align:middle}
+  .topActions{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .iconBtn{width:34px;height:34px;border-radius:11px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;cursor:pointer;color:#42506b;position:relative;transition:.15s}
+  .iconBtn:hover{border-color:#c6d0e8;transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+  .notifDot{position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:99px;background:#ff5470;border:2px solid #fff}
+  .userChip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:5px 10px 5px 5px;cursor:pointer}
+  .userChip .avatar{width:30px;height:30px;border-radius:9px}
+  .userChip b{font-size:12.5px;display:block;line-height:1.1}
+  .userChip small{font-size:11px;color:var(--muted)}
+  .hamburger{display:none}
+
+  .page{padding:22px 26px 40px;max-width:1360px;width:100%;margin:0 auto}
+  .tabsRow{display:flex;align-items:center;gap:10px;margin:2px 0 14px}
+  .miniTab{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--brand2);background:#fff;border:1px solid var(--line);padding:7px 12px;border-radius:11px;box-shadow:var(--shadow-sm)}
+  .miniTab i{width:20px;height:20px;border-radius:7px;background:#e9edff;display:grid;place-items:center;font-style:normal}
+  .splitBtn{margin-left:auto;display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:#42506b;background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px 12px;cursor:pointer}
+  .splitBtn:hover{border-color:#c6d0e8}
+
+  .hero{background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+  .hero::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,#2348ff,#2dd4bf,#c6a15b,#2348ff);background-size:200% 100%;animation:slide 8s linear infinite}
+  @keyframes slide{to{background-position:200% 0}}
+  .heroTop{padding:22px 24px 16px;display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+  .heroTitle h1{margin:0;font-family:'Sora';font-size:21px;letter-spacing:-.02em}
+  .heroTitle h1 .gold{background:linear-gradient(90deg,#9a7a2e,#d8b96a);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .heroTitle p{margin:5px 0 0;color:var(--muted);font-size:12.8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .stepPill{font-size:11px;font-weight:800;color:#fff;background:linear-gradient(90deg,#2348ff,#5b6cff);padding:3px 9px;border-radius:99px}
+  .heroStats{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+  .stat{background:#f5f7fd;border:1px solid var(--line);border-radius:14px;padding:10px 13px;min-width:132px}
+  .stat small{font-size:10.5px;font-weight:800;letter-spacing:.12em;color:var(--faint)}
+  .stat b{display:block;font-family:'Sora';font-size:16px;margin-top:2px}
+  .stat em{font-style:normal;font-size:11.5px;color:var(--muted)}
+  .stat.good b{color:#0a7a68}
+
+  .stepper{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 24px 6px}
+  .step{display:flex;gap:11px;align-items:flex-start;background:#f6f8fd;border:1px solid var(--line);border-radius:14px;padding:11px 12px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+  .step .n{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:13px;background:#e7ebf7;color:#5b6a8a;flex:0 0 auto}
+  .step b{font-size:12.5px;display:block}
+  .step small{font-size:11.3px;color:var(--muted)}
+  .step.done .n{background:#d9f9f1;color:#0a7a68}
+  .step.current{background:linear-gradient(180deg,#203a9e,#16286e);color:#fff;border-color:#203a9e;box-shadow:0 12px 24px -12px rgba(32,58,158,.7)}
+  .step.current small{color:#b9c4f2}
+  .step.current .n{background:rgba(255,255,255,.16);color:#fff}
+  .step.current::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,#2dd4bf,transparent)}
+  .progressWrap{padding:12px 24px 18px}
+  .progressMeta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:7px;font-weight:600}
+  .progress{height:8px;border-radius:99px;background:#e8ecf6;overflow:hidden;position:relative}
+  .progress i{display:block;height:100%;width:25%;border-radius:99px;background:linear-gradient(90deg,#2348ff,#5b7bff 60%,#2dd4bf);transition:width .5s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 12px rgba(35,72,255,.5)}
+
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;margin-top:18px;align-items:start}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .formCard{overflow:hidden}
+  .formHead{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line2);background:linear-gradient(180deg,#f8faff,#fff)}
+  .formHead .fi{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#e9edff,#d9f9f1);border:1px solid var(--line);display:grid;place-items:center}
+  .formHead b{font-size:14px}
+  .formHead small{display:block;font-size:11.8px;color:var(--muted);font-weight:500}
+  .uhid{margin-left:auto;text-align:right}
+  .uhid small{font-size:10px;font-weight:800;letter-spacing:.16em;color:var(--faint)}
+  .uhid b{font-family:'Sora';font-size:14px;letter-spacing:.04em}
+  .uhid em{display:inline-block;font-style:normal;font-size:10.5px;font-weight:800;color:#0a7a68;background:#d9f9f1;border:1px solid #a7e9d8;padding:2px 8px;border-radius:99px;margin-left:8px;vertical-align:middle}
+  .formBody{padding:20px 20px 8px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .grid1{margin-top:14px}
+  .field label{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;letter-spacing:.1em;color:#5b6a8a;margin-bottom:7px}
+  .req{color:#ff5470}
+  .field input,.field select{width:100%;border:1.5px solid #e1e7f2;background:#f8faff;border-radius:12px;padding:11px 12px;font-size:13.5px;color:var(--ink);outline:none;transition:.15s;appearance:none}
+  .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2367748e' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:34px;cursor:pointer}
+  .field input:focus,.field select:focus{border-color:#2348ff;background:#fff;box-shadow:0 0 0 4px rgba(35,72,255,.12)}
+  .field input:hover,.field select:hover{border-color:#c4cde6}
+  .field input.filled,.field select.filled{border-color:#b9f0e3;background:#fbffff}
+  .hint{font-size:11px;color:var(--faint);margin-top:6px}
+  .radioRow{display:flex;gap:16px;align-items:center;margin-bottom:8px}
+  .radio{display:inline-flex;align-items:center;gap:8px;font-size:12.8px;font-weight:600;color:#33415e;cursor:pointer}
+  .radio input{accent-color:#2348ff;width:16px;height:16px}
+  .dateWrap{position:relative}
+  .dateWrap input{padding-right:38px}
+  .dateWrap .cal{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#7a89a8;pointer-events:none}
+  .ageEcho{position:absolute;right:36px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:800;background:#0a1330;color:#fff;padding:3px 8px;border-radius:99px}
+  .switchRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .switchCard{flex:1;min-width:220px;display:flex;gap:12px;align-items:center;border:1.5px solid #e1e7f2;background:#f8faff;border-radius:14px;padding:11px 13px;cursor:pointer;transition:.15s;user-select:none}
+  .switchCard.on{border-color:#2348ff;background:#f0f3ff;box-shadow:0 0 0 4px rgba(35,72,255,.1)}
+  .switchCard.gold.on{border-color:#c6a15b;background:#fffbf0;box-shadow:0 0 0 4px rgba(198,161,91,.16)}
+  .sw{width:40px;height:23px;border-radius:99px;background:#d3dae9;position:relative;transition:.2s;flex:0 0 auto}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:99px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.25);transition:.2s}
+  .switchCard.on .sw{background:linear-gradient(90deg,#2348ff,#2dd4bf)}
+  .switchCard.on .sw::after{left:20px}
+  .switchCard b{font-size:13px;display:flex;align-items:center;gap:7px}
+  .switchCard small{font-size:11.5px;color:var(--muted)}
+  .crown{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,#ffe9b0,#c6a15b);display:inline-grid;place-items:center;color:#5b430a}
+  .formFoot{display:flex;align-items:center;gap:12px;padding:16px 20px;border-top:1px solid var(--line2);background:#fbfcff;position:sticky;bottom:0}
+  .btn{border:0;border-radius:12px;padding:11px 18px;font-size:13.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.15s}
+  .btnGhost{background:#fff;border:1.5px solid var(--line);color:#33415e}
+  .btnGhost:hover{border-color:#b9c4e2;transform:translateY(-1px)}
+  .btnPrimary{background:linear-gradient(135deg,#2b54ff,#1a34c8);color:#fff;box-shadow:0 12px 22px -10px rgba(35,72,255,.7),inset 0 1px 0 rgba(255,255,255,.35)}
+  .btnPrimary:hover{transform:translateY(-1px);box-shadow:0 16px 28px -10px rgba(35,72,255,.75)}
+  .btnPrimary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .draftBtn{margin-left:auto;background:transparent;border:0;color:var(--muted);font-weight:700;font-size:12.8px;cursor:pointer}
+  .draftBtn:hover{color:var(--ink)}
+  .dots{display:flex;gap:6px;align-items:center;margin:0 4px}
+  .dots i{width:7px;height:7px;border-radius:99px;background:#d3dae9}
+  .dots i.on{width:22px;background:linear-gradient(90deg,#2348ff,#2dd4bf)}
+
+  /* Rail */
+  .rail{display:flex;flex-direction:column;gap:14px;position:sticky;top:76px}
+  .previewCard{overflow:hidden;position:relative}
+  .previewTop{background:linear-gradient(135deg,#0e1c48 0%,#2238a0 55%,#0e9d8b 130%);color:#fff;padding:18px;position:relative;overflow:hidden}
+  .previewTop::after{content:"";position:absolute;width:220px;height:220px;right:-70px;top:-70px;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%)}
+  .previewTop small{letter-spacing:.18em;font-size:10px;font-weight:800;color:#aebcf3}
+  .prevName{font-family:'Sora';font-size:18px;margin:6px 0 2px}
+  .prevSub{font-size:12px;color:#cdd8ff}
+  .prevTags{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+  .tag{font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22)}
+  .tag.teal{background:#2dd4bf;color:#063f38;border-color:#2dd4bf}
+  .tag.gold{background:linear-gradient(135deg,#ffe9b0,#d8b96a);color:#4a3605;border-color:transparent}
+  .prevAvatar{position:absolute;right:16px;top:16px;width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);display:grid;place-items:center;font-family:'Sora';font-weight:800;font-size:18px;backdrop-filter:blur(6px)}
+  .previewBody{padding:14px 16px}
+  .kv{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed #e7ebf5;font-size:12.6px}
+  .kv:last-child{border:0}
+  .kv span{color:var(--muted)}
+  .kv b{font-weight:700}
+  .meterCard{padding:16px}
+  .meterCard h4,.helpCard h4{margin:0 0 2px;font-size:13.5px}
+  .meterCard p,.helpCard p{margin:4px 0 12px;font-size:12px;color:var(--muted);line-height:1.5}
+  .meter{height:9px;border-radius:99px;background:#edf0f8;overflow:hidden}
+  .meter i{display:block;height:100%;width:32%;background:linear-gradient(90deg,#c6a15b,#2dd4bf,#2348ff);border-radius:99px;transition:width .4s}
+  .checkList{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+  .checkList li{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:#33415e}
+  .tick{width:20px;height:20px;border-radius:99px;display:grid;place-items:center;flex:0 0 auto;background:#edf0f8;color:#8a94ad;font-size:12px;font-weight:800}
+  li.ok .tick{background:#d9f9f1;color:#0a7a68}
+  li.ok{color:var(--ink);font-weight:600}
+  .helpCard{padding:16px;background:linear-gradient(180deg,#0e1c48,#16286e);color:#dbe3ff;border-color:#1c2f7a}
+  .helpCard p{color:#a9b6e2}
+  .helpBtns{display:flex;gap:9px}
+  .helpBtns button{flex:1;border-radius:11px;padding:9px;font-size:12.5px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff}
+  .helpBtns button.solid{background:#fff;color:#16286e;border-color:#fff}
+
+  .stepsPages{display:block}
+  .stepPage{display:none}
+  .stepPage.show{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .emptyBox{border:1.5px dashed #cbd5ec;background:#f8faff;border-radius:14px;padding:22px;text-align:center;color:var(--muted);font-size:13px}
+  .toastWrap{position:fixed;right:18px;bottom:18px;z-index:60;display:flex;flex-direction:column;gap:10px}
+  .toast{background:#0a1330;color:#e8eeff;border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;min-width:300px;max-width:360px;box-shadow:0 20px 40px -12px rgba(0,0,0,.4);display:flex;gap:11px;align-items:flex-start;animation:fade .2s ease}
+  .toast b{font-size:13px;display:block}
+  .toast span{font-size:12px;color:#a9b6e2}
+  .toast .ti{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(135deg,#2dd4bf,#2348ff);color:#fff}
+
+  .mobileBar{display:none}
+  @media(max-width:1120px){
+    .layout{grid-template-columns:1fr}
+    .rail{position:static;display:grid;grid-template-columns:1fr 1fr;align-items:start}
+    .sidebar{width:84px;flex-basis:84px}
+    .sidebar .brandName,.sidebar .sideSearch,.sidebar .navSec,.sidebar .navItem span.lbl,.sidebar .navItem .chev,.sidebar .countBadge,.sidebar .adminCard div,.sidebar .sysStatus{display:none}
+    .navItem{justify-content:center;padding:11px}
+    .navItem.active::before{left:-10px}
+    .brandRow{justify-content:center}
+    .collapseBtn{display:none}
+    .adminCard{justify-content:center}
+  }
+  @media(max-width:760px){
+    .page{padding:14px 12px 30px}
+    .topbar{padding:10px 12px}
+    .userChip div{display:none}
+    .heroTop{padding:16px}
+    .stepper{grid-template-columns:1fr 1fr;padding:0 16px}
+    .progressWrap{padding:12px 16px 14px}
+    .grid4,.grid3,.grid2{grid-template-columns:1fr 1fr}
+    .rail{grid-template-columns:1fr}
+    .sidebar{position:fixed;z-index:50;left:0;top:0;transform:translateX(-110%);transition:.25s;width:288px;flex-basis:288px}
+    .sidebar.open{transform:none;width:288px}
+    .sidebar.open .brandName,.sidebar.open .sideSearch,.sidebar.open .navSec,.sidebar.open .navItem span.lbl,.sidebar.open .adminCard div,.sidebar.open .sysStatus{display:block}
+    .sidebar.open .navItem{justify-content:flex-start}
+    .sidebar.open .countBadge{display:inline-flex}
+    .hamburger{display:grid}
+    .heroStats{width:100%}
+    .stat{flex:1}
+    .mobileBar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:10px 12px;gap:10px}
+    .mobileBar .btn{flex:1;justify-content:center}
+    .formFoot .btnPrimary,.formFoot .btnGhost{flex:1;justify-content:center}
+    .formFoot{margin-bottom:58px}
+  }
+  @media(max-width:460px){.grid4,.grid3,.grid2{grid-template-columns:1fr}}
+/* ============ DARK MODE ============ */
+  html[data-theme="dark"]{color-scheme:dark}
+  html[data-theme="dark"] body{background:#0b1020;color:var(--ink)}
+  html[data-theme="dark"]{--bg:#0b1020;--card:#141b31;--ink:#e8edf8;--muted:#9aa6c4;--faint:#6f7b9c;--line:#24304d;--line2:#1a2340}
+  html[data-theme="dark"] .bgGrid{opacity:.25}
+  html[data-theme="dark"] .topbar{background:rgba(15,21,40,.86)}
+  html[data-theme="dark"] .iconBtn{background:var(--card);border-color:var(--line);color:var(--ink)}
+  html[data-theme="dark"] .userChip{background:var(--card);border-color:var(--line);color:var(--ink)}
+  html[data-theme="dark"] .userChip small{color:var(--muted)}
+  html[data-theme="dark"] .miniTab{background:var(--card);color:#9db4ff;border-color:var(--line)}
+  html[data-theme="dark"] .splitBtn{background:var(--card);border-color:var(--line);color:var(--ink)}
+  html[data-theme="dark"] .hero{background:linear-gradient(180deg,#151d38 0%,#101736 100%)}
+  html[data-theme="dark"] .stat{background:#1a2342}
+  html[data-theme="dark"] .stat em{color:var(--muted)}
+  html[data-theme="dark"] .step{background:#1a2342}
+  html[data-theme="dark"] .step small{color:var(--muted)}
+  html[data-theme="dark"] .step .n{background:#2a3763;color:#aebcf3}
+  html[data-theme="dark"] .step.done .n{background:rgba(45,212,191,.18);color:#7df0dd}
+  html[data-theme="dark"] .progress{background:#232e52}
+  html[data-theme="dark"] .formHead{background:linear-gradient(180deg,#17203c,#141b31)}
+  html[data-theme="dark"] .formHead small{color:var(--muted)}
+  html[data-theme="dark"] .field label{color:var(--muted)}
+  html[data-theme="dark"] .field input,html[data-theme="dark"] .field select{background:#0f1830;border-color:#2a3763;color:var(--ink)}
+  html[data-theme="dark"] .field input::placeholder{color:var(--faint)}
+  html[data-theme="dark"] .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239aa6c4' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
+  html[data-theme="dark"] .field input:focus,html[data-theme="dark"] .field select:focus{background:#0c1329;border-color:#2348ff}
+  html[data-theme="dark"] .field input.filled,html[data-theme="dark"] .field select.filled{border-color:#0e9d8b;background:#0c1f22}
+  html[data-theme="dark"] .hint{color:var(--faint)}
+  html[data-theme="dark"] .radio{color:var(--ink)}
+  html[data-theme="dark"] .switchCard{background:#0f1830;border-color:#2a3763}
+  html[data-theme="dark"] .switchCard small{color:var(--muted)}
+  html[data-theme="dark"] .sw{background:#2a3763}
+  html[data-theme="dark"] .formFoot{background:#101736}
+  html[data-theme="dark"] .btnGhost{background:#1a2342;border-color:var(--line);color:var(--ink)}
+  html[data-theme="dark"] .dots i{background:#2a3763}
+  html[data-theme="dark"] .previewBody .kv{border-color:var(--line)}
+  html[data-theme="dark"] .kv span{color:var(--muted)}
+  html[data-theme="dark"] .meter{background:#232e52}
+  html[data-theme="dark"] .checkList li{color:var(--ink)}
+  html[data-theme="dark"] .tick{background:#232e52;color:var(--faint)}
+  html[data-theme="dark"] .emptyBox{background:#101736;border-color:#2a3763;color:var(--muted)}
+  html[data-theme="dark"] .mobileBar{background:rgba(15,21,40,.94);border-color:var(--line)}
+  html[data-theme="dark"] .dateField input{background:#0f1830;border-color:#2a3763;color:var(--ink)}
+  html[data-theme="dark"] .presets{background:#0f1830;border-color:var(--line)}
+  html[data-theme="dark"] .presets button{color:var(--muted)}
+  html[data-theme="dark"] .presets button.on{background:linear-gradient(135deg,#2b54ff,#1a34c8);color:#fff}
+  html[data-theme="dark"] .searchBox input{background:#0f1830;border-color:#2a3763;color:var(--ink)}
+  html[data-theme="dark"] .searchBox input:focus{background:#0c1329}
+  html[data-theme="dark"] thead th{background:#101736}
+  html[data-theme="dark"] tbody tr:hover{background:#182144}
+  html[data-theme="dark"] .branchCell span{color:var(--muted)}
+  html[data-theme="dark"] .occBar{background:#232e52}
+  html[data-theme="dark"] .donutBar{background:#232e52}
+  html[data-theme="dark"] .wardRow .track{background:#232e52}
+  html[data-theme="dark"] .payRow{border-color:var(--line)}
+  html[data-theme="dark"] .payRow span{color:var(--muted)}
+  html[data-theme="dark"] .alertRow{background:#101736;border-color:var(--line)}
+  html[data-theme="dark"] .alertRow span{color:var(--muted)}
+  html[data-theme="dark"] .alertRow.crit{background:rgba(255,84,112,.07);border-color:#5c2433}
+  html[data-theme="dark"] .alertIco{background:#1a2342}
+  html[data-theme="dark"] .alertRow.crit .alertIco{background:rgba(255,84,112,.16)}
+  html[data-theme="dark"] .alertRow button{background:#1a2342;border-color:var(--line);color:#9db4ff}
+  html[data-theme="dark"] .statusChip.dim{background:#232e52;color:#9aa6c4;border-color:#2a3763}
+  html[data-theme="dark"] .delta.flat{background:#232e52;color:#9aa6c4}
+  html[data-theme="dark"] .kpi .val{color:var(--ink)}
+  html[data-theme="dark"] .kpiFoot{color:var(--faint)}
+  html[data-theme="dark"] .pad p.sub{color:var(--muted)}
+  html[data-theme="dark"] .cardHead small{color:var(--muted)}
+  html[data-theme="dark"] .legendDot{color:var(--muted)}
+  html[data-theme="dark"] .tableTools small{color:var(--muted)}
+  html[data-theme="dark"] .toast{background:#1a2342;border-color:#2a3763}
+</style>
+<script>(function(){try{var t=null;try{t=localStorage.getItem('pravo-theme');}catch(e){}if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='light';}})();</script>
+</head>
+<body>
+
+<div class="bgGlow"></div>
+<div class="bgGrid"></div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebarEl">
+    <div class="brandRow">
+      <div class="logoMark">P</div>
+      <div class="brandName"><b>Pravo</b><span>HOSPITAL OS</span></div>
+      <button class="collapseBtn" id="collapseBtn" title="Collapse">⟨⟩</button>
+    </div>
+    <div class="sideSearch">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8b99c8" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="navSearchInput" placeholder="Search menu…">
+      <span class="kbd">Ctrl K</span>
+    </div>
+    <nav class="nav" id="sideNav">
+      <div class="navSec">OVERVIEW</div>
+      <a class="navItem" data-nav="Dashboard" href="./dashboard.html" style="text-decoration:none"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg><span class="lbl">Dashboard</span></a>
+      <div class="navSec">FRONT OFFICE</div>
+      <a class="navItem active" data-nav="OP Registration" href="./op-registration.html" style="text-decoration:none"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg><span class="lbl">OP Registration</span><span class="chev">›</span></a>
+      <button class="navItem" data-nav="IP Registration"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9V7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2"/><path d="M2 9h20v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/><path d="M6 13h4M6 17h7"/></svg><span class="lbl">IP Registration</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="Appointments"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="lbl">Appointments</span><span class="countBadge">24</span></button>
+      <div class="navSec">RECORDS</div>
+      <button class="navItem" data-nav="Masters"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span class="lbl">Masters</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="Registration"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg><span class="lbl">Registration</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="Transactions"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg><span class="lbl">Transactions</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="Reports"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 15v3M12 10v8M17 6v12"/></svg><span class="lbl">Reports</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="Tools"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 0 0 6-6L14 13l-3-3z"/></svg><span class="lbl">Tools</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="Reports & Dashboards"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 12h9V3"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg><span class="lbl">Reports &amp; Dashboards</span></button>
+      <button class="navItem" data-nav="Block/Unblock Report"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span class="lbl">Block/Unblock Report</span></button>
+      <div class="navSec">CLINICAL</div>
+      <button class="navItem" data-nav="Patients"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg><span class="lbl">Patients</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="OPD"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="lbl">OPD</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="Billing"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/></svg><span class="lbl">Billing</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="Laboratory"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M9 3h6M10 3v6L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7 15h10"/></svg><span class="lbl">Laboratory</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="Pharmacy"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="m10.5 20.5-7-7a4.5 4.5 0 0 1 6.4-6.4l7 7"/><path d="m13.5 3.5 7 7a4.5 4.5 0 0 1-6.4 6.4l-7-7"/></svg><span class="lbl">Pharmacy</span><span class="chev">›</span></button>
+      <button class="navItem" data-nav="IPD"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="8" width="10" height="8" rx="2"/></svg><span class="lbl">IPD</span><span class="chev">›</span></button>
+    </nav>
+    <div class="sideFoot">
+      <div class="adminCard">
+        <div class="avatar">SA</div>
+        <div><b>System Administrator</b><span>Super Admin • On duty</span></div>
+      </div>
+      <div class="sysStatus"><span class="pulse"></span> All systems operational • v4.2</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <button class="iconBtn hamburger" id="menuBtn" aria-label="Menu">☰</button>
+      <div class="crumb">
+        <div class="crumbIcon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></div>
+        <div><b>OP Registration <span class="envPill"><span style="width:7px;height:7px;border-radius:99px;background:#0a7a68;display:inline-block"></span> Front Office</span></b><small id="crumbSub">New Patient Registration • Step 1 of 4</small></div>
+      </div>
+      <div class="topActions">
+        <button class="iconBtn" title="Shortcuts">⌘</button>
+        <button class="iconBtn" id="themeBtn" title="Toggle dark mode">☾</button><button class="iconBtn" id="bellBtn" title="Notifications">◉<span class="notifDot"></span></button>
+        <div class="userChip"><div class="avatar teal">SA</div><div><b>System Administrator</b><small>Front Office • Shift A</small></div><span style="color:#8a94ad">▾</span></div>
+      </div>
+    </header>
+
+    <div class="page">
+      <div class="tabsRow">
+        <span class="miniTab"><i>◈</i> OP Registration</span>
+        <span style="font-size:12px;color:#8a94ad">Front Office / OP / New</span>
+        <a class="splitBtn" href="./dashboard.html" style="text-decoration:none">◈ Dashboard</a>
+        <button class="splitBtn" id="splitBtn">⧉ Split <span style="opacity:.5">⌃</span></button>
+      </div>
+
+      <section class="hero">
+        <div class="heroTop">
+          <div class="heroTitle">
+            <h1>New Patient <span class="gold">Registration</span></h1>
+            <p><span class="stepPill" id="stepPill">STEP 1 OF 4</span> <span id="stepName">Demographics — identity &amp; basics</span></p>
+          </div>
+          <div class="heroStats">
+            <div class="stat"><small>TODAY'S OP</small><b>248</b><em>+18 vs yesterday</em></div>
+            <div class="stat"><small>AVG WAIT</small><b>11 min</b><em>token system live</em></div>
+            <div class="stat good"><small>QUEUE STATUS</small><b>● Flowing</b><em>4 counters open</em></div>
+          </div>
+        </div>
+        <div class="stepper" id="stepperEl">
+          <div class="step current" data-step="1"><div class="n">01</div><div><b>Demographics</b><small>Name, age, gender</small></div></div>
+          <div class="step" data-step="2"><div class="n">02</div><div><b>Contact &amp; Address</b><small>Phone, city, kin</small></div></div>
+          <div class="step" data-step="3"><div class="n">03</div><div><b>Medical &amp; Insurance</b><small>Blood, payer, history</small></div></div>
+          <div class="step" data-step="4"><div class="n">04</div><div><b>Review &amp; Confirm</b><small>Verify &amp; print</small></div></div>
+        </div>
+        <div class="progressWrap">
+          <div class="progressMeta"><span id="progressLabel">Step 1 of 4 • Demographics</span><span id="progressPct">25% complete</span></div>
+          <div class="progress"><i id="progressBar"></i></div>
+        </div>
+      </section>
+
+      <div class="layout">
+        <!-- FORM -->
+        <section class="card formCard">
+          <div class="formHead">
+            <div class="fi">◍</div>
+            <div><b id="formTitle">Patient demographics</b><small id="formSub">Fields marked * are required for UHID generation</small></div>
+            <div class="uhid"><small>AUTO UHID</small><br><b>PRV-2026-08417</b><em>● New</em></div>
+          </div>
+
+          <div class="stepsPages">
+          <!-- STEP 1 -->
+          <div class="stepPage show" data-page="1">
+            <div class="formBody">
+              <div class="grid4">
+                <div class="field"><label>SALUTATION</label><select id="f_sal"><option>—</option><option>Mr.</option><option>Ms.</option><option>Mrs.</option><option>Dr.</option><option>Master</option><option>Baby</option></select></div>
+                <div class="field"><label>FIRST NAME <span class="req">*</span></label><input id="f_first" placeholder="e.g. Aarav" autocomplete="off"></div>
+                <div class="field"><label>MIDDLE NAME</label><input id="f_mid" placeholder="Optional" autocomplete="off"></div>
+                <div class="field"><label>LAST NAME <span class="req">*</span></label><input id="f_last" placeholder="e.g. Sharma" autocomplete="off"></div>
+              </div>
+              <div class="grid3">
+                <div class="field"><label>GENDER</label><select id="f_gender"><option>Male</option><option>Female</option><option>Other</option><option>Prefer not to say</option></select></div>
+                <div class="field"><label>BLOOD GROUP</label><select id="f_blood"><option value="">e.g. O+</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select><div class="hint">Used for emergency &amp; lab matching</div></div>
+                <div class="field"><label>MARITAL STATUS</label><select><option>—</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select></div>
+              </div>
+              <div class="grid1">
+                <div class="field">
+                  <label>AGE <span class="req">*</span></label>
+                  <div class="radioRow">
+                    <label class="radio"><input type="radio" name="ageMode" value="dob" checked> Date of birth</label>
+                    <label class="radio"><input type="radio" name="ageMode" value="est"> Estimated age</label>
+                  </div>
+                  <div class="dateWrap" id="dobWrap">
+                    <input type="date" id="f_dob" value="">
+                    <span class="ageEcho" id="ageEcho" hidden>—</span>
+                    <span class="cal">◐</span>
+                  </div>
+                  <div class="dateWrap" id="estWrap" hidden>
+                    <input type="number" id="f_est" min="0" max="130" placeholder="e.g. 34">
+                    <span class="cal">◷</span>
+                  </div>
+                  <div class="hint" id="dobHint">Format dd-mm-yyyy • age auto-calculates for tokens &amp; dosage</div>
+                </div>
+              </div>
+              <div class="grid1">
+                <div class="field"><label>LANGUAGE</label><select><option value="">— Select preferred language —</option><option>English</option><option>Hindi</option><option>Marathi</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Bengali</option><option>Gujarati</option><option>Punjabi</option><option>Urdu</option></select></div>
+              </div>
+              <div class="grid2">
+                <div class="field"><label>PATIENT CASE TYPE</label><select><option>—</option><option selected>General</option><option>Emergency</option><option>MLC</option><option>Insurance / TPA</option><option>Corporate</option><option>CGHS / ECHS</option></select></div>
+                <div class="field"><label>PATIENT TAG</label><select id="f_tag"><option>—</option><option>New</option><option>Follow-up</option><option>Senior Citizen</option><option>Child</option><option>ANC</option></select></div>
+              </div>
+              <div class="grid1">
+                <div class="field"><label>SPECIALLY ABLED CATEGORY</label><select><option>— none —</option><option>Locomotor</option><option>Visual</option><option>Hearing</option><option>Intellectual</option><option>Multiple</option></select></div>
+              </div>
+              <div class="switchRow">
+                <div class="switchCard gold" id="vipCard"><div class="sw"></div><div><b><span class="crown">♛</span> VIP</b><br><small>Priority queue &amp; lounge access</small></div></div>
+                <div class="switchCard" id="smsCard"><div class="sw"></div><div><b>✉ SMS updates</b><br><small>Token, reports &amp; payment alerts</small></div></div>
+              </div>
+              <div class="grid3">
+                <div class="field"><label>OCCUPATION</label><input placeholder="e.g. Teacher"></div>
+                <div class="field"><label>MONTHLY INCOME</label><input placeholder="e.g. ₹ 45,000"></div>
+                <div class="field"><label>MOTHER'S NAME</label><input placeholder="For minor / verification"></div>
+              </div>
+              <div style="height:12px"></div>
+            </div>
+          </div>
+
+          <!-- STEP 2 demo -->
+          <div class="stepPage" data-page="2">
+            <div class="formBody">
+              <div class="grid3">
+                <div class="field"><label>MOBILE NUMBER <span class="req">*</span></label><input placeholder="+91 ••••• •••••"></div>
+                <div class="field"><label>ALTERNATE PHONE</label><input placeholder="Optional"></div>
+                <div class="field"><label>EMAIL</label><input placeholder="name@mail.com"></div>
+              </div>
+              <div class="grid3">
+                <div class="field"><label>ADDRESS LINE 1</label><input placeholder="Flat / street"></div>
+                <div class="field"><label>CITY</label><input placeholder="e.g. Pune"></div>
+                <div class="field"><label>PIN CODE</label><input placeholder="411001"></div>
+              </div>
+              <div class="grid3">
+                <div class="field"><label>STATE</label><select><option>Maharashtra</option><option>Delhi</option><option>Karnataka</option><option>Tamil Nadu</option><option>Other</option></select></div>
+                <div class="field"><label>EMERGENCY CONTACT</label><input placeholder="Name + relation"></div>
+                <div class="field"><label>EMERGENCY PHONE</label><input placeholder="+91 ••••• •••••"></div>
+              </div>
+              <div class="emptyBox" style="margin:14px 0 18px">⌖ &nbsp;Address auto-verifies against PIN database — demo step, no save yet.</div>
+            </div>
+          </div>
+          <!-- STEP 3 demo -->
+          <div class="stepPage" data-page="3">
+            <div class="formBody">
+              <div class="grid3">
+                <div class="field"><label>DEPARTMENT</label><select><option>General Medicine</option><option>Orthopaedics</option><option>Paediatrics</option><option>Dermatology</option><option>Cardiology</option><option>ENT</option></select></div>
+                <div class="field"><label>DOCTOR</label><select><option>Dr. A. Rao — Gen. Med</option><option>Dr. S. Iyer — Ortho</option><option>Dr. N. Khan — Paeds</option></select></div>
+                <div class="field"><label>PAYER TYPE</label><select><option>Self-pay</option><option>Insurance / TPA</option><option>Corporate</option><option>Govt. Scheme</option></select></div>
+              </div>
+              <div class="grid2">
+                <div class="field"><label>KNOWN ALLERGIES</label><input placeholder="e.g. Penicillin, dust"></div>
+                <div class="field"><label>CHRONIC CONDITIONS</label><input placeholder="e.g. Diabetes, hypertension"></div>
+              </div>
+              <div class="emptyBox" style="margin:14px 0 18px">♥ &nbsp;Insurance &amp; ABHA verification happens here in the live build.</div>
+            </div>
+          </div>
+          <!-- STEP 4 demo -->
+          <div class="stepPage" data-page="4">
+            <div class="formBody">
+              <div class="emptyBox" style="padding:28px">✓ &nbsp;Review summary, capture consent &amp; print OP slip.<br><span style="font-size:12px">Complete Step 1 required fields to unlock Finish.</span>
+              <div style="margin-top:14px;display:flex;gap:10px;justify-content:center"><span class="tag" style="background:#eef2ff;color:#2348ff;border:1px solid #c9d4ff">Consent ✔</span><span class="tag" style="background:#eef2ff;color:#2348ff;border:1px solid #c9d4ff">ABHA ✔</span><span class="tag" style="background:#eef2ff;color:#2348ff;border:1px solid #c9d4ff">Payment ⏳</span></div>
+              </div>
+              <div style="height:16px"></div>
+            </div>
+          </div>
+          </div>
+
+          <div class="formFoot">
+            <button class="btn btnGhost" id="backBtn">← Back</button>
+            <div class="dots" id="dotsEl"><i class="on"></i><i></i><i></i><i></i></div>
+            <button class="draftBtn" id="draftBtn">Save draft</button>
+            <button class="btn btnPrimary" id="nextBtn">Next →</button>
+          </div>
+        </section>
+
+        <!-- RAIL -->
+        <aside class="rail">
+          <div class="card previewCard">
+            <div class="previewTop">
+              <small>LIVE PREVIEW</small>
+              <div class="prevName" id="pvName">— —</div>
+              <div class="prevSub" id="pvSub">Age — • Male • Blood —</div>
+              <div class="prevTags"><span class="tag teal" id="pvCase">General</span><span class="tag" id="pvTag">New</span><span class="tag gold" id="pvVip" hidden>★ VIP</span></div>
+              <div class="prevAvatar" id="pvAvatar">••</div>
+            </div>
+            <div class="previewBody">
+              <div class="kv"><span>UHID</span><b>PRV-2026-08417</b></div>
+              <div class="kv"><span>Visit</span><b>OP • General • Token 249</b></div>
+              <div class="kv"><span>Language</span><b id="pvLang">—</b></div>
+              <div class="kv"><span>SMS alerts</span><b id="pvSms">Off</b></div>
+            </div>
+          </div>
+          <div class="card meterCard">
+            <h4>Form completeness</h4>
+            <p id="meterLabel">32% — add name &amp; age to generate UHID</p>
+            <div class="meter"><i id="meterBar"></i></div>
+            <ul class="checkList" id="checkList">
+              <li data-k="name"><span class="tick">✓</span> Patient full name</li>
+              <li data-k="age"><span class="tick">✓</span> Age / date of birth</li>
+              <li data-k="blood"><span class="tick">✓</span> Blood group</li>
+              <li data-k="contact"><span class="tick">✓</span> Contact (step 2)</li>
+            </ul>
+          </div>
+          <div class="card helpCard">
+            <h4>Need help at counter?</h4>
+            <p>ABHA, insurance &amp; MLC need extra documents. Keep Aadhaar + referral ready.</p>
+            <div class="helpBtns"><button id="sopBtn">View SOP</button><button class="solid" id="callBtn">Call supervisor</button></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mobileBar"><button class="btn btnGhost" id="mBackBtn">← Back</button><button class="btn btnPrimary" id="mNextBtn">Next →</button></div>
+<div class="toastWrap" id="toastWrap"></div>
+
+<script>
+(function(){
+  var step = 1;
+  var totalSteps = 4;
+  var stepNames = {1:"Demographics — identity & basics",2:"Contact & address",3:"Medical & insurance",4:"Review & confirm"};
+  var stepperEl = document.getElementById('stepperEl');
+  var progressBar = document.getElementById('progressBar');
+  var progressLabel = document.getElementById('progressLabel');
+  var progressPct = document.getElementById('progressPct');
+  var stepPill = document.getElementById('stepPill');
+  var stepName = document.getElementById('stepName');
+  var crumbSub = document.getElementById('crumbSub');
+  var formTitle = document.getElementById('formTitle');
+  var formSub = document.getElementById('formSub');
+  var titles = {1:["Patient demographics","Fields marked * are required for UHID generation"],2:["Contact & address","Mobile is used for token SMS & reports"],3:["Medical & visit details","Department, doctor & payer"],4:["Review & confirm","Verify, consent & print OP slip"]};
+
+  function toast(title, sub){
+    var w = document.getElementById('toastWrap');
+    var t = document.createElement('div'); t.className='toast';
+    t.innerHTML = '<div class="ti">✓</div><div><b></b><span></span></div>';
+    t.querySelector('b').textContent = title;
+    t.querySelector('span').textContent = sub || '';
+    w.appendChild(t);
+    setTimeout(function(){ t.style.opacity='0'; t.style.transform='translateY(6px)'; setTimeout(function(){t.remove()},300); }, 3200);
+  }
+
+  function setStep(n){
+    step = Math.min(4, Math.max(1, n));
+    var steps = stepperEl.querySelectorAll('.step');
+    steps.forEach(function(s){
+      var k = +s.dataset.step;
+      s.classList.toggle('current', k===step);
+      s.classList.toggle('done', k<step);
+      s.querySelector('.n').textContent = k<step ? '✓' : ('0'+k);
+    });
+    document.querySelectorAll('.stepPage').forEach(function(p){ p.classList.toggle('show', +p.dataset.page===step); });
+    var dots = document.getElementById('dotsEl').querySelectorAll('i');
+    dots.forEach(function(d,i){ d.classList.toggle('on', i===step-1); });
+    progressBar.style.width = (step/totalSteps*100)+'%';
+    progressLabel.textContent = 'Step '+step+' of 4 • '+stepNames[step].split(' — ')[0];
+    progressPct.textContent = (step/totalSteps*100)+'% complete';
+    stepPill.textContent = 'STEP '+step+' OF 4';
+    stepName.textContent = stepNames[step];
+    crumbSub.textContent = 'New Patient Registration • Step '+step+' of 4';
+    formTitle.textContent = titles[step][0];
+    formSub.textContent = titles[step][1];
+    document.getElementById('nextBtn').textContent = step===4 ? '✓ Finish registration' : 'Next →';
+    document.getElementById('backBtn').disabled = step===1;
+    document.getElementById('backBtn').style.opacity = step===1 ? .45 : 1;
+    updateMeter();
+  }
+  stepperEl.addEventListener('click', function(e){
+    var s = e.target.closest('.step'); if(s) setStep(+s.dataset.step);
+  });
+
+  function validStep1(){
+    var f = document.getElementById('f_first').value.trim();
+    var l = document.getElementById('f_last').value.trim();
+    var mode = document.querySelector('input[name="ageMode"]:checked').value;
+    var ageOk = mode==='dob' ? !!document.getElementById('f_dob').value : !!document.getElementById('f_est').value;
+    return f && l && ageOk;
+  }
+  function next(){
+    if(step===1 && !validStep1()){ toast('Almost there','Add first name, last name and age to continue.'); shake(); return; }
+    if(step===4){ toast('Registration complete','UHID PRV-2026-08417 • Token 249 printed.'); return; }
+    setStep(step+1);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function back(){ setStep(step-1); }
+  function shake(){
+    var c = document.querySelector('.formCard');
+    c.style.transform='translateX(-4px)'; setTimeout(function(){c.style.transform='translateX(4px)'; setTimeout(function(){c.style.transform='';},90)},90);
+  }
+  document.getElementById('nextBtn').onclick = next;
+  document.getElementById('backBtn').onclick = back;
+  document.getElementById('mNextBtn').onclick = next;
+  document.getElementById('mBackBtn').onclick = back;
+  document.getElementById('draftBtn').onclick = function(){ toast('Draft saved','You can resume from Front Office → Drafts.'); };
+  document.getElementById('splitBtn').onclick = function(){ toast('Split view','Open two registrations side-by-side (demo).'); };
+  document.getElementById('bellBtn').onclick = function(){ toast('3 notifications','2 lab reports ready • 1 bed request.'); };
+  document.getElementById('sopBtn').onclick = function(){ toast('Counter SOP','ABHA → consent → payment → token.'); };
+  document.getElementById('callBtn').onclick = function(){ toast('Supervisor paged','Desk 4 support in ~2 min.'); };
+
+  // age mode toggle
+  var dobWrap = document.getElementById('dobWrap'), estWrap = document.getElementById('estWrap');
+  document.querySelectorAll('input[name="ageMode"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      var isDob = document.querySelector('input[name="ageMode"]:checked').value==='dob';
+      dobWrap.hidden = !isDob; estWrap.hidden = isDob; syncPreview(); updateMeter();
+    });
+  });
+  function calcAge(dobStr){
+    if(!dobStr) return null;
+    var d = new Date(dobStr), now = new Date();
+    var a = now.getFullYear()-d.getFullYear();
+    var m = now.getMonth()-d.getMonth();
+    if(m<0||(m===0&&now.getDate()<d.getDate())) a--;
+    return a>=0&&a<=130?a:null;
+  }
+
+  // switches
+  function bindSwitch(id, cb){
+    var el = document.getElementById(id);
+    el.addEventListener('click', function(){ el.classList.toggle('on'); cb(el.classList.contains('on')); updateMeter(); });
+  }
+  bindSwitch('vipCard', function(on){ document.getElementById('pvVip').hidden = !on; });
+  bindSwitch('smsCard', function(on){ document.getElementById('pvSms').textContent = on?'On':'Off'; });
+  // default SMS on like screenshot
+  document.getElementById('smsCard').classList.add('on'); document.getElementById('pvSms').textContent='On';
+
+  // live preview
+  var f_first=document.getElementById('f_first'), f_mid=document.getElementById('f_mid'), f_last=document.getElementById('f_last'),
+      f_sal=document.getElementById('f_sal'), f_gender=document.getElementById('f_gender'), f_blood=document.getElementById('f_blood'),
+      f_dob=document.getElementById('f_dob'), f_est=document.getElementById('f_est'), f_tag=document.getElementById('f_tag'),
+      ageEcho=document.getElementById('ageEcho');
+  function initials(){ var a=(f_first.value.trim()[0]||''), b=(f_last.value.trim()[0]||''); return ((a+b)||'••').toUpperCase(); }
+  function fullName(){
+    var parts=[f_sal.value!=='—'?f_sal.value:'',f_first.value.trim(),f_mid.value.trim(),f_last.value.trim()].filter(Boolean);
+    return parts.join(' ')||'— —';
+  }
+  function ageText(){
+    var mode=document.querySelector('input[name="ageMode"]:checked').value;
+    if(mode==='dob'){ var a=calcAge(f_dob.value); return a===null?null:a+' yrs'; }
+    return f_est.value? f_est.value+' yrs (est.)':null;
+  }
+  function syncPreview(){
+    document.getElementById('pvName').textContent = fullName();
+    document.getElementById('pvAvatar').textContent = initials();
+    var age = ageText();
+    var a = calcAge(f_dob.value);
+    if(document.querySelector('input[name="ageMode"]:checked').value==='dob' && a!==null){ ageEcho.hidden=false; ageEcho.textContent=a+' yrs'; }
+    else ageEcho.hidden=true;
+    document.getElementById('pvSub').textContent = (age||'Age —')+' • '+f_gender.value+' • Blood '+(f_blood.value||'—');
+    document.getElementById('pvTag').textContent = f_tag.value==='—'?'New':f_tag.value;
+    var langSel = document.querySelectorAll('.formBody select')[3];
+    document.getElementById('pvLang').textContent = langSel && langSel.value && langSel.value[0]!=='—' ? langSel.value : '—';
+    // filled states
+    document.querySelectorAll('.field input,.field select').forEach(function(el){
+      el.classList.toggle('filled', !!(el.value && el.value!=='—' && el.value!=='— none —' && el.value!=='— Select preferred language —'));
+    });
+  }
+  ['input','change','keyup'].forEach(function(ev){ document.addEventListener(ev, function(e){ if(e.target.closest && e.target.closest('.formCard')){ syncPreview(); updateMeter(); } }, true); });
+
+  function updateMeter(){
+    var score = 12;
+    var checks = {name:false, age:false, blood:false, contact:false};
+    if(f_first.value.trim()&&f_last.value.trim()){ score+=28; checks.name=true; }
+    var mode=document.querySelector('input[name="ageMode"]:checked').value;
+    if((mode==='dob'&&f_dob.value)||(mode==='est'&&f_est.value)){ score+=26; checks.age=true; }
+    if(f_blood.value){ score+=16; checks.blood=true; }
+    if(document.getElementById('smsCard').classList.contains('on')){ score+=8; }
+    if(step>1){ score=Math.max(score,72); checks.contact=true; }
+    if(step>2) score=Math.max(score,88);
+    if(step>3) score=Math.min(98,score+6);
+    score=Math.min(98,score);
+    document.getElementById('meterBar').style.width=score+'%';
+    document.getElementById('meterLabel').textContent = score+'% — '+(score<50?'add name & age to generate UHID':score<85?'looking good — continue to contact':'ready for review & print');
+    document.querySelectorAll('#checkList li').forEach(function(li){ li.classList.toggle('ok', !!checks[li.dataset.k]); });
+  }
+
+  // sidebar nav demo + search filter
+  document.getElementById('sideNav').addEventListener('click', function(e){
+    var b = e.target.closest('.navItem'); if(!b) return;
+    this.querySelectorAll('.navItem').forEach(function(x){x.classList.remove('active')});
+    b.classList.add('active');
+    var href=b.getAttribute&&b.getAttribute('href'); if(href&&href!=='#'&&href.indexOf('.html')!==-1){ return; }
+    if(b.dataset.nav!=='OP Registration' && b.dataset.nav!=='Dashboard') toast(b.dataset.nav,'Demo navigation — OP flow stays open.');
+    if(window.innerWidth<=760) document.getElementById('sidebarEl').classList.remove('open');
+  });
+  document.getElementById('navSearchInput').addEventListener('input', function(){
+    var q=this.value.toLowerCase();
+    document.querySelectorAll('#sideNav .navItem').forEach(function(b){
+      b.style.display = b.dataset.nav.toLowerCase().includes(q)?'':'none';
+    });
+  });
+  document.addEventListener('keydown', function(e){ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); document.getElementById('navSearchInput').focus(); }});
+  document.getElementById('menuBtn').onclick=function(){ document.getElementById('sidebarEl').classList.toggle('open'); };
+  document.getElementById('collapseBtn').onclick=function(){ toast('Sidebar','Use Ctrl+K to jump to any module.'); };
+
+  // case type -> preview chip
+  document.querySelectorAll('.formBody select')[4].addEventListener('change', function(){ document.getElementById('pvCase').textContent=this.value==='—'?'General':this.value; });
+
+  setStep(1); syncPreview();
+})();
+</script>
+<script>
+(function(){
+  function paint(){
+    var d = document.documentElement.dataset.theme === 'dark';
+    var b = document.getElementById('themeBtn');
+    if(b){ b.textContent = d ? '\u2600' : '\u263E'; b.title = d ? 'Switch to light mode' : 'Switch to dark mode'; }
+  }
+  window.toggleTheme = function(){
+    var d = document.documentElement.dataset.theme !== 'dark';
+    document.documentElement.dataset.theme = d ? 'dark' : 'light';
+    try{ localStorage.setItem('pravo-theme', d ? 'dark' : 'light'); }catch(e){}
+    paint();
+    if(window.__dashBooted && window.__dashRefresh && !document.getElementById('view-dashboard').hidden){ window.__dashRefresh(false); }
+  };
+  document.addEventListener('click', function(e){ if(e.target.closest && e.target.closest('#themeBtn')){ toggleTheme(); } });
+  paint();
+})();
+</script>
+
+
+</body>
+</html>

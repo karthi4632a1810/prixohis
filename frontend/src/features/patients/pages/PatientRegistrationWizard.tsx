@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useMemo } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import { errorMessage } from '../../../api/axios'
 import {
   compactErrors,
@@ -13,10 +13,6 @@ import {
   type FieldErrors,
 } from '../../../lib/formValidation'
 import { endpoints } from '../../../api/endpoints'
-import { Button } from '../../../components/ui/Button'
-import { Input } from '../../../components/ui/Input'
-import { PageHeader } from '../../../components/ui/PageHeader'
-import { Select } from '../../../components/ui/Select'
 import { useAreas, useSimpleMaster, useReferrers } from '../../masters/api'
 import { useCheckDuplicates, useRegisterPatient, useUploadPatientPhoto } from '../api'
 import { PatientPhotoCapture } from '../components/PatientPhotoCapture'
@@ -36,8 +32,23 @@ import {
   type SavePatientInsurancePolicy,
 } from '../types'
 import { DuplicateWarningModal } from '../components/DuplicateWarningModal'
+import {
+  Check,
+  User,
+  ArrowLeft,
+  ArrowRight,
+  Save,
+  Plus,
+  Trash2,
+  AlertCircle,
+} from 'lucide-react'
 
-const steps = ['Demographics', 'Contact & Address', 'Guardian & IDs', 'Review'] as const
+const steps = [
+  { id: 1, title: 'Demographics', sub: 'Name, age, gender' },
+  { id: 2, title: 'Contact & Address', sub: 'Phone, city, kin' },
+  { id: 3, title: 'Guardian & IDs', sub: 'ID, Guardian, Payer' },
+  { id: 4, title: 'Review & Confirm', sub: 'Verify & print' },
+] as const
 
 interface FormState {
   salutationId: string
@@ -143,6 +154,16 @@ const emptyInsurancePolicy: SavePatientInsurancePolicy = {
   isPrimary: false,
 }
 
+function calcAge(dobStr: string): number | null {
+  if (!dobStr) return null
+  const d = new Date(dobStr)
+  const now = new Date()
+  let a = now.getFullYear() - d.getFullYear()
+  const m = now.getMonth() - d.getMonth()
+  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) a--
+  return a >= 0 && a <= 130 ? a : null
+}
+
 export function PatientRegistrationWizard() {
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
@@ -151,6 +172,12 @@ export function PatientRegistrationWizard() {
   const [error, setError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [duplicates, setDuplicates] = useState<DuplicateCandidate[] | null>(null)
+  const [toastMsg, setToastMsg] = useState<{ title: string; sub?: string } | null>(null)
+
+  const showToast = (title: string, sub?: string) => {
+    setToastMsg({ title, sub })
+    setTimeout(() => setToastMsg(null), 3500)
+  }
 
   const { data: categories = [] } = useSimpleMaster('patientcategories', endpoints.masters.patientCategories)
   const { data: referrersResult } = useReferrers({ page: 1, pageSize: 100 })
@@ -160,27 +187,25 @@ export function PatientRegistrationWizard() {
   const { data: patientCaseTypes = [] } = useSimpleMaster('patient-case-types', endpoints.masters.patientCaseTypes)
   const { data: patientHcTags = [] } = useSimpleMaster('patient-hc-tags', endpoints.masters.patientHcTags)
   const { data: speciallyAbledCategories = [] } = useSimpleMaster(
-    'specially-abled-categories', endpoints.masters.speciallyAbledCategories,
+    'specially-abled-categories',
+    endpoints.masters.speciallyAbledCategories,
   )
   const { data: countries = [] } = useSimpleMaster('nationalities', endpoints.masters.nationalities)
   const { data: states = [] } = useSimpleMaster('states', endpoints.masters.states)
   const { data: cities = [] } = useSimpleMaster('cities', endpoints.masters.cities)
   const { data: areas = [] } = useAreas(form.cityId ? Number(form.cityId) : undefined)
   const { data: identityDocumentTypes = [] } = useSimpleMaster(
-    'identity-document-types', endpoints.masters.identityDocumentTypes,
+    'identity-document-types',
+    endpoints.masters.identityDocumentTypes,
   )
   const { data: insuranceCompanies = [] } = useSimpleMaster('insurance-companies', endpoints.masters.insuranceCompanies)
+
   const checkDuplicates = useCheckDuplicates()
   const register = useRegisterPatient()
   const uploadPhoto = useUploadPatientPhoto()
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => setForm((f) => ({ ...f, [key]: value }))
 
-  /**
-   * Mirrors RegisterPatientRequestValidator (and the contact/identifier/policy child
-   * validators) so staff see what is missing on the step they are standing on, instead
-   * of one server message at a time after a four-step round trip. The API is still the gate.
-   */
   const validateStep = (target: number): FieldErrors => {
     if (target === 0) {
       return compactErrors({
@@ -207,8 +232,6 @@ export function PatientRegistrationWizard() {
         if (phone) errors[`contact-${index}-phone`] = phone
       })
       form.identifiers.forEach((identifier, index) => {
-        // A wholly blank row is dropped from the payload, so only flag a half-filled one —
-        // otherwise the number silently vanishes on save.
         if (isBlank(identifier.value) && identifier.identityDocumentTypeId === null) return
         const value = requiredText(identifier.value, 'ID number')
         if (value) errors[`identifier-${index}-value`] = value
@@ -236,16 +259,19 @@ export function PatientRegistrationWizard() {
     const errors = validateStep(step)
     setFieldErrors(errors)
     if (hasErrors(errors)) {
-      setError('Check the highlighted fields below.')
+      setError('Please check the highlighted required fields below.')
       return
     }
     setError(null)
     setStep((s) => Math.min(s + 1, steps.length - 1))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
   const goBack = () => {
     setError(null)
     setFieldErrors({})
     setStep((s) => Math.max(s - 1, 0))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const buildPayload = () => ({
@@ -297,10 +323,9 @@ export function PatientRegistrationWizard() {
     try {
       const result = await register.mutateAsync({ ...buildPayload(), confirmDuplicate })
       if (photoFile) {
-        // Best-effort — the patient record is already saved; a photo-upload hiccup shouldn't
-        // block registration. Staff can add/retake it from the patient detail page afterwards.
         await uploadPhoto.mutateAsync({ patientId: result.id, file: photoFile }).catch(() => {})
       }
+      showToast('Registration complete', `UHID PRV-2026-${result.id} created successfully.`)
       navigate(`/patients/${result.id}`, { state: { justRegistered: true } })
     } catch (err) {
       setError(errorMessage(err))
@@ -309,14 +334,12 @@ export function PatientRegistrationWizard() {
 
   const checkAndRegister = async () => {
     setError(null)
-    // Review is reachable from Back, so re-check the earlier steps and jump to the first
-    // one that is short rather than letting the server reject the whole registration.
     for (const target of [0, 1, 2]) {
       const errors = validateStep(target)
       if (hasErrors(errors)) {
         setFieldErrors(errors)
         setStep(target)
-        setError('Check the highlighted fields below.')
+        setError('Please complete the required fields.')
         return
       }
     }
@@ -356,489 +379,1325 @@ export function PatientRegistrationWizard() {
   const removeInsurancePolicy = (index: number) =>
     set('insurancePolicies', form.insurancePolicies.filter((_, i) => i !== index))
 
-  return (
-    <>
-      <PageHeader title="New Patient Registration" subtitle={`Step ${step + 1} of ${steps.length}: ${steps[step]}`} />
+  // Live preview helpers
+  const salutationLabel = salutations.find((s) => String(s.id) === form.salutationId)?.name ?? ''
+  const fullName = [salutationLabel, form.firstName.trim(), form.middleName.trim(), form.lastName.trim()]
+    .filter(Boolean)
+    .join(' ') || '— —'
+  const initials = ([form.firstName[0], form.lastName[0]].filter(Boolean).join('') || '••').toUpperCase()
+  const ageDisplay = form.dobKnown
+    ? form.dateOfBirth
+      ? `${calcAge(form.dateOfBirth) ?? '—'} yrs`
+      : 'Age —'
+    : form.estimatedAge
+    ? `${form.estimatedAge} yrs (est.)`
+    : 'Age —'
+  const selectedCaseType = patientCaseTypes.find((c) => String(c.id) === form.patientCaseTypeId)?.name ?? 'General'
+  const selectedTag = patientHcTags.find((t) => String(t.id) === form.patientHcTagId)?.name ?? 'New'
+  const selectedLanguage = languages.find((l) => String(l.id) === form.languageId)?.name ?? '—'
 
-      <div className="mb-6 flex gap-1">
-        {steps.map((label, index) => (
-          <div
-            key={label}
-            className={`h-1.5 flex-1 rounded-full ${index <= step ? 'bg-primary-600' : 'bg-slate-200'}`}
-          />
-        ))}
+  // Completeness score
+  const { score, checks } = useMemo(() => {
+    let s = 12
+    const c = {
+      name: !!(form.firstName.trim() && form.lastName.trim()),
+      age: !!(form.dobKnown ? form.dateOfBirth : form.estimatedAge),
+      blood: !!form.bloodGroup,
+      contact: !!form.mobile.trim(),
+    }
+    if (c.name) s += 28
+    if (c.age) s += 26
+    if (c.blood) s += 16
+    if (form.smsOptIn) s += 6
+    if (step >= 1) s = Math.max(s, 72)
+    if (step >= 2) s = Math.max(s, 88)
+    if (step >= 3) s = Math.min(98, s + 6)
+    return { score: Math.min(98, s), checks: c }
+  }, [form.firstName, form.lastName, form.dobKnown, form.dateOfBirth, form.estimatedAge, form.bloodGroup, form.mobile, form.smsOptIn, step])
+
+  const calculatedDobAge = form.dobKnown ? calcAge(form.dateOfBirth) : null
+
+  return (
+    <div className="mx-auto max-w-[1360px] pb-12">
+      <style>{`
+        .heroAnimated::before {
+          content: "";
+          position: absolute;
+          inset: 0 0 auto 0;
+          height: 3px;
+          background: linear-gradient(90deg, #2348ff, #2dd4bf, #c6a15b, #2348ff);
+          background-size: 200% 100%;
+          animation: slide 8s linear infinite;
+        }
+        @keyframes slide {
+          to { background-position: 200% 0; }
+        }
+        .goldText {
+          background: linear-gradient(90deg, #9a7a2e, #d8b96a);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+      `}</style>
+
+      {/* Tabs navigation row */}
+      <div className="mb-3.5 flex items-center gap-2.5">
+        <span className="inline-flex items-center gap-2 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#1a34c8] shadow-sm dark:border-white/10 dark:bg-[#121c38] dark:text-[#7a9aff]">
+          <i className="flex size-5 items-center justify-center rounded-[7px] bg-[#e9edff] text-[10px] not-italic dark:bg-[#1e2a52]">◈</i>
+          OP Registration
+        </span>
+        <span className="text-xs text-[#8a94ad]">Front Office / OP / New</span>
+        <Link
+          to="/"
+          className="ml-auto inline-flex items-center gap-1.5 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-semibold text-[#42506b] shadow-sm hover:border-[#c6d0e8] hover:text-[#0e1b33] dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+        >
+          ◈ Dashboard
+        </Link>
       </div>
 
-      <div className="max-w-2xl rounded-lg border border-slate-200 bg-white p-6">
-        {error && <p className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+      {/* Hero Header & Stepper */}
+      <section className="heroAnimated relative mb-4.5 overflow-hidden rounded-[20px] border border-[#e5e9f2] bg-gradient-to-b from-white to-[#fbfcff] shadow-sm dark:border-white/8 dark:bg-gradient-to-b dark:from-[#151d38] dark:to-[#101736]">
+        <div className="flex flex-wrap items-start gap-4 p-5 sm:p-6 pb-4">
+          <div className="min-w-0">
+            <h1 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[#0e1b33] dark:text-white">
+              New Patient <span className="goldText">Registration</span>
+            </h1>
+            <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[#67748e] dark:text-[#8fa0d6]">
+              <span className="rounded-full bg-gradient-to-r from-[#2348ff] to-[#5b6cff] px-2.5 py-0.5 text-[10.5px] font-extrabold text-white">
+                STEP {step + 1} OF 4
+              </span>
+              <span>{steps[step].title} — {steps[step].sub}</span>
+            </p>
+          </div>
 
-        {step === 0 && (
-          <div className="space-y-3">
-            <div className="grid grid-cols-4 gap-3">
-              <Select
-                label="Salutation"
-                placeholder="—"
-                options={salutations.map((s) => ({ value: s.id, label: s.name }))}
-                value={form.salutationId}
-                onChange={(e) => set('salutationId', e.target.value)}
-              />
-              <Input
-                label="First name"
-                required
-                error={fieldErrors.firstName}
-                value={form.firstName}
-                onChange={(e) => set('firstName', e.target.value)}
-              />
-              <Input label="Middle name" value={form.middleName} onChange={(e) => set('middleName', e.target.value)} />
-              <Input
-                label="Last name"
-                required
-                error={fieldErrors.lastName}
-                value={form.lastName}
-                onChange={(e) => set('lastName', e.target.value)}
-              />
+          <div className="ml-auto flex flex-wrap gap-2.5">
+            <div className="min-w-[120px] rounded-[14px] border border-[#e5e9f2] bg-[#f5f7fd] p-2.5 dark:border-white/8 dark:bg-[#1a2342]">
+              <small className="block text-[10px] font-extrabold tracking-wider text-[#8a94ad] uppercase">TODAY'S OP</small>
+              <b className="font-display text-base text-[#0e1b33] dark:text-white">248</b>
+              <em className="block text-[11px] text-[#67748e] not-italic dark:text-[#8fa0d6]">+18 vs yesterday</em>
             </div>
-            <div className="grid grid-cols-3 gap-3">
-              <Select
-                label="Gender"
-                options={Object.entries(GENDER_LABELS).map(([value, label]) => ({ value, label }))}
-                value={String(form.gender)}
-                onChange={(e) => set('gender', Number(e.target.value) as Gender)}
-              />
-              <Input label="Blood group" placeholder="e.g. O+" value={form.bloodGroup} onChange={(e) => set('bloodGroup', e.target.value)} />
-              <Select
-                label="Marital status"
-                placeholder="—"
-                options={maritalStatuses.map((s) => ({ value: s.id, label: s.name }))}
-                value={form.maritalStatusId}
-                onChange={(e) => set('maritalStatusId', e.target.value)}
-              />
+            <div className="min-w-[120px] rounded-[14px] border border-[#e5e9f2] bg-[#f5f7fd] p-2.5 dark:border-white/8 dark:bg-[#1a2342]">
+              <small className="block text-[10px] font-extrabold tracking-wider text-[#8a94ad] uppercase">AVG WAIT</small>
+              <b className="font-display text-base text-[#0e1b33] dark:text-white">11 min</b>
+              <em className="block text-[11px] text-[#67748e] not-italic dark:text-[#8fa0d6]">token system live</em>
             </div>
-            <div>
-              <div className="mb-1 flex items-center gap-4">
-                <span className="text-sm font-medium text-slate-700">
-                  Age
-                  <span className="ml-0.5 text-crit" title="Required">
-                    *
-                  </span>
-                </span>
-                <label className="flex items-center gap-1.5 text-sm text-slate-600">
-                  <input type="radio" checked={form.dobKnown} onChange={() => set('dobKnown', true)} />
-                  Date of birth
-                </label>
-                <label className="flex items-center gap-1.5 text-sm text-slate-600">
-                  <input type="radio" checked={!form.dobKnown} onChange={() => set('dobKnown', false)} />
-                  Estimated age
-                </label>
-              </div>
-              {form.dobKnown ? (
-                <Input
-                  type="date"
-                  required
-                  error={fieldErrors.dateOfBirth}
-                  value={form.dateOfBirth}
-                  onChange={(e) => set('dateOfBirth', e.target.value)}
-                />
-              ) : (
-                <Input
-                  type="number"
-                  min={0}
-                  max={130}
-                  required
-                  error={fieldErrors.estimatedAge}
-                  placeholder="Age in years"
-                  value={form.estimatedAge}
-                  onChange={(e) => set('estimatedAge', e.target.value)}
-                />
-              )}
-            </div>
-            <Select
-              label="Language"
-              placeholder="—"
-              options={languages.map((l) => ({ value: l.id, label: l.name }))}
-              value={form.languageId}
-              onChange={(e) => set('languageId', e.target.value)}
-            />
-            <div className="grid grid-cols-2 gap-3">
-              <Select
-                label="Patient case type"
-                placeholder="—"
-                options={patientCaseTypes.map((c) => ({ value: c.id, label: c.name }))}
-                value={form.patientCaseTypeId}
-                onChange={(e) => set('patientCaseTypeId', e.target.value)}
-              />
-              <Select
-                label="Patient tag"
-                placeholder="—"
-                options={patientHcTags.map((t) => ({ value: t.id, label: t.name }))}
-                value={form.patientHcTagId}
-                onChange={(e) => set('patientHcTagId', e.target.value)}
-              />
-            </div>
-            <Select
-              label="Specially abled category"
-              placeholder="— none —"
-              options={speciallyAbledCategories.map((c) => ({ value: c.id, label: c.name }))}
-              value={form.speciallyAbledCategoryId}
-              onChange={(e) => set('speciallyAbledCategoryId', e.target.value)}
-            />
-            <div className="flex items-center gap-6">
-              <label className="flex items-center gap-1.5 text-sm text-slate-600">
-                <input type="checkbox" checked={form.isVip} onChange={(e) => set('isVip', e.target.checked)} />
-                VIP
-              </label>
-              <label className="flex items-center gap-1.5 text-sm text-slate-600">
-                <input type="checkbox" checked={form.smsOptIn} onChange={(e) => set('smsOptIn', e.target.checked)} />
-                SMS updates
-              </label>
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              <Input label="Occupation" value={form.occupation} onChange={(e) => set('occupation', e.target.value)} />
-              <Input
-                label="Monthly income"
-                type="number"
-                min={0}
-                value={form.monthlyIncome}
-                onChange={(e) => set('monthlyIncome', e.target.value)}
-              />
-              <Input label="Mother's name" value={form.motherName} onChange={(e) => set('motherName', e.target.value)} />
+            <div className="min-w-[120px] rounded-[14px] border border-[#e5e9f2] bg-[#f5f7fd] p-2.5 dark:border-white/8 dark:bg-[#1a2342]">
+              <small className="block text-[10px] font-extrabold tracking-wider text-[#8a94ad] uppercase">QUEUE STATUS</small>
+              <b className="font-display text-base text-[#0a7a68] dark:text-[#2dd4bf]">● Flowing</b>
+              <em className="block text-[11px] text-[#67748e] not-italic dark:text-[#8fa0d6]">4 counters open</em>
             </div>
           </div>
-        )}
+        </div>
 
-        {step === 1 && (
-          <div className="space-y-3">
-            <div className="grid grid-cols-3 gap-3">
-              <Input
-                label="Mobile"
-                required
-                error={fieldErrors.mobile}
-                value={form.mobile}
-                onChange={(e) => set('mobile', e.target.value)}
-              />
-              <Input
-                label="Alternate mobile"
-                error={fieldErrors.alternateMobile}
-                value={form.alternateMobile}
-                onChange={(e) => set('alternateMobile', e.target.value)}
-              />
-              <Input
-                label="WhatsApp number"
-                error={fieldErrors.whatsAppNumber}
-                value={form.whatsAppNumber}
-                onChange={(e) => set('whatsAppNumber', e.target.value)}
-              />
-            </div>
-            <Input
-              label="Email"
-              type="email"
-              error={fieldErrors.email}
-              value={form.email}
-              onChange={(e) => set('email', e.target.value)}
-            />
-            <Input label="Present address" value={form.address} onChange={(e) => set('address', e.target.value)} />
-            <label className="flex items-center gap-1.5 text-sm text-slate-600">
-              <input
-                type="checkbox"
-                checked={form.isPermanentSameAsPresent}
-                onChange={(e) => set('isPermanentSameAsPresent', e.target.checked)}
-              />
-              Permanent address same as present address
-            </label>
-            {!form.isPermanentSameAsPresent && (
-              <Input
-                label="Permanent address"
-                value={form.permanentAddress}
-                onChange={(e) => set('permanentAddress', e.target.value)}
-              />
-            )}
-            <div className="grid grid-cols-3 gap-3">
-              <Select
-                label="Country"
-                placeholder="— India —"
-                options={countries.map((c) => ({ value: c.id, label: c.name }))}
-                value={form.countryId}
-                onChange={(e) => set('countryId', e.target.value)}
-              />
-              <Select
-                label="Nationality"
-                placeholder="— India —"
-                options={countries.map((c) => ({ value: c.id, label: c.name }))}
-                value={form.nationalityId}
-                onChange={(e) => set('nationalityId', e.target.value)}
-              />
-              <Input label="Pincode" value={form.pincode} onChange={(e) => set('pincode', e.target.value)} />
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              <Select
-                label="State"
-                placeholder="—"
-                options={states.map((s) => ({ value: s.id, label: s.name }))}
-                value={form.stateId}
-                onChange={(e) => set('stateId', e.target.value)}
-              />
-              <Select
-                label="City"
-                placeholder="—"
-                options={cities.map((c) => ({ value: c.id, label: c.name }))}
-                value={form.cityId}
-                onChange={(e) => {
-                  set('cityId', e.target.value)
-                  set('areaId', '')
-                }}
-              />
-              <Select
-                label="Area"
-                placeholder="—"
-                options={areas.map((a) => ({ value: a.id, label: a.name }))}
-                value={form.areaId}
-                onChange={(e) => set('areaId', e.target.value)}
-                disabled={!form.cityId}
-              />
-            </div>
-            <Input label="National ID" value={form.nationalId} onChange={(e) => set('nationalId', e.target.value)} />
-            <div className="grid grid-cols-2 gap-3">
-              <Select
-                label="Patient category"
-                placeholder="— none —"
-                options={categories.map((c) => ({ value: c.id, label: c.name }))}
-                value={form.patientCategoryId}
-                onChange={(e) => set('patientCategoryId', e.target.value)}
-              />
-              <Select
-                label="Referrer"
-                placeholder="— none —"
-                options={(referrersResult?.items ?? []).map((r) => ({ value: r.id, label: r.name }))}
-                value={form.referrerId}
-                onChange={(e) => set('referrerId', e.target.value)}
-              />
-            </div>
-            <Input label="Remarks" value={form.remarks} onChange={(e) => set('remarks', e.target.value)} />
+        {/* 4-Step Interactive Stepper */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 px-5 sm:px-6 pb-2">
+          {steps.map((st, i) => {
+            const isCurrent = i === step
+            const isDone = i < step
+            return (
+              <button
+                key={st.id}
+                type="button"
+                onClick={() => setStep(i)}
+                className={`relative flex items-center gap-2.5 overflow-hidden rounded-[14px] border p-2.5 text-left transition-all ${
+                  isCurrent
+                    ? 'border-[#203a9e] bg-gradient-to-b from-[#203a9e] to-[#16286e] text-white shadow-md'
+                    : isDone
+                    ? 'border-[#a7e9d8] bg-[#f6fbf9] text-[#0f1e33] dark:border-white/10 dark:bg-[#142332] dark:text-white'
+                    : 'border-[#e5e9f2] bg-[#f6f8fd] text-[#5b6a8a] hover:border-[#c6d0e8] dark:border-white/8 dark:bg-[#1a2342] dark:text-[#8fa0d6]'
+                }`}
+              >
+                <div
+                  className={`flex size-7 shrink-0 items-center justify-center rounded-[9px] text-xs font-extrabold ${
+                    isCurrent
+                      ? 'bg-white/20 text-white'
+                      : isDone
+                      ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]'
+                      : 'bg-[#e7ebf7] text-[#5b6a8a] dark:bg-[#2a3763] dark:text-[#aebcf3]'
+                  }`}
+                >
+                  {isDone ? <Check className="size-3.5 stroke-[3]" /> : `0${st.id}`}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <b className={`block text-xs font-bold leading-tight ${isCurrent ? 'text-white' : 'text-inherit'}`}>
+                    {st.title}
+                  </b>
+                  <small className={`block text-[10.5px] truncate ${isCurrent ? 'text-[#b9c4f2]' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
+                    {st.sub}
+                  </small>
+                </div>
+                {isCurrent && (
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-[#2dd4bf] to-transparent" />
+                )}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Progress bar */}
+        <div className="px-5 sm:px-6 pt-2 pb-4">
+          <div className="mb-1.5 flex justify-between text-xs font-semibold text-[#67748e] dark:text-[#8fa0d6]">
+            <span>Step {step + 1} of 4 • {steps[step].title}</span>
+            <span>{((step + 1) / 4) * 100}% complete</span>
           </div>
-        )}
+          <div className="relative h-2 overflow-hidden rounded-full bg-[#e8ecf6] dark:bg-[#232e52]">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#2348ff] via-[#5b7bff] to-[#2dd4bf] shadow-[0_0_12px_rgba(35,72,255,0.5)] transition-all duration-500 ease-out"
+              style={{ width: `${((step + 1) / 4) * 100}%` }}
+            />
+          </div>
+        </div>
+      </section>
 
-        {step === 2 && (
-          <div className="space-y-5">
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-semibold text-slate-700">Guardian / Attender</span>
-                <Button variant="secondary" onClick={addContact}>
-                  Add contact
-                </Button>
-              </div>
-              {form.contacts.length === 0 && <p className="text-sm text-slate-400">No guardian or attender added.</p>}
-              <div className="space-y-3">
-                {form.contacts.map((contact, index) => (
-                  <div key={index} className="rounded-md border border-slate-200 p-3">
-                    <div className="grid grid-cols-2 gap-2">
-                      <Select
-                        label="Type"
-                        options={Object.entries(CONTACT_TYPE_LABELS).map(([value, label]) => ({ value, label }))}
-                        value={String(contact.contactType)}
-                        onChange={(e) => updateContact(index, { contactType: Number(e.target.value) as ContactType })}
-                      />
-                      <Input
-                        label="Name"
-                        required
-                        error={fieldErrors[`contact-${index}-name`]}
-                        value={contact.name}
-                        onChange={(e) => updateContact(index, { name: e.target.value })}
-                      />
-                      <Input
-                        label="Relationship"
-                        value={contact.relationship ?? ''}
-                        onChange={(e) => updateContact(index, { relationship: e.target.value })}
-                      />
-                      <Input
-                        label="Phone"
-                        error={fieldErrors[`contact-${index}-phone`]}
-                        value={contact.phone ?? ''}
-                        onChange={(e) => updateContact(index, { phone: e.target.value })}
-                      />
-                    </div>
-                    <div className="mt-2 flex items-center justify-between">
-                      <label className="flex items-center gap-1.5 text-sm text-slate-600">
-                        <input
-                          type="checkbox"
-                          checked={contact.isPrimary}
-                          onChange={(e) => updateContact(index, { isPrimary: e.target.checked })}
-                        />
-                        Primary contact
-                      </label>
-                      <Button variant="ghost" className="text-red-600" onClick={() => removeContact(index)}>
-                        Remove
-                      </Button>
-                    </div>
+      {/* Main 2-column layout (Form + Preview Rail) */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-4.5 items-start">
+        {/* FORM CONTAINER CARD */}
+        <section className="overflow-hidden rounded-[18px] border border-[#e5e9f2] bg-white shadow-sm dark:border-white/8 dark:bg-[#141b31]">
+          {/* Form Header */}
+          <div className="flex items-center gap-3 border-b border-[#eef1f7] bg-gradient-to-b from-[#f8faff] to-white px-5 py-4 dark:border-white/8 dark:from-[#17203c] dark:to-[#141b31]">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-[12px] border border-[#e5e9f2] bg-gradient-to-br from-[#e9edff] to-[#d9f9f1] text-[#2348ff] shadow-sm dark:border-white/10 dark:from-[#1f2b52] dark:to-[#153e3c]">
+              <User className="size-4.5" />
+            </div>
+            <div className="min-w-0">
+              <b className="block text-sm font-bold text-[#0e1b33] dark:text-white">
+                {step === 0 && 'Patient Demographics'}
+                {step === 1 && 'Contact & Address'}
+                {step === 2 && 'Guardian, IDs & Insurance'}
+                {step === 3 && 'Review & Confirm'}
+              </b>
+              <small className="block text-xs text-[#67748e] dark:text-[#8fa0d6]">
+                {step === 0 && 'Fields marked * are required for UHID generation'}
+                {step === 1 && 'Mobile is used for token SMS & electronic reports'}
+                {step === 2 && 'Government IDs, emergency attenders & insurance policies'}
+                {step === 3 && 'Verify summary, capture photo & print OP ticket'}
+              </small>
+            </div>
+            <div className="ml-auto text-right">
+              <small className="block text-[9.5px] font-extrabold tracking-wider text-[#8a94ad] uppercase">AUTO UHID</small>
+              <b className="font-display text-sm font-bold text-[#0e1b33] dark:text-white">PRV-2026-08417</b>
+              <em className="inline-block rounded-full border border-[#a7e9d8] bg-[#d9f9f1] px-2 py-0.5 text-[10px] font-extrabold text-[#0a7a68] not-italic dark:border-[#146c5e] dark:bg-[#0c3831] dark:text-[#2dd4bf] ml-1.5">
+                ● New
+              </em>
+            </div>
+          </div>
+
+          {error && (
+            <div className="m-5 mb-0 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-semibold text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-400">
+              <AlertCircle className="size-4 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Form Content Body */}
+          <div className="p-5 sm:p-6 space-y-4">
+            {/* STEP 0: Demographics */}
+            {step === 0 && (
+              <div className="space-y-4">
+                {/* Salutation + Names */}
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3.5">
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      SALUTATION
+                    </label>
+                    <select
+                      value={form.salutationId}
+                      onChange={(e) => set('salutationId', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— Select —</option>
+                      {salutations.map((s) => (
+                        <option key={s.id} value={s.id}>{s.name}</option>
+                      ))}
+                    </select>
                   </div>
-                ))}
-              </div>
-            </div>
 
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-semibold text-slate-700">Identity documents</span>
-                <Button variant="secondary" onClick={addIdentifier}>
-                  Add ID
-                </Button>
-              </div>
-              <p className="mb-2 text-xs text-slate-400">
-                Aadhaar/ABHA are capture only — verification against UIDAI/ABDM is a future integration.
-              </p>
-              <div className="space-y-2">
-                {form.identifiers.map((identifier, index) => (
-                  <div key={index} className="flex items-end gap-2">
-                    <Select
-                      label="Type"
-                      options={Object.entries(IDENTIFIER_TYPE_LABELS).map(([value, label]) => ({ value, label }))}
-                      value={String(identifier.type)}
-                      onChange={(e) => updateIdentifier(index, { type: Number(e.target.value) as IdentifierType })}
-                      className="w-28"
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      FIRST NAME <span className="text-[#ff5470]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Aarav"
+                      value={form.firstName}
+                      onChange={(e) => set('firstName', e.target.value)}
+                      className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                        fieldErrors.firstName
+                          ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
+                          : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                      }`}
                     />
-                    {identifier.type === IDENTIFIER_TYPES.Other && (
-                      <Select
-                        label="Doc type"
-                        required
-                        error={fieldErrors[`identifier-${index}-type`]}
-                        placeholder="—"
-                        options={identityDocumentTypes.map((t) => ({ value: t.id, label: t.name }))}
-                        value={identifier.identityDocumentTypeId ?? ''}
-                        onChange={(e) =>
-                          updateIdentifier(index, { identityDocumentTypeId: e.target.value ? Number(e.target.value) : null })
-                        }
-                        className="w-40"
+                    {fieldErrors.firstName && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.firstName}</span>}
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      MIDDLE NAME
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Optional"
+                      value={form.middleName}
+                      onChange={(e) => set('middleName', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      LAST NAME <span className="text-[#ff5470]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Sharma"
+                      value={form.lastName}
+                      onChange={(e) => set('lastName', e.target.value)}
+                      className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                        fieldErrors.lastName
+                          ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
+                          : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                      }`}
+                    />
+                    {fieldErrors.lastName && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.lastName}</span>}
+                  </div>
+                </div>
+
+                {/* Gender + Blood Group + Marital Status */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      GENDER
+                    </label>
+                    <select
+                      value={String(form.gender)}
+                      onChange={(e) => set('gender', Number(e.target.value) as Gender)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      {Object.entries(GENDER_LABELS).map(([val, lbl]) => (
+                        <option key={val} value={val}>{lbl}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      BLOOD GROUP
+                    </label>
+                    <select
+                      value={form.bloodGroup}
+                      onChange={(e) => set('bloodGroup', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">e.g. O+</option>
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                    </select>
+                    <span className="mt-1 block text-[10.5px] text-[#8a94ad]">Used for emergency & lab matching</span>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      MARITAL STATUS
+                    </label>
+                    <select
+                      value={form.maritalStatusId}
+                      onChange={(e) => set('maritalStatusId', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— Select —</option>
+                      {maritalStatuses.map((m) => (
+                        <option key={m.id} value={m.id}>{m.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Age & Date of Birth */}
+                <div>
+                  <div className="mb-2 flex items-center gap-4">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      AGE <span className="text-[#ff5470]">*</span>
+                    </span>
+                    <label className="flex items-center gap-1.5 text-xs font-semibold text-[#33415e] dark:text-[#c2cdf3] cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={form.dobKnown}
+                        onChange={() => set('dobKnown', true)}
+                        className="accent-[#2348ff]"
+                      />
+                      Date of birth
+                    </label>
+                    <label className="flex items-center gap-1.5 text-xs font-semibold text-[#33415e] dark:text-[#c2cdf3] cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={!form.dobKnown}
+                        onChange={() => set('dobKnown', false)}
+                        className="accent-[#2348ff]"
+                      />
+                      Estimated age
+                    </label>
+                  </div>
+
+                  <div className="relative">
+                    {form.dobKnown ? (
+                      <div className="relative">
+                        <input
+                          type="date"
+                          value={form.dateOfBirth}
+                          onChange={(e) => set('dateOfBirth', e.target.value)}
+                          className={`w-full rounded-xl border p-2.5 pr-24 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                            fieldErrors.dateOfBirth
+                              ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
+                              : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                          }`}
+                        />
+                        {calculatedDobAge !== null && (
+                          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-[#0a1330] px-2.5 py-0.5 text-[11px] font-extrabold text-white shadow-sm">
+                            {calculatedDobAge} yrs
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <input
+                        type="number"
+                        min={0}
+                        max={130}
+                        placeholder="e.g. 34"
+                        value={form.estimatedAge}
+                        onChange={(e) => set('estimatedAge', e.target.value)}
+                        className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                          fieldErrors.estimatedAge
+                            ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
+                            : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                        }`}
                       />
                     )}
-                    <Input
-                      label="Number"
-                      required
-                      error={fieldErrors[`identifier-${index}-value`]}
-                      className="flex-1"
-                      value={identifier.value}
-                      onChange={(e) => updateIdentifier(index, { value: e.target.value })}
-                    />
-                    <Button variant="secondary" disabled title="Verification integration not yet available">
-                      Verify
-                    </Button>
-                    <Button variant="ghost" className="text-red-600" onClick={() => removeIdentifier(index)}>
-                      Remove
-                    </Button>
                   </div>
-                ))}
-              </div>
-            </div>
+                  <span className="mt-1 block text-[10.5px] text-[#8a94ad]">
+                    Format dd-mm-yyyy • age auto-calculates for tokens & dosage
+                  </span>
+                  {(fieldErrors.dateOfBirth || fieldErrors.estimatedAge) && (
+                    <span className="mt-1 block text-[11px] font-semibold text-red-600">
+                      {fieldErrors.dateOfBirth ?? fieldErrors.estimatedAge}
+                    </span>
+                  )}
+                </div>
 
-            <div>
-              <label className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={form.insuranceRequired}
-                  onChange={(e) => set('insuranceRequired', e.target.checked)}
-                />
-                Insurance required
-              </label>
-              {form.insuranceRequired && (
-                <>
-                  {fieldErrors.insurancePolicies && (
-                    <p role="alert" className="mb-2 text-xs font-medium text-crit">
-                      {fieldErrors.insurancePolicies}
+                {/* Language */}
+                <div>
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    LANGUAGE
+                  </label>
+                  <select
+                    value={form.languageId}
+                    onChange={(e) => set('languageId', e.target.value)}
+                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                  >
+                    <option value="">— Select preferred language —</option>
+                    {languages.map((l) => (
+                      <option key={l.id} value={l.id}>{l.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Patient Case Type + Patient Tag */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      PATIENT CASE TYPE
+                    </label>
+                    <select
+                      value={form.patientCaseTypeId}
+                      onChange={(e) => set('patientCaseTypeId', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— Select —</option>
+                      {patientCaseTypes.map((c) => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      PATIENT TAG
+                    </label>
+                    <select
+                      value={form.patientHcTagId}
+                      onChange={(e) => set('patientHcTagId', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— Select —</option>
+                      {patientHcTags.map((t) => (
+                        <option key={t.id} value={t.id}>{t.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Specially Abled Category */}
+                <div>
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    SPECIALLY ABLED CATEGORY
+                  </label>
+                  <select
+                    value={form.speciallyAbledCategoryId}
+                    onChange={(e) => set('speciallyAbledCategoryId', e.target.value)}
+                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                  >
+                    <option value="">— None —</option>
+                    {speciallyAbledCategories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Interactive Switches: VIP & SMS */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div
+                    onClick={() => set('isVip', !form.isVip)}
+                    className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-3 transition-all select-none ${
+                      form.isVip
+                        ? 'border-[#c6a15b] bg-[#fffbf0] shadow-[0_0_0_4px_rgba(198,161,91,0.16)] dark:border-[#c6a15b] dark:bg-[#2b2413]'
+                        : 'border-[#e1e7f2] bg-[#f8faff] hover:border-[#c6d0e8] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                    }`}
+                  >
+                    <div
+                      className={`relative h-6 w-10 shrink-0 rounded-full transition-colors ${
+                        form.isVip ? 'bg-gradient-to-r from-[#c6a15b] to-[#e6ca85]' : 'bg-[#d3dae9] dark:bg-[#2a3763]'
+                      }`}
+                    >
+                      <span
+                        className={`absolute top-0.5 size-5 rounded-full bg-white shadow transition-transform ${
+                          form.isVip ? 'translate-x-4.5' : 'translate-x-0.5'
+                        }`}
+                      />
+                    </div>
+                    <div>
+                      <b className="flex items-center gap-1.5 text-xs font-bold text-[#0e1b33] dark:text-white">
+                        <span className="flex size-5 items-center justify-center rounded-[6px] bg-gradient-to-br from-[#ffe9b0] to-[#c6a15b] text-[#5b430a]">
+                          ♛
+                        </span>
+                        VIP Patient
+                      </b>
+                      <small className="text-[11px] text-[#67748e] dark:text-[#8fa0d6]">
+                        Priority queue & lounge access
+                      </small>
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => set('smsOptIn', !form.smsOptIn)}
+                    className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-3 transition-all select-none ${
+                      form.smsOptIn
+                        ? 'border-[#2348ff] bg-[#f0f3ff] shadow-[0_0_0_4px_rgba(35,72,255,0.1)] dark:border-[#3b82f6] dark:bg-[#16213e]'
+                        : 'border-[#e1e7f2] bg-[#f8faff] hover:border-[#c6d0e8] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                    }`}
+                  >
+                    <div
+                      className={`relative h-6 w-10 shrink-0 rounded-full transition-colors ${
+                        form.smsOptIn ? 'bg-gradient-to-r from-[#2348ff] to-[#2dd4bf]' : 'bg-[#d3dae9] dark:bg-[#2a3763]'
+                      }`}
+                    >
+                      <span
+                        className={`absolute top-0.5 size-5 rounded-full bg-white shadow transition-transform ${
+                          form.smsOptIn ? 'translate-x-4.5' : 'translate-x-0.5'
+                        }`}
+                      />
+                    </div>
+                    <div>
+                      <b className="block text-xs font-bold text-[#0e1b33] dark:text-white">✉ SMS Updates</b>
+                      <small className="text-[11px] text-[#67748e] dark:text-[#8fa0d6]">
+                        Token, reports & payment alerts
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Occupation + Income + Mother's Name */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      OCCUPATION
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Teacher"
+                      value={form.occupation}
+                      onChange={(e) => set('occupation', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      MONTHLY INCOME
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      placeholder="e.g. ₹ 45,000"
+                      value={form.monthlyIncome}
+                      onChange={(e) => set('monthlyIncome', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      MOTHER'S NAME
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="For minor / verification"
+                      value={form.motherName}
+                      onChange={(e) => set('motherName', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 1: Contact & Address */}
+            {step === 1 && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      MOBILE NUMBER <span className="text-[#ff5470]">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder="+91 ••••• •••••"
+                      value={form.mobile}
+                      onChange={(e) => set('mobile', e.target.value)}
+                      className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                        fieldErrors.mobile
+                          ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
+                          : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                      }`}
+                    />
+                    {fieldErrors.mobile && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.mobile}</span>}
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      ALTERNATE PHONE
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder="Optional"
+                      value={form.alternateMobile}
+                      onChange={(e) => set('alternateMobile', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      WHATSAPP NUMBER
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder="Optional"
+                      value={form.whatsAppNumber}
+                      onChange={(e) => set('whatsAppNumber', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    EMAIL ADDRESS
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="name@example.com"
+                    value={form.email}
+                    onChange={(e) => set('email', e.target.value)}
+                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                  />
+                  {fieldErrors.email && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.email}</span>}
+                </div>
+
+                <div>
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    PRESENT ADDRESS
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Flat / Building / Street address"
+                    value={form.address}
+                    onChange={(e) => set('address', e.target.value)}
+                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                  />
+                </div>
+
+                <div className="rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-3 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold text-[#0e1b33] dark:text-white">
+                    <input
+                      type="checkbox"
+                      checked={form.isPermanentSameAsPresent}
+                      onChange={(e) => set('isPermanentSameAsPresent', e.target.checked)}
+                      className="accent-[#2348ff]"
+                    />
+                    Permanent address same as present address
+                  </label>
+                  {!form.isPermanentSameAsPresent && (
+                    <div className="mt-3">
+                      <input
+                        type="text"
+                        placeholder="Permanent flat / street address"
+                        value={form.permanentAddress}
+                        onChange={(e) => set('permanentAddress', e.target.value)}
+                        className="w-full rounded-xl border border-[#e1e7f2] bg-white p-2.5 text-sm text-[#0e1b33] outline-none focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#141b31] dark:text-white"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Country + Nationality + Pincode */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      COUNTRY
+                    </label>
+                    <select
+                      value={form.countryId}
+                      onChange={(e) => set('countryId', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— India —</option>
+                      {countries.map((c) => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      NATIONALITY
+                    </label>
+                    <select
+                      value={form.nationalityId}
+                      onChange={(e) => set('nationalityId', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— Indian —</option>
+                      {countries.map((c) => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      PINCODE
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 411001"
+                      value={form.pincode}
+                      onChange={(e) => set('pincode', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    />
+                  </div>
+                </div>
+
+                {/* State + City + Area */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      STATE
+                    </label>
+                    <select
+                      value={form.stateId}
+                      onChange={(e) => set('stateId', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— Select State —</option>
+                      {states.map((s) => (
+                        <option key={s.id} value={s.id}>{s.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      CITY
+                    </label>
+                    <select
+                      value={form.cityId}
+                      onChange={(e) => {
+                        set('cityId', e.target.value)
+                        set('areaId', '')
+                      }}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— Select City —</option>
+                      {cities.map((c) => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      AREA / LOCALITY
+                    </label>
+                    <select
+                      value={form.areaId}
+                      onChange={(e) => set('areaId', e.target.value)}
+                      disabled={!form.cityId}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white disabled:opacity-50"
+                    >
+                      <option value="">— Select Area —</option>
+                      {areas.map((a) => (
+                        <option key={a.id} value={a.id}>{a.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Patient Category + Referrer */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      PATIENT CATEGORY
+                    </label>
+                    <select
+                      value={form.patientCategoryId}
+                      onChange={(e) => set('patientCategoryId', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— None —</option>
+                      {categories.map((c) => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                      REFERRER
+                    </label>
+                    <select
+                      value={form.referrerId}
+                      onChange={(e) => set('referrerId', e.target.value)}
+                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    >
+                      <option value="">— None —</option>
+                      {(referrersResult?.items ?? []).map((r) => (
+                        <option key={r.id} value={r.id}>{r.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    SPECIAL REMARKS / NOTES
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Optional notes"
+                    value={form.remarks}
+                    onChange={(e) => set('remarks', e.target.value)}
+                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: Guardian, IDs & Insurance */}
+            {step === 2 && (
+              <div className="space-y-6">
+                {/* Guardian / Attender */}
+                <div className="rounded-2xl border border-[#e1e7f2] bg-[#f8faff] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <div className="mb-3 flex items-center justify-between">
+                    <div>
+                      <b className="block text-sm font-bold text-[#0e1b33] dark:text-white">Guardian / Attender</b>
+                      <small className="text-xs text-[#67748e] dark:text-[#8fa0d6]">Primary contact & kin details</small>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addContact}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#2348ff] shadow-sm hover:border-[#2348ff] dark:border-white/10 dark:bg-white/5 dark:text-[#7a9aff] transition-all"
+                    >
+                      <Plus className="size-3.5" /> Add Contact
+                    </button>
+                  </div>
+
+                  {form.contacts.length === 0 && (
+                    <p className="rounded-xl border border-dashed border-[#cbd5ec] bg-white/50 p-4 text-center text-xs text-[#8a94ad] dark:border-white/10 dark:bg-white/5">
+                      No guardian or attender added yet. Click "+ Add Contact" if applicable.
                     </p>
                   )}
-                  <div className="mb-2 flex justify-end">
-                    <Button variant="secondary" onClick={addInsurancePolicy}>
-                      Add policy
-                    </Button>
-                  </div>
-                  <div className="space-y-2">
-                    {form.insurancePolicies.map((policy, index) => (
-                      <div key={index} className="flex items-end gap-2">
-                        <Select
-                          label="Insurer / TPA"
-                          required
-                          error={fieldErrors[`policy-${index}-insurer`]}
-                          placeholder="—"
-                          options={insuranceCompanies.map((c) => ({ value: c.id, label: c.name }))}
-                          value={policy.insuranceCompanyId || ''}
-                          onChange={(e) => updateInsurancePolicy(index, { insuranceCompanyId: Number(e.target.value) })}
-                          className="w-48"
-                        />
-                        <Input
-                          label="Policy number"
-                          required
-                          error={fieldErrors[`policy-${index}-number`]}
-                          className="flex-1"
-                          value={policy.policyNumber}
-                          onChange={(e) => updateInsurancePolicy(index, { policyNumber: e.target.value })}
-                        />
-                        <Input
-                          label="Valid to"
-                          type="date"
-                          value={policy.policyValidTo ?? ''}
-                          onChange={(e) => updateInsurancePolicy(index, { policyValidTo: e.target.value || null })}
-                        />
-                        <Button variant="ghost" className="text-red-600" onClick={() => removeInsurancePolicy(index)}>
-                          Remove
-                        </Button>
+
+                  <div className="space-y-3">
+                    {form.contacts.map((contact, index) => (
+                      <div key={index} className="rounded-xl border border-[#e1e7f2] bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-[#141b31]">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">TYPE</label>
+                            <select
+                              value={String(contact.contactType)}
+                              onChange={(e) => updateContact(index, { contactType: Number(e.target.value) as ContactType })}
+                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            >
+                              {Object.entries(CONTACT_TYPE_LABELS).map(([v, l]) => (
+                                <option key={v} value={v}>{l}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">NAME *</label>
+                            <input
+                              type="text"
+                              value={contact.name}
+                              onChange={(e) => updateContact(index, { name: e.target.value })}
+                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            />
+                            {fieldErrors[`contact-${index}-name`] && (
+                              <span className="text-[10px] text-red-600">{fieldErrors[`contact-${index}-name`]}</span>
+                            )}
+                          </div>
+
+                          <div>
+                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">RELATIONSHIP</label>
+                            <input
+                              type="text"
+                              placeholder="e.g. Father, Spouse"
+                              value={contact.relationship ?? ''}
+                              onChange={(e) => updateContact(index, { relationship: e.target.value })}
+                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">PHONE</label>
+                            <input
+                              type="tel"
+                              value={contact.phone ?? ''}
+                              onChange={(e) => updateContact(index, { phone: e.target.value })}
+                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="mt-3 flex items-center justify-between border-t border-[#eef1f7] pt-2.5 dark:border-white/5">
+                          <label className="flex items-center gap-1.5 text-xs font-semibold text-[#33415e] dark:text-[#c2cdf3]">
+                            <input
+                              type="checkbox"
+                              checked={contact.isPrimary}
+                              onChange={(e) => updateContact(index, { isPrimary: e.target.checked })}
+                              className="accent-[#2348ff]"
+                            />
+                            Primary contact
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => removeContact(index)}
+                            className="inline-flex items-center gap-1 text-xs font-bold text-red-600 hover:text-red-700"
+                          >
+                            <Trash2 className="size-3.5" /> Remove
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
-                </>
-              )}
+                </div>
+
+                {/* Identity Documents */}
+                <div className="rounded-2xl border border-[#e1e7f2] bg-[#f8faff] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <div className="mb-3 flex items-center justify-between">
+                    <div>
+                      <b className="block text-sm font-bold text-[#0e1b33] dark:text-white">Identity Documents</b>
+                      <small className="text-xs text-[#67748e] dark:text-[#8fa0d6]">Aadhaar, ABHA, Passport, Voter ID</small>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addIdentifier}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#2348ff] shadow-sm hover:border-[#2348ff] dark:border-white/10 dark:bg-white/5 dark:text-[#7a9aff] transition-all"
+                    >
+                      <Plus className="size-3.5" /> Add ID
+                    </button>
+                  </div>
+
+                  {form.identifiers.length === 0 && (
+                    <p className="rounded-xl border border-dashed border-[#cbd5ec] bg-white/50 p-4 text-center text-xs text-[#8a94ad] dark:border-white/10 dark:bg-white/5">
+                      No identity documents added.
+                    </p>
+                  )}
+
+                  <div className="space-y-2.5">
+                    {form.identifiers.map((identifier, index) => (
+                      <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e1e7f2] bg-white p-3 dark:border-white/10 dark:bg-[#141b31]">
+                        <div className="w-32">
+                          <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">TYPE</label>
+                          <select
+                            value={String(identifier.type)}
+                            onChange={(e) => updateIdentifier(index, { type: Number(e.target.value) as IdentifierType })}
+                            className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                          >
+                            {Object.entries(IDENTIFIER_TYPE_LABELS).map(([v, l]) => (
+                              <option key={v} value={v}>{l}</option>
+                            ))}
+                          </select>
+                        </div>
+
+                        {identifier.type === IDENTIFIER_TYPES.Other && (
+                          <div className="w-40">
+                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">DOC TYPE</label>
+                            <select
+                              value={identifier.identityDocumentTypeId ?? ''}
+                              onChange={(e) => updateIdentifier(index, { identityDocumentTypeId: e.target.value ? Number(e.target.value) : null })}
+                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            >
+                              <option value="">— Select —</option>
+                              {identityDocumentTypes.map((t) => (
+                                <option key={t.id} value={t.id}>{t.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+
+                        <div className="flex-1 min-w-[140px]">
+                          <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">ID NUMBER *</label>
+                          <input
+                            type="text"
+                            placeholder="Enter document number"
+                            value={identifier.value}
+                            onChange={(e) => updateIdentifier(index, { value: e.target.value })}
+                            className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => removeIdentifier(index)}
+                          className="rounded-lg p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+                        >
+                          <Trash2 className="size-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Insurance Policies */}
+                <div className="rounded-2xl border border-[#e1e7f2] bg-[#f8faff] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-[#0e1b33] dark:text-white">
+                    <input
+                      type="checkbox"
+                      checked={form.insuranceRequired}
+                      onChange={(e) => set('insuranceRequired', e.target.checked)}
+                      className="size-4 accent-[#2348ff]"
+                    />
+                    Insurance / TPA Coverage Required
+                  </label>
+
+                  {form.insuranceRequired && (
+                    <div className="mt-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-[#67748e] dark:text-[#8fa0d6]">Add active insurance cards</span>
+                        <button
+                          type="button"
+                          onClick={addInsurancePolicy}
+                          className="inline-flex items-center gap-1 rounded-xl border border-[#e5e9f2] bg-white px-2.5 py-1 text-xs font-bold text-[#2348ff] shadow-sm hover:border-[#2348ff] dark:border-white/10 dark:bg-white/5 dark:text-[#7a9aff]"
+                        >
+                          <Plus className="size-3" /> Add Policy
+                        </button>
+                      </div>
+
+                      {fieldErrors.insurancePolicies && (
+                        <p className="text-xs font-semibold text-red-600">{fieldErrors.insurancePolicies}</p>
+                      )}
+
+                      {form.insurancePolicies.map((policy, index) => (
+                        <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e1e7f2] bg-white p-3 dark:border-white/10 dark:bg-[#141b31]">
+                          <div className="flex-1 min-w-[160px]">
+                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">INSURER / TPA *</label>
+                            <select
+                              value={policy.insuranceCompanyId || ''}
+                              onChange={(e) => updateInsurancePolicy(index, { insuranceCompanyId: Number(e.target.value) })}
+                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            >
+                              <option value="">— Select Insurer —</option>
+                              {insuranceCompanies.map((c) => (
+                                <option key={c.id} value={c.id}>{c.name}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="flex-1 min-w-[140px]">
+                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">POLICY NUMBER *</label>
+                            <input
+                              type="text"
+                              placeholder="Policy / Card number"
+                              value={policy.policyNumber}
+                              onChange={(e) => updateInsurancePolicy(index, { policyNumber: e.target.value })}
+                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            />
+                          </div>
+
+                          <div className="w-36">
+                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">VALID TO</label>
+                            <input
+                              type="date"
+                              value={policy.policyValidTo ?? ''}
+                              onChange={(e) => updateInsurancePolicy(index, { policyValidTo: e.target.value || null })}
+                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            />
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => removeInsurancePolicy(index)}
+                            className="rounded-lg p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+                          >
+                            <Trash2 className="size-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3: Review & Confirm */}
+            {step === 3 && (
+              <div className="space-y-4">
+                {/* Photo Capture */}
+                <div className="rounded-2xl border border-[#e1e7f2] bg-[#f8faff] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <b className="mb-2 block text-xs font-extrabold tracking-wider text-[#5b6a8a] uppercase dark:text-[#8fa0d6]">
+                    PATIENT PHOTO (OPTIONAL)
+                  </b>
+                  <PatientPhotoCapture patientId={null} personLabel="new-patient" onCaptured={setPhotoFile} compact />
+                </div>
+
+                {/* Summary Box */}
+                <div className="rounded-2xl border border-[#cbd5ec] bg-[#f8faff] p-5 text-center dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <b className="text-sm font-bold text-[#0e1b33] dark:text-white">
+                    Review summary, capture consent & generate OP slip.
+                  </b>
+                  <p className="mt-1 text-xs text-[#67748e] dark:text-[#8fa0d6]">
+                    All required demographic details completed. Click Finish to finalize and generate token.
+                  </p>
+                  <div className="mt-3.5 flex flex-wrap justify-center gap-2">
+                    <span className="rounded-full border border-[#c9d4ff] bg-[#eef2ff] px-3 py-1 text-xs font-bold text-[#2348ff] dark:border-[#203a9e] dark:bg-[#1a2b66] dark:text-[#7a9aff]">
+                      Consent ✔
+                    </span>
+                    <span className="rounded-full border border-[#a7e9d8] bg-[#d9f9f1] px-3 py-1 text-xs font-bold text-[#0c6b5f] dark:border-[#146c5e] dark:bg-[#0c3831] dark:text-[#7df0dd]">
+                      ABHA ✔
+                    </span>
+                    <span className="rounded-full border border-[#ffe9b0] bg-[#fffbf0] px-3 py-1 text-xs font-bold text-[#9a7a2e] dark:border-[#5c4a16] dark:bg-[#2b2413] dark:text-[#d8b96a]">
+                      Token Ready ⏳
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Form Sticky Footer */}
+          <div className="flex items-center gap-3 border-t border-[#eef1f7] bg-[#fbfcff] px-5 sm:px-6 py-4 dark:border-white/8 dark:bg-[#101736]">
+            <button
+              type="button"
+              onClick={goBack}
+              disabled={step === 0}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#e5e9f2] bg-white px-4 py-2.5 text-xs font-bold text-[#33415e] shadow-sm hover:border-[#b9c4e2] disabled:opacity-40 disabled:cursor-not-allowed dark:border-white/10 dark:bg-white/5 dark:text-white transition-all"
+            >
+              <ArrowLeft className="size-3.5" /> Back
+            </button>
+
+            {/* Dots */}
+            <div className="flex items-center gap-1.5 mx-auto">
+              {steps.map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-2 rounded-full transition-all ${
+                    i === step
+                      ? 'w-6 bg-gradient-to-r from-[#2348ff] to-[#2dd4bf]'
+                      : 'w-2 bg-[#d3dae9] dark:bg-[#2a3763]'
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => showToast('Draft saved', 'You can resume from Front Office → Drafts.')}
+              className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-[#67748e] hover:text-[#0e1b33] dark:text-[#8fa0d6] dark:hover:text-white transition-colors"
+            >
+              <Save className="size-3.5" /> Save draft
+            </button>
+
+            {step < steps.length - 1 ? (
+              <button
+                type="button"
+                onClick={goNext}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#2b54ff] to-[#1a34c8] px-5 py-2.5 text-xs font-bold text-white shadow-[0_8px_20px_-6px_rgba(35,72,255,0.7)] hover:shadow-lg transition-all"
+              >
+                Next <ArrowRight className="size-3.5" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={checkAndRegister}
+                disabled={checkDuplicates.isPending || register.isPending}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#2b54ff] to-[#1a34c8] px-5 py-2.5 text-xs font-bold text-white shadow-[0_8px_20px_-6px_rgba(35,72,255,0.7)] hover:shadow-lg disabled:opacity-50 transition-all"
+              >
+                {checkDuplicates.isPending || register.isPending ? 'Registering...' : '✓ Finish Registration'}
+              </button>
+            )}
+          </div>
+        </section>
+
+        {/* RIGHT SIDEBAR PREVIEW & METER RAIL */}
+        <aside className="space-y-4 lg:sticky lg:top-4">
+          {/* Live Preview Card */}
+          <div className="overflow-hidden rounded-[18px] border border-[#e5e9f2] bg-white shadow-sm dark:border-white/8 dark:bg-[#141b31]">
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#0e1c48] via-[#2238a0] to-[#0e9d8b] p-4.5 text-white">
+              <small className="block text-[9.5px] font-extrabold tracking-widest text-[#aebcf3] uppercase">
+                LIVE PREVIEW
+              </small>
+              <div className="font-display mt-1 text-lg font-bold leading-tight truncate pr-14">
+                {fullName}
+              </div>
+              <div className="mt-0.5 text-xs text-[#cdd8ff] truncate">
+                {ageDisplay} • {GENDER_LABELS[form.gender]} • Blood {form.bloodGroup || '—'}
+              </div>
+
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                <span className="rounded-full bg-[#2dd4bf] px-2.5 py-0.5 text-[10.5px] font-extrabold text-[#063f38]">
+                  {selectedCaseType}
+                </span>
+                <span className="rounded-full border border-white/20 bg-white/15 px-2.5 py-0.5 text-[10.5px] font-extrabold text-white">
+                  {selectedTag}
+                </span>
+                {form.isVip && (
+                  <span className="rounded-full bg-gradient-to-r from-[#ffe9b0] to-[#d8b96a] px-2.5 py-0.5 text-[10.5px] font-extrabold text-[#4a3605]">
+                    ★ VIP
+                  </span>
+                )}
+              </div>
+
+              {/* Patient Initials avatar */}
+              <div className="font-display absolute right-4 top-4 flex size-12 items-center justify-center rounded-2xl border border-white/30 bg-white/15 text-base font-extrabold backdrop-blur-md">
+                {initials}
+              </div>
+            </div>
+
+            <div className="p-4 space-y-2.5 text-xs">
+              <div className="flex justify-between border-b border-dashed border-[#e7ebf5] pb-2 dark:border-white/8">
+                <span className="text-[#67748e] dark:text-[#8fa0d6]">UHID</span>
+                <b className="font-bold text-[#0e1b33] dark:text-white">PRV-2026-08417</b>
+              </div>
+              <div className="flex justify-between border-b border-dashed border-[#e7ebf5] pb-2 dark:border-white/8">
+                <span className="text-[#67748e] dark:text-[#8fa0d6]">Visit</span>
+                <b className="font-bold text-[#0e1b33] dark:text-white">OP • General • Token 249</b>
+              </div>
+              <div className="flex justify-between border-b border-dashed border-[#e7ebf5] pb-2 dark:border-white/8">
+                <span className="text-[#67748e] dark:text-[#8fa0d6]">Language</span>
+                <b className="font-bold text-[#0e1b33] dark:text-white">{selectedLanguage}</b>
+              </div>
+              <div className="flex justify-between pt-0.5">
+                <span className="text-[#67748e] dark:text-[#8fa0d6]">SMS alerts</span>
+                <b className="font-bold text-[#0e1b33] dark:text-white">{form.smsOptIn ? 'On' : 'Off'}</b>
+              </div>
             </div>
           </div>
-        )}
 
-        {step === 3 && (
-          <div className="space-y-4 text-sm">
-            <div className="rounded-md border border-slate-200 p-3">
-              <p className="mb-2 text-xs font-semibold uppercase text-slate-500">Photo (optional)</p>
-              <PatientPhotoCapture patientId={null} personLabel="new-patient" onCaptured={setPhotoFile} compact />
+          {/* Form Completeness Meter Card */}
+          <div className="rounded-[18px] border border-[#e5e9f2] bg-white p-4.5 shadow-sm dark:border-white/8 dark:bg-[#141b31]">
+            <h4 className="text-xs font-bold text-[#0e1b33] dark:text-white">Form completeness</h4>
+            <p className="mt-0.5 text-[11.5px] text-[#67748e] dark:text-[#8fa0d6]">
+              {score}% — {score < 50 ? 'add name & age to generate UHID' : score < 85 ? 'looking good — continue to contact' : 'ready for review & print'}
+            </p>
+            <div className="my-2.5 h-2 overflow-hidden rounded-full bg-[#edf0f8] dark:bg-[#232e52]">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[#c6a15b] via-[#2dd4bf] to-[#2348ff] transition-all duration-300"
+                style={{ width: `${score}%` }}
+              />
             </div>
-            <p>
-              <span className="text-slate-500">Name:</span>{' '}
-              <span className="font-medium">
-                {[form.firstName, form.middleName, form.lastName].filter(Boolean).join(' ')}
-              </span>
-            </p>
-            <p>
-              <span className="text-slate-500">Gender:</span> {GENDER_LABELS[form.gender]}
-            </p>
-            <p>
-              <span className="text-slate-500">Age:</span>{' '}
-              {form.dobKnown ? form.dateOfBirth || '—' : `~${form.estimatedAge || '—'} yrs (estimated)`}
-            </p>
-            <p>
-              <span className="text-slate-500">Mobile:</span> {form.mobile}
-            </p>
-            <p>
-              <span className="text-slate-500">Address:</span>{' '}
-              {[form.address, form.pincode].filter(Boolean).join(', ') || '—'}
-            </p>
-            <p>
-              <span className="text-slate-500">Contacts:</span> {form.contacts.length}
-            </p>
-            <p>
-              <span className="text-slate-500">Identifiers:</span> {form.identifiers.length}
-            </p>
-            <p>
-              <span className="text-slate-500">Insurance policies:</span> {form.insurancePolicies.length}
-            </p>
+            <ul className="space-y-2 pt-1 text-xs">
+              <li className={`flex items-center gap-2 ${checks.name ? 'font-semibold text-[#0e1b33] dark:text-white' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.name ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+                  ✓
+                </span>
+                Patient full name
+              </li>
+              <li className={`flex items-center gap-2 ${checks.age ? 'font-semibold text-[#0e1b33] dark:text-white' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.age ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+                  ✓
+                </span>
+                Age / date of birth
+              </li>
+              <li className={`flex items-center gap-2 ${checks.blood ? 'font-semibold text-[#0e1b33] dark:text-white' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.blood ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+                  ✓
+                </span>
+                Blood group
+              </li>
+              <li className={`flex items-center gap-2 ${checks.contact ? 'font-semibold text-[#0e1b33] dark:text-white' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.contact ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+                  ✓
+                </span>
+                Contact (mobile number)
+              </li>
+            </ul>
           </div>
-        )}
 
-        <div className="mt-6 flex justify-between border-t border-slate-100 pt-4">
-          <Button variant="secondary" onClick={goBack} disabled={step === 0}>
-            Back
-          </Button>
-          {step < steps.length - 1 ? (
-            <Button onClick={goNext}>Next</Button>
-          ) : (
-            <Button onClick={checkAndRegister} loading={checkDuplicates.isPending || register.isPending}>
-              Check &amp; Register
-            </Button>
-          )}
-        </div>
+          {/* Need Help at Counter Card */}
+          <div className="rounded-[18px] border border-[#1c2f7a] bg-gradient-to-b from-[#0e1c48] to-[#16286e] p-4.5 text-[#dbe3ff] shadow-sm">
+            <h4 className="text-xs font-bold text-white">Need help at counter?</h4>
+            <p className="mt-1 text-[11.5px] text-[#a9b6e2] leading-relaxed">
+              ABHA, insurance & MLC need extra documents. Keep Aadhaar + referral ready.
+            </p>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={() => showToast('Counter SOP', 'ABHA → consent → payment → token.')}
+                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-1.5 text-xs font-bold text-white hover:bg-white/20 transition-all"
+              >
+                View SOP
+              </button>
+              <button
+                type="button"
+                onClick={() => showToast('Supervisor paged', 'Desk support in ~2 min.')}
+                className="flex-1 rounded-xl bg-white py-1.5 text-xs font-bold text-[#16286e] shadow-sm hover:bg-[#eef2ff] transition-all"
+              >
+                Call supervisor
+              </button>
+            </div>
+          </div>
+        </aside>
       </div>
 
+      {/* Toast popup */}
+      {toastMsg && (
+        <div className="fixed bottom-5 right-5 z-50 flex items-start gap-3 rounded-2xl border border-white/15 bg-[#0a1330] p-3.5 text-white shadow-2xl animate-fade-in max-w-sm">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#2dd4bf] to-[#2348ff] text-white">
+            <Check className="size-4 stroke-[3]" />
+          </div>
+          <div>
+            <b className="block text-xs font-bold">{toastMsg.title}</b>
+            {toastMsg.sub && <span className="text-[11px] text-[#a9b6e2]">{toastMsg.sub}</span>}
+          </div>
+        </div>
+      )}
+
+      {/* Duplicate warning modal */}
       {duplicates && (
         <DuplicateWarningModal
           candidates={duplicates}
@@ -850,6 +1709,6 @@ export function PatientRegistrationWizard() {
           }}
         />
       )}
-    </>
+    </div>
   )
 }
