@@ -146,11 +146,13 @@ function SidebarNode({
     </span>
   ) : null
 
-  const linkClass = `group relative flex items-center gap-2.5 rounded-[11px] px-2.5 py-2 text-[13px] font-medium transition-all ${
+  const linkClass = `group relative flex items-center gap-2.5 rounded-[11px] px-2.5 py-2 text-[13.2px] font-medium transition-all ${
     collapsed ? 'justify-center' : ''
   } ${
     isActive
       ? 'bg-gradient-to-r from-[#3b62ff] to-[#3b62ff]/65 text-white font-semibold shadow-[0_8px_20px_-8px_rgba(59,98,255,0.8),inset_0_1px_0_rgba(255,255,255,0.35)]'
+      : holdsActive
+      ? 'bg-white/10 text-white font-semibold'
       : 'text-[#c2cdf3] hover:bg-white/8 hover:text-white'
   }`
 
@@ -165,7 +167,7 @@ function SidebarNode({
   }
 
   const childList = hasChildren && isOpen && (
-    <div className={`mt-1 space-y-0.5 ${depth > 0 ? 'ml-3 border-l border-white/10 pl-2' : ''}`}>
+    <div className="mt-1 ml-3.5 space-y-0.5 border-l border-white/10 pl-2">
       {node.children.map((child) => (
         <SidebarNode
           key={child.id}
@@ -180,44 +182,6 @@ function SidebarNode({
     </div>
   )
 
-  // Top-level Section Header (when depth === 0, has children and no direct path)
-  if (depth === 0 && !node.path && hasChildren) {
-    if (collapsed) {
-      return (
-        <div className="py-1">
-          <div className="my-1.5 h-px bg-white/10" />
-          <div className="space-y-1">
-            {node.children.map((child) => (
-              <SidebarNode
-                key={child.id}
-                node={child}
-                activeNodeId={activeNodeId}
-                forceOpen={forceOpen}
-                collapsed={collapsed}
-                onExpandSidebar={onExpandSidebar}
-                depth={depth + 1}
-              />
-            ))}
-          </div>
-        </div>
-      )
-    }
-
-    return (
-      <div className="pt-2.5 pb-1">
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="flex w-full items-center justify-between px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#7c8cc0] hover:text-white transition-colors"
-        >
-          <span>{node.title}</span>
-          <ChevronDown className={`size-3 text-[#7c8cc0] transition-transform ${isOpen ? '' : '-rotate-90'}`} aria-hidden />
-        </button>
-        {childList}
-      </div>
-    )
-  }
-
   // A node with both path AND children
   if (node.path && hasChildren) {
     const path = node.path
@@ -225,7 +189,7 @@ function SidebarNode({
       <div>
         <div className={`flex items-center gap-0.5 ${collapsed ? 'flex-col' : ''}`}>
           <a href={path} title={collapsed ? node.title : undefined} onClick={handleLinkClick(path)} className={`min-w-0 flex-1 ${linkClass}`}>
-            <span className="flex size-4 shrink-0 items-center justify-center">
+            <span className="flex size-4.5 shrink-0 items-center justify-center text-inherit">
               <MenuIconFor name={node.icon} />
             </span>
             {!collapsed && <span className="truncate">{node.title}</span>}
@@ -252,7 +216,7 @@ function SidebarNode({
     const path = node.path
     return (
       <a href={path} title={collapsed ? node.title : undefined} onClick={handleLinkClick(path)} className={linkClass}>
-        <span className="flex size-4 shrink-0 items-center justify-center">
+        <span className="flex size-4.5 shrink-0 items-center justify-center text-inherit">
           <MenuIconFor name={node.icon} />
         </span>
         {!collapsed && <span className="truncate">{node.title}</span>}
@@ -266,7 +230,7 @@ function SidebarNode({
     )
   }
 
-  // Nested group without path (depth > 0)
+  // Group node without path (expandable menu item)
   return (
     <div>
       <button
@@ -281,7 +245,7 @@ function SidebarNode({
           setOpen((value) => !value)
         }}
         aria-expanded={hasChildren ? isOpen : undefined}
-        className={`flex w-full items-center gap-2.5 rounded-[11px] px-2.5 py-2 text-[13px] font-medium transition-all ${
+        className={`group flex w-full items-center gap-2.5 rounded-[11px] px-2.5 py-2 text-[13.2px] font-medium transition-all ${
           collapsed ? 'justify-center' : ''
         } ${
           holdsActive
@@ -289,12 +253,13 @@ function SidebarNode({
             : 'text-[#c2cdf3] hover:bg-white/8 hover:text-white'
         }`}
       >
-        <span className="flex size-4 shrink-0 items-center justify-center">
+        <span className="flex size-4.5 shrink-0 items-center justify-center text-inherit">
           <MenuIconFor name={node.icon} />
         </span>
         {!collapsed && (
           <>
             <span className="flex-1 text-left truncate">{node.title}</span>
+            {badgeEl}
             <ChevronDown className={`size-3.5 text-[#8fa0d6] transition-transform ${isOpen ? '' : '-rotate-90'}`} aria-hidden />
           </>
         )}
