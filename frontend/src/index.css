@@ -14,19 +14,19 @@
 
   /* Shell tokens — used by AppShell, auth pages and shared ui/ primitives.
      Values are re-pointed at runtime by the `.dark` block below. */
-  --color-shell-bg: #eef2f7;
-  --color-shell-bg2: #e4e9f1;
+  --color-shell-bg: #f7f2ec;
+  --color-shell-bg2: #f0eae2;
   --color-panel: #ffffff;
-  --color-panel-2: #f3f5f9;
+  --color-panel-2: #fdf8f2;
   --color-panel-solid: #ffffff;
-  --color-border-soft: rgb(15 23 42 / 0.1);
-  --color-border-strong: rgb(15 23 42 / 0.18);
-  --color-ink: #0f1a2e;
-  --color-ink-muted: #586a86;
-  --color-ink-faint: #8493ab;
+  --color-border-soft: rgb(15 23 42 / 0.08);
+  --color-border-strong: rgb(15 23 42 / 0.15);
+  --color-ink: #191919;
+  --color-ink-muted: #67748e;
+  --color-ink-faint: #8a94ad;
 
-  --color-accent: #1e3a8a;
-  --color-accent-2: #2563eb;
+  --color-accent: #c66328;
+  --color-accent-2: #9e4f20;
   --color-indigo: #1e40af;
   --color-violet: #334155;
   --color-crit: #e11d48;

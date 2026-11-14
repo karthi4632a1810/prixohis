@@ -65,8 +65,8 @@ function TabChip({
     <div
       className={`group flex shrink-0 items-center rounded-[11px] border transition-all ${
         isActive
-          ? 'border-[#e5e9f2] bg-white text-[#1a34c8] shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] dark:border-white/15 dark:bg-[#121c38] dark:text-[#7a9aff]'
-          : 'border-transparent text-[#627290] hover:bg-white/60 hover:text-[#0e1b33] dark:text-[#8fa0d6] dark:hover:bg-white/5 dark:hover:text-white'
+          ? 'border-[#e5e9f2] bg-white text-[#9e4f20] shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] dark:border-white/15 dark:bg-[#121c38] dark:text-[#e0a989]'
+          : 'border-transparent text-[#67748e] hover:bg-white/60 hover:text-[#191919] dark:text-[#8fa0d6] dark:hover:bg-white/5 dark:hover:text-white'
       } ${isPrimary && isActive ? 'font-bold' : 'font-medium'}`}
     >
       <button
@@ -82,7 +82,7 @@ function TabChip({
         <span
           className={`flex size-5 shrink-0 items-center justify-center rounded-[7px] text-[11px] ${
             isActive
-              ? 'bg-[#e9edff] text-[#2348ff] dark:bg-[#1e2a52] dark:text-[#6d8eff]'
+              ? 'bg-[#f9ede1] text-[#c66328] dark:bg-[#9e4f20]/20 dark:text-[#e0a989]'
               : 'text-inherit opacity-70'
           }`}
         >

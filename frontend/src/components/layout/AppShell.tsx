@@ -4,7 +4,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Code2,
   KeyRound,
   LogOut,
   Moon,
@@ -141,7 +140,7 @@ function SidebarNode({
 
   const isAppointments = node.title.toLowerCase().includes('appointment')
   const badgeEl = isAppointments ? (
-    <span className="ml-auto rounded-full border border-[rgba(45,212,191,0.35)] bg-[rgba(45,212,191,0.18)] px-[7px] py-[1px] text-[11px] font-extrabold text-[#7df0dd]">
+    <span className="ml-auto rounded-full border border-[rgba(198,99,40,0.35)] bg-[rgba(198,99,40,0.18)] px-[7px] py-[1px] text-[11px] font-extrabold text-[#e0a989]">
       24
     </span>
   ) : null
@@ -150,10 +149,10 @@ function SidebarNode({
     collapsed ? 'justify-center' : ''
   } ${
     isActive
-      ? 'bg-gradient-to-r from-[#3b62ff]/95 to-[#3b62ff]/55 text-white font-medium shadow-[0_10px_22px_-10px_rgba(59,98,255,0.8),inset_0_1px_0_rgba(255,255,255,0.35)]'
+      ? 'bg-gradient-to-r from-[rgba(198,99,40,0.95)] to-[rgba(198,99,40,0.55)] text-white font-medium shadow-[0_10px_22px_-10px_rgba(198,99,40,0.8),inset_0_1px_0_rgba(255,255,255,0.35)]'
       : holdsActive
       ? 'bg-white/10 text-white font-semibold'
-      : 'text-[#c2cdf3] hover:bg-white/6 hover:text-white'
+      : 'text-[#d6d2cb] hover:bg-white/6 hover:text-white'
   }`
 
   const handleLinkClick = (path: string) => (e: React.MouseEvent) => {
@@ -200,7 +199,7 @@ function SidebarNode({
               type="button"
               title={isOpen ? 'Collapse' : 'Expand'}
               onClick={() => setOpen((value) => !value)}
-              className="flex shrink-0 items-center justify-center rounded-[8px] p-2 text-[#8fa0d6] hover:bg-white/10 hover:text-white transition-colors"
+              className="flex shrink-0 items-center justify-center rounded-[8px] p-2 text-[#8d8880] hover:bg-white/10 hover:text-white transition-colors"
             >
               <ChevronDown className={`size-3.5 transition-transform ${isOpen ? '' : '-rotate-90'}`} aria-hidden />
             </button>
@@ -245,12 +244,12 @@ function SidebarNode({
           setOpen((value) => !value)
         }}
         aria-expanded={hasChildren ? isOpen : undefined}
-        className={`group flex w-full items-center gap-2.5 rounded-[11px] px-2.5 py-2 text-[13.2px] font-medium transition-all ${
+        className={`group flex w-full items-center gap-[11px] rounded-[11px] px-[10px] py-[9px] text-[13.2px] font-medium transition-all ${
           collapsed ? 'justify-center' : ''
         } ${
           holdsActive
             ? 'bg-white/10 text-white font-semibold'
-            : 'text-[#c2cdf3] hover:bg-white/8 hover:text-white'
+            : 'text-[#d6d2cb] hover:bg-white/6 hover:text-white'
         }`}
       >
         <span className="flex size-4.5 shrink-0 items-center justify-center text-inherit">
@@ -260,7 +259,7 @@ function SidebarNode({
           <>
             <span className="flex-1 text-left truncate">{node.title}</span>
             {badgeEl}
-            <ChevronDown className={`size-3.5 text-[#8fa0d6] transition-transform ${isOpen ? '' : '-rotate-90'}`} aria-hidden />
+            <ChevronDown className={`size-3.5 text-[#8d8880] transition-transform ${isOpen ? '' : '-rotate-90'}`} aria-hidden />
           </>
         )}
       </button>
@@ -342,10 +341,10 @@ export function AppShell() {
 
   return (
     <TabWorkspaceProvider>
-      <div className="relative flex h-dvh overflow-hidden bg-[#eef1f7] text-[#0f1e33] dark:bg-[#070a13] dark:text-[#e8edf7]">
+      <div className="relative flex h-dvh overflow-hidden bg-[#f7f2ec] text-[#191919] dark:bg-[#070a13] dark:text-[#e8edf7]">
         {/* Subtle background glow & grid matching the dashboard theme */}
         <div className="pointer-events-none fixed inset-0 z-0">
-          <div className="absolute inset-0 bg-[radial-gradient(700px_380px_at_18%_-8%,rgba(35,72,255,0.08),transparent_60%),radial-gradient(600px_420px_at_88%_0%,rgba(14,183,162,0.08),transparent_60%),radial-gradient(900px_600px_at_50%_110%,rgba(198,161,91,0.06),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(700px_380px_at_18%_-8%,rgba(198,99,40,0.12),transparent_60%),radial-gradient(600px_420px_at_88%_0%,rgba(198,99,40,0.10),transparent_60%),radial-gradient(900px_600px_at_50%_110%,rgba(198,161,91,0.06),transparent_60%)]" />
           <div
             className="absolute inset-0 opacity-40"
             style={{
@@ -360,14 +359,14 @@ export function AppShell() {
         {/* Sidebar matching dashboard.html / Pravo Hospital OS theme */}
         <aside
           style={{
-            background: 'linear-gradient(180deg, #0a1330 0%, #0d1a41 55%, #0b1537 100%)',
+            background: 'linear-gradient(180deg, #191919 0%, #1c1c1c 55%, #191919 100%)',
           }}
-          className={`relative z-30 flex min-h-0 shrink-0 flex-col border-r border-white/8 text-[#dbe3ff] shadow-xl transition-[width] duration-200 ${
+          className={`relative z-30 flex min-h-0 shrink-0 flex-col border-r border-white/8 text-[#ebe8e3] shadow-xl transition-[width] duration-200 ${
             collapsed ? 'w-[84px]' : 'w-[288px]'
           }`}
         >
           {/* Ambient glow pseudo-elements on sidebar */}
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(420px_220px_at_20%_0%,rgba(35,72,255,0.35),transparent_70%),radial-gradient(360px_260px_at_90%_30%,rgba(14,183,162,0.18),transparent_70%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(420px_220px_at_20%_0%,rgba(198,99,40,0.35),transparent_70%),radial-gradient(360px_260px_at_90%_30%,rgba(198,99,40,0.18),transparent_70%)]" />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
 
           {/* Toggle sidebar button */}
@@ -375,34 +374,25 @@ export function AppShell() {
             type="button"
             onClick={() => setCollapsed((v) => !v)}
             title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            className="absolute top-4.5 -right-3 z-40 flex size-6 items-center justify-center rounded-full border border-white/20 bg-[#0d1a41] text-[#c2cdf3] shadow-md hover:bg-[#1a2b66] hover:text-white transition-all"
+            className="absolute top-4.5 -right-3 z-40 flex size-6 items-center justify-center rounded-full border border-white/20 bg-[#1c1c1c] text-[#d6d2cb] shadow-md hover:bg-[#2a2a2a] hover:text-white transition-all"
           >
             {collapsed ? <ChevronRight className="size-3" aria-hidden /> : <ChevronLeft className="size-3" aria-hidden />}
           </button>
 
           {/* Brand Header */}
           <div className={`relative flex items-center gap-3 p-[18px_16px_14px] ${collapsed ? 'justify-center px-0' : ''}`}>
-            <div className="flex size-[38px] shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br from-[#3b62ff] via-[#7a5bff] to-[#0eb7a2] font-display text-[18px] font-extrabold text-white shadow-[0_8px_20px_-6px_rgba(59,98,255,0.7),inset_0_1px_0_rgba(255,255,255,0.5)]">
-              P
-            </div>
-            {!collapsed && (
-              <div className="min-w-0 flex-1">
-                <div className="font-display text-[15.5px] leading-[1.05] font-extrabold text-white">Pravo</div>
-                <div className="text-[10px] font-bold tracking-[0.28em] text-[#8fa0d6] uppercase">Hospital OS</div>
-              </div>
-            )}
-            {!collapsed && (
-              <div className="flex size-7 items-center justify-center rounded-[8px] border border-white/10 bg-white/7 text-xs font-mono text-[#8fa0d6]">
-                <Code2 className="size-3.5" aria-hidden />
-              </div>
-            )}
+            <img
+              src="/logo-dark.svg"
+              alt="Pravo"
+              className={collapsed ? 'h-[32px] w-[34px] object-cover object-left' : 'h-[38px] w-auto max-w-[196px] object-contain block'}
+            />
           </div>
 
           {/* Search bar inside sidebar */}
           {!collapsed && (
             <div className="relative mx-[14px] mt-[2px] mb-[12px]">
               <div className="relative">
-                <Search className="pointer-events-none absolute top-1/2 left-[10px] size-3.5 -translate-y-1/2 text-[#8b99c8]" aria-hidden />
+                <Search className="pointer-events-none absolute top-1/2 left-[10px] size-3.5 -translate-y-1/2 text-[#8d8880]" aria-hidden />
                 <input
                   id={MENU_SEARCH_ID}
                   type="text"
@@ -413,10 +403,10 @@ export function AppShell() {
                   }}
                   placeholder="Search menu…"
                   aria-label="Search menu"
-                  className="w-full rounded-[11px] border border-white/12 bg-white/7 py-[10px] pr-[52px] pl-[34px] text-[13px] text-[#e8eeff] outline-none placeholder:text-[#8b99c8] focus:border-[#7a8fff]/70 focus:bg-white/10 focus:ring-0 focus:shadow-[0_0_0_3px_rgba(59,98,255,0.25)] transition-all"
+                  className="w-full rounded-[11px] border border-white/12 bg-white/7 py-[10px] pr-[52px] pl-[34px] text-[13px] text-[#e8eeff] outline-none placeholder:text-[#8d8880] focus:border-[rgba(198,99,40,0.7)] focus:bg-white/10 focus:ring-0 focus:shadow-[0_0_0_3px_rgba(198,99,40,0.25)] transition-all"
                 />
                 {!menuSearch ? (
-                  <kbd className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 rounded-[6px] border border-white/12 bg-white/8 px-[6px] py-[2px] text-[10.5px] font-semibold text-[#a9b6e2]">
+                  <kbd className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 rounded-[6px] border border-white/12 bg-white/8 px-[6px] py-[2px] text-[10.5px] font-semibold text-[#b5b0a6]">
                     Ctrl K
                   </kbd>
                 ) : (
@@ -424,7 +414,7 @@ export function AppShell() {
                     type="button"
                     onClick={() => setMenuSearch('')}
                     aria-label="Clear menu search"
-                    className="absolute top-1/2 right-2.5 -translate-y-1/2 text-[#8b99c8] hover:text-white"
+                    className="absolute top-1/2 right-2.5 -translate-y-1/2 text-[#8d8880] hover:text-white"
                   >
                     <X className="size-3.5" aria-hidden />
                   </button>
@@ -436,7 +426,7 @@ export function AppShell() {
           {/* Navigation Menu */}
           <nav className="relative min-h-0 flex-1 space-y-1 overflow-y-auto px-[10px] pt-[2px] pb-[10px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {visibleMenu.length === 0 && trimmedSearch && (
-              <p className="px-3 py-2 text-xs text-[#8fa0d6]">No menu items match "{menuSearch.trim()}".</p>
+              <p className="px-3 py-2 text-xs text-[#8d8880]">No menu items match "{menuSearch.trim()}".</p>
             )}
             {visibleMenu.map((node) => (
               <SidebarNode
@@ -454,21 +444,21 @@ export function AppShell() {
           {/* Sidebar Footer with user info & status */}
           <div className="relative shrink-0 border-t border-white/8 bg-black/18 p-[12px_14px_14px]">
             <div className={`flex items-center gap-[10px] rounded-[14px] border border-white/10 bg-white/7 p-[10px] transition-all ${collapsed ? 'justify-center p-2' : ''}`}>
-              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-gradient-to-br from-[#ffe9b8] to-[#c6a15b] font-display text-[12px] font-extrabold text-[#0a1330] shadow-sm">
+              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-[#9e4f20] font-display text-[12px] font-extrabold text-white shadow-sm">
                 {user ? initialsOf(user.fullName) : 'SA'}
               </div>
               {!collapsed && (
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-[12.5px] font-bold text-white leading-tight">{user?.fullName ?? 'System Administrator'}</div>
-                  <div className="truncate text-[11px] text-[#93a2d1]">{user ? roleLabel(user.roles) : 'Super Admin'} • {user?.branchName ?? 'Main Branch'}</div>
+                  <div className="truncate text-[11px] text-[#a09a90]">{user ? roleLabel(user.roles) : 'Super Admin'} • {user?.branchName ?? 'Main Branch'}</div>
                 </div>
               )}
             </div>
             {!collapsed && (
-              <div className="mt-2.5 flex items-center gap-2 px-1 text-[11px] text-[#8fa0d6]">
+              <div className="mt-2.5 flex items-center gap-2 px-1 text-[11px] text-[#a09a90]">
                 <span className="relative flex size-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#34d399] opacity-75"></span>
-                  <span className="relative inline-flex size-2 rounded-full bg-[#34d399]"></span>
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#c66328] opacity-75"></span>
+                  <span className="relative inline-flex size-2 rounded-full bg-[#c66328]"></span>
                 </span>
                 <span>Signed in • {user?.branchName ?? 'Main Branch'} • v4.2</span>
               </div>
@@ -479,19 +469,19 @@ export function AppShell() {
         {/* Main Content Area */}
         <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col">
           {/* Top Bar Header */}
-          <header className="relative z-20 flex h-[58px] shrink-0 items-center gap-[14px] border-b border-[#e5e9f2] bg-white px-[22px] text-[#1e4265] shadow-none dark:border-white/8 dark:bg-[#0c152a] dark:text-[#dbe3ff]">
+          <header className="relative z-20 flex h-[58px] shrink-0 items-center gap-[14px] border-b border-[#e5e9f2] bg-white px-[22px] text-[#191919] shadow-none dark:border-white/8 dark:bg-[#0c152a] dark:text-[#dbe3ff]">
             {/* Left Page Title / Breadcrumb */}
             <div className="flex items-center gap-3 min-w-0">
-              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-[#326fb1] border border-[#285a91] text-white shadow-none">
+              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-[#c66328] border border-[#9e4f20] text-white shadow-none">
                 <MenuIconFor name={active?.node.icon ?? 'layout-dashboard'} />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-display truncate text-[14px] font-bold text-[#1e4265] leading-[1.1] dark:text-white">
+                  <span className="font-display truncate text-[14px] font-bold text-[#191919] leading-[1.1] dark:text-white">
                     {active?.node.title ?? 'Dashboard'}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#b8cfe3] bg-[#dce8f3] px-[9px] py-[3px] text-[11px] font-bold text-[#285a91] dark:border-[#285a91] dark:bg-[#1a3460] dark:text-[#8fc3ff]">
-                    <span className="size-[7px] rounded-full bg-[#285a91] dark:bg-[#8fc3ff] inline-block" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#eed0be] bg-[#f8ece5] px-[9px] py-[3px] text-[11px] font-bold text-[#9e4f20] dark:border-[#9e4f20]/40 dark:bg-[#9e4f20]/20 dark:text-[#e0a989]">
+                    <span className="size-[7px] rounded-full bg-[#9e4f20] dark:bg-[#e0a989] inline-block" />
                     {user?.branchName ?? 'Main Branch'}
                   </span>
                 </div>
@@ -510,7 +500,7 @@ export function AppShell() {
                   setCollapsed(false)
                   requestAnimationFrame(() => document.getElementById(MENU_SEARCH_ID)?.focus())
                 }}
-                className="hidden sm:flex size-[34px] items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-xs font-semibold text-[#42506b] hover:bg-[#eef3f9] hover:border-[#c6d0e8] shadow-none dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+                className="hidden sm:flex size-[34px] items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-xs font-semibold text-[#42506b] hover:bg-[#f7ebdd] hover:border-[#dcc7a8] shadow-none dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
                 title="Search menu (Ctrl+K)"
               >
                 ⌘
@@ -519,7 +509,7 @@ export function AppShell() {
               {/* Notifications bell */}
               <button
                 type="button"
-                className="relative flex size-[34px] items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] hover:bg-[#eef3f9] hover:border-[#c6d0e8] shadow-none dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+                className="relative flex size-[34px] items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] hover:bg-[#f7ebdd] hover:border-[#dcc7a8] shadow-none dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
                 title="Notifications"
               >
                 <Bell className="size-4" aria-hidden />
@@ -531,7 +521,7 @@ export function AppShell() {
                 type="button"
                 onClick={toggleTheme}
                 title="Toggle theme"
-                className="flex size-[34px] items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] hover:bg-[#eef3f9] hover:border-[#c6d0e8] shadow-none dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+                className="flex size-[34px] items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] hover:bg-[#f7ebdd] hover:border-[#dcc7a8] shadow-none dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
               >
                 {theme === 'dark' ? <Sun className="size-4" aria-hidden /> : <Moon className="size-4" aria-hidden />}
               </button>
@@ -541,13 +531,13 @@ export function AppShell() {
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen((value) => !value)}
-                  className="flex items-center gap-2.5 rounded-[13px] border border-[#e5e9f2] bg-white p-[5px_10px_5px_5px] text-[#1e4265] shadow-none transition-all hover:bg-[#eef3f9] hover:border-[#c6d0e8] dark:border-white/10 dark:bg-white/5"
+                  className="flex items-center gap-2.5 rounded-[13px] border border-[#e5e9f2] bg-white p-[5px_10px_5px_5px] text-[#191919] shadow-none transition-all hover:bg-[#f7ebdd] hover:border-[#dcc7a8] dark:border-white/10 dark:bg-white/5"
                 >
-                  <div className="flex size-[30px] shrink-0 items-center justify-center rounded-[9px] bg-[#285a91] text-xs font-extrabold text-white shadow-none">
+                  <div className="flex size-[30px] shrink-0 items-center justify-center rounded-[9px] bg-[#9e4f20] text-xs font-extrabold text-white shadow-none">
                     {user ? initialsOf(user.fullName) : 'SA'}
                   </div>
                   <div className="hidden text-left sm:block">
-                    <div className="text-[12.5px] font-bold leading-[1.1] text-[#1e4265] dark:text-white truncate max-w-[140px]">
+                    <div className="text-[12.5px] font-bold leading-[1.1] text-[#191919] dark:text-white truncate max-w-[140px]">
                       {user?.fullName ?? 'System Administrator'}
                     </div>
                     <div className="text-[11px] text-[#5b6a8a] dark:text-[#8fa0d6] truncate max-w-[140px]">
