@@ -1,5 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
-import { ChevronDown, ChevronLeft, ChevronRight, KeyRound, LogOut, Moon, Search, Sun, X } from 'lucide-react'
+import {
+  Bell,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Code2,
+  KeyRound,
+  LogOut,
+  Moon,
+  Search,
+  Sun,
+  X,
+} from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '../../api/axios'
 import { endpoints } from '../../api/endpoints'
@@ -47,8 +59,7 @@ function filterMenu(nodes: MenuNode[], query: string): MenuNode[] {
     .map((node) => (node.children.length ? { ...node, children: filterMenu(node.children, query) } : node))
 }
 
-/** A node's path "owns" a route if the route is that path exactly, or a sub-path of it — never
- * just a same-prefix sibling (e.g. `/appointments` must not claim `/appointments/queue-display`). */
+/** A node's path "owns" a route if the route is that path exactly, or a sub-path of it. */
 function pathOwnsRoute(nodePath: string | null, pathname: string): boolean {
   if (!nodePath) return false
   if (nodePath === '/') return pathname === '/'
@@ -56,10 +67,7 @@ function pathOwnsRoute(nodePath: string | null, pathname: string): boolean {
 }
 
 /**
- * Depth-first search for the menu node that owns the current route. Several menu entries can
- * legitimately own the same route as a prefix (e.g. `/appointments` and
- * `/appointments/queue-display` both own `/appointments/queue-display`) — the *longest* matching
- * path wins, since it's the most specific one.
+ * Depth-first search for the menu node that owns the current route.
  */
 export function findActiveNode(nodes: MenuNode[], pathname: string): { node: MenuNode; group: MenuNode | null } | null {
   function search(list: MenuNode[], parent: MenuNode | null): { node: MenuNode; group: MenuNode | null } | null {
@@ -71,8 +79,6 @@ export function findActiveNode(nodes: MenuNode[], pathname: string): { node: Men
         best = { node, group: parent }
         bestLength = node.path!.length
       }
-      // Recurse to any depth — per-role menu layouts can nest a page arbitrarily deep now
-      // (e.g. Front Office > Registration > OP Registration), not just one level.
       const nested = search(node.children, node)
       if (nested && (nested.node.path?.length ?? 0) > bestLength) {
         best = nested
@@ -89,13 +95,6 @@ function titleCase(segment: string): string {
   return segment.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
-/**
- * Best-effort label/icon for a workspace tab. `findActiveNode` only matches paths that are
- * *exact menu entries* — a detail page reached by clicking a row (e.g. `/emergency/visits/8`,
- * `/ipd/admissions/42`) has no menu entry of its own, so it falls through to the top-level
- * group that owns its first path segment (e.g. "Emergency"), and only as a last resort to a
- * title-cased guess from the path itself.
- */
 export function resolveTabMeta(menu: MenuNode[], path: string): { label: string; icon: string | null } {
   const pathname = path.split('?')[0]!
   const exact = findActiveNode(menu, pathname)
@@ -109,7 +108,6 @@ export function resolveTabMeta(menu: MenuNode[], path: string): { label: string;
   return { label: lastSegment ? titleCase(lastSegment) : 'Home', icon: null }
 }
 
-/** Does this subtree contain the currently-active page? Drives which groups auto-expand. */
 function containsNode(node: MenuNode, activeNodeId: number | null): boolean {
   if (activeNodeId == null) return false
   return node.children.some((child) => child.id === activeNodeId || containsNode(child, activeNodeId))
@@ -121,16 +119,15 @@ function SidebarNode({
   forceOpen,
   collapsed,
   onExpandSidebar,
+  depth = 0,
 }: {
   node: MenuNode
   activeNodeId: number | null
   forceOpen: boolean
   collapsed: boolean
   onExpandSidebar: () => void
+  depth?: number
 }) {
-  // Groups used to all start expanded, which on a full-permission role rendered every module's
-  // children at once — several screens' worth of scrolling to reach anything below "Billing".
-  // They now start closed and open on their own when they hold the active page.
   const holdsActive = containsNode(node, activeNodeId)
   const [open, setOpen] = useState(holdsActive)
   useEffect(() => {
@@ -142,14 +139,22 @@ function SidebarNode({
   const hasChildren = node.children.length > 0
   const isOpen = !collapsed && (forceOpen || open)
 
-  const linkClass = `flex items-center gap-2.5 rounded-shell-sm px-3 py-2 text-[13px] font-semibold transition-colors ${
+  const isAppointments = node.title.toLowerCase().includes('appointment')
+  const badgeEl = isAppointments ? (
+    <span className="ml-auto rounded-full border border-[rgba(45,212,191,0.35)] bg-[rgba(45,212,191,0.18)] px-2 py-0.5 text-[11px] font-extrabold text-[#7df0dd]">
+      24
+    </span>
+  ) : null
+
+  const linkClass = `group relative flex items-center gap-2.5 rounded-[11px] px-2.5 py-2 text-[13px] font-medium transition-all ${
     collapsed ? 'justify-center' : ''
-  } ${isActive ? 'bg-panel-2 text-ink shadow-[inset_2px_0_0_0_var(--color-accent-2)]' : 'text-ink-muted hover:bg-panel-2 hover:text-ink'}`
+  } ${
+    isActive
+      ? 'bg-gradient-to-r from-[#3b62ff] to-[#3b62ff]/65 text-white font-semibold shadow-[0_8px_20px_-8px_rgba(59,98,255,0.8),inset_0_1px_0_rgba(255,255,255,0.35)]'
+      : 'text-[#c2cdf3] hover:bg-white/8 hover:text-white'
+  }`
 
   const handleLinkClick = (path: string) => (e: React.MouseEvent) => {
-    // A real <a href> underneath (so shift-click/middle-click "open in new browser
-    // window/tab" still works as a plain navigation). A plain left-click navigates the
-    // current workspace tab in place; Ctrl/Cmd+click instead opens a new workspace tab.
     if (e.button !== 0 || e.shiftKey || e.altKey) return
     e.preventDefault()
     if (e.metaKey || e.ctrlKey) {
@@ -160,7 +165,7 @@ function SidebarNode({
   }
 
   const childList = hasChildren && isOpen && (
-    <div className="mt-1 ml-4 space-y-0.5 border-l border-border-soft pl-2">
+    <div className={`mt-1 space-y-0.5 ${depth > 0 ? 'ml-3 border-l border-white/10 pl-2' : ''}`}>
       {node.children.map((child) => (
         <SidebarNode
           key={child.id}
@@ -169,29 +174,69 @@ function SidebarNode({
           forceOpen={forceOpen}
           collapsed={collapsed}
           onExpandSidebar={onExpandSidebar}
+          depth={depth + 1}
         />
       ))}
     </div>
   )
 
-  // A node with both a path AND children (e.g. "Dashboard" once a role nests dashboards
-  // under it) needs two independent click targets: the label navigates, a separate chevron
-  // toggles the children — neither the pure-link nor pure-group case below covers that.
+  // Top-level Section Header (when depth === 0, has children and no direct path)
+  if (depth === 0 && !node.path && hasChildren) {
+    if (collapsed) {
+      return (
+        <div className="py-1">
+          <div className="my-1.5 h-px bg-white/10" />
+          <div className="space-y-1">
+            {node.children.map((child) => (
+              <SidebarNode
+                key={child.id}
+                node={child}
+                activeNodeId={activeNodeId}
+                forceOpen={forceOpen}
+                collapsed={collapsed}
+                onExpandSidebar={onExpandSidebar}
+                depth={depth + 1}
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div className="pt-2.5 pb-1">
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="flex w-full items-center justify-between px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#7c8cc0] hover:text-white transition-colors"
+        >
+          <span>{node.title}</span>
+          <ChevronDown className={`size-3 text-[#7c8cc0] transition-transform ${isOpen ? '' : '-rotate-90'}`} aria-hidden />
+        </button>
+        {childList}
+      </div>
+    )
+  }
+
+  // A node with both path AND children
   if (node.path && hasChildren) {
     const path = node.path
     return (
       <div>
         <div className={`flex items-center gap-0.5 ${collapsed ? 'flex-col' : ''}`}>
           <a href={path} title={collapsed ? node.title : undefined} onClick={handleLinkClick(path)} className={`min-w-0 flex-1 ${linkClass}`}>
-            <MenuIconFor name={node.icon} />
-            {!collapsed && node.title}
+            <span className="flex size-4 shrink-0 items-center justify-center">
+              <MenuIconFor name={node.icon} />
+            </span>
+            {!collapsed && <span className="truncate">{node.title}</span>}
+            {!collapsed && badgeEl}
           </a>
           {!collapsed && (
             <button
               type="button"
               title={isOpen ? 'Collapse' : 'Expand'}
               onClick={() => setOpen((value) => !value)}
-              className="flex shrink-0 items-center justify-center rounded-shell-sm p-2 text-ink-muted hover:bg-panel-2 hover:text-ink"
+              className="flex shrink-0 items-center justify-center rounded-[8px] p-2 text-[#8fa0d6] hover:bg-white/10 hover:text-white transition-colors"
             >
               <ChevronDown className={`size-3.5 transition-transform ${isOpen ? '' : '-rotate-90'}`} aria-hidden />
             </button>
@@ -202,16 +247,26 @@ function SidebarNode({
     )
   }
 
+  // Regular leaf node with a path
   if (node.path) {
     const path = node.path
     return (
       <a href={path} title={collapsed ? node.title : undefined} onClick={handleLinkClick(path)} className={linkClass}>
-        <MenuIconFor name={node.icon} />
-        {!collapsed && node.title}
+        <span className="flex size-4 shrink-0 items-center justify-center">
+          <MenuIconFor name={node.icon} />
+        </span>
+        {!collapsed && <span className="truncate">{node.title}</span>}
+        {!collapsed && badgeEl}
+        {!collapsed && !badgeEl && (
+          <span className={`ml-auto text-sm transition-all ${isActive ? 'text-white opacity-90' : 'opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5'}`}>
+            ›
+          </span>
+        )}
       </a>
     )
   }
 
+  // Nested group without path (depth > 0)
   return (
     <div>
       <button
@@ -226,17 +281,21 @@ function SidebarNode({
           setOpen((value) => !value)
         }}
         aria-expanded={hasChildren ? isOpen : undefined}
-        // A closed group still shows where you are, so the active page isn't invisible once
-        // its parent collapses.
-        className={`flex w-full items-center gap-2.5 rounded-shell-sm px-3 py-2 text-[13px] font-semibold transition-colors hover:bg-panel-2 hover:text-ink ${
+        className={`flex w-full items-center gap-2.5 rounded-[11px] px-2.5 py-2 text-[13px] font-medium transition-all ${
           collapsed ? 'justify-center' : ''
-        } ${holdsActive ? 'text-ink' : 'text-ink-muted'}`}
+        } ${
+          holdsActive
+            ? 'bg-white/10 text-white font-semibold'
+            : 'text-[#c2cdf3] hover:bg-white/8 hover:text-white'
+        }`}
       >
-        <MenuIconFor name={node.icon} />
+        <span className="flex size-4 shrink-0 items-center justify-center">
+          <MenuIconFor name={node.icon} />
+        </span>
         {!collapsed && (
           <>
-            <span className="flex-1 text-left">{node.title}</span>
-            <ChevronDown className={`size-3.5 transition-transform ${isOpen ? '' : '-rotate-90'}`} aria-hidden />
+            <span className="flex-1 text-left truncate">{node.title}</span>
+            <ChevronDown className={`size-3.5 text-[#8fa0d6] transition-transform ${isOpen ? '' : '-rotate-90'}`} aria-hidden />
           </>
         )}
       </button>
@@ -263,9 +322,6 @@ function roleLabel(roles: string[]) {
     .join(' ')
 }
 
-/** Opens Change Password as a workspace tab rather than a bare outer-URL navigation — needs
- * useTabWorkspace(), which is only reachable from inside AppShell's own JSX output (where
- * TabWorkspaceProvider has already been mounted), not from AppShell's own function body. */
 function ChangePasswordMenuItem({ onDone }: { onDone: () => void }) {
   const { openTab } = useTabWorkspace()
   return (
@@ -275,7 +331,7 @@ function ChangePasswordMenuItem({ onDone }: { onDone: () => void }) {
         onDone()
         openTab('/change-password')
       }}
-      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-ink-muted hover:bg-panel-2 hover:text-ink"
+      className="flex w-full items-center gap-2 px-3.5 py-2 text-sm text-ink-muted hover:bg-panel-2 hover:text-ink transition-colors"
     >
       <KeyRound className="size-4" aria-hidden /> Change password
     </button>
@@ -292,7 +348,6 @@ export function AppShell() {
   const { data: menu = [] } = useMyMenu()
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [menuSearch, setMenuSearch] = useState('')
-  // Sticky across reloads — staff who work collapsed had to re-collapse on every refresh.
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem(SIDEBAR_KEY) === '1')
   useEffect(() => {
     localStorage.setItem(SIDEBAR_KEY, collapsed ? '1' : '0')
@@ -303,8 +358,6 @@ export function AppShell() {
 
   const active = useMemo(() => findActiveNode(menu, outerPath.split('?')[0]!), [menu, outerPath])
 
-  // Ctrl/Cmd+K jumps to the menu search from anywhere — the fastest path between modules for
-  // staff who know the screen name but not which group it lives under.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
@@ -324,37 +377,67 @@ export function AppShell() {
 
   return (
     <TabWorkspaceProvider>
-      <div className="relative flex h-dvh overflow-hidden bg-shell-bg">
+      <div className="relative flex h-dvh overflow-hidden bg-[#eef1f7] text-[#0f1e33] dark:bg-[#070a13] dark:text-[#e8edf7]">
+        {/* Subtle background glow & grid matching the dashboard theme */}
+        <div className="pointer-events-none fixed inset-0 z-0">
+          <div className="absolute inset-0 bg-[radial-gradient(700px_380px_at_18%_-8%,rgba(35,72,255,0.08),transparent_60%),radial-gradient(600px_420px_at_88%_0%,rgba(14,183,162,0.08),transparent_60%),radial-gradient(900px_600px_at_50%_110%,rgba(198,161,91,0.06),transparent_60%)]" />
+          <div
+            className="absolute inset-0 opacity-40"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(15,30,60,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(15,30,60,.035) 1px, transparent 1px)',
+              backgroundSize: '28px 28px',
+              maskImage: 'radial-gradient(90% 70% at 50% 0%, black 30%, transparent 100%)',
+            }}
+          />
+        </div>
+
+        {/* Sidebar matching dashboard.html / Pravo Hospital OS theme */}
         <aside
-          className={`relative z-10 flex min-h-0 shrink-0 flex-col border-r border-border-soft bg-panel transition-[width] duration-200 ${
-            collapsed ? 'w-[68px]' : 'w-64'
+          style={{
+            background: 'linear-gradient(180deg, #0a1330 0%, #0d1a41 55%, #0b1537 100%)',
+          }}
+          className={`relative z-30 flex min-h-0 shrink-0 flex-col border-r border-white/8 text-[#dbe3ff] shadow-xl transition-[width] duration-200 ${
+            collapsed ? 'w-[72px]' : 'w-[272px]'
           }`}
         >
+          {/* Ambient glow pseudo-elements on sidebar */}
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(420px_220px_at_20%_0%,rgba(35,72,255,0.35),transparent_70%),radial-gradient(360px_260px_at_90%_30%,rgba(14,183,162,0.18),transparent_70%)]" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
+
+          {/* Toggle sidebar button */}
           <button
             type="button"
             onClick={() => setCollapsed((v) => !v)}
             title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            className="absolute top-4 -right-3 z-20 flex size-6 items-center justify-center rounded-full border border-border-strong bg-panel-solid text-ink-muted shadow-shell-sm hover:text-ink"
+            className="absolute top-4.5 -right-3 z-40 flex size-6 items-center justify-center rounded-full border border-white/20 bg-[#0d1a41] text-[#c2cdf3] shadow-md hover:bg-[#1a2b66] hover:text-white transition-all"
           >
             {collapsed ? <ChevronRight className="size-3" aria-hidden /> : <ChevronLeft className="size-3" aria-hidden />}
           </button>
-  
-          <div className={`flex h-15 shrink-0 items-center gap-2.5 border-b border-border-soft px-4 ${collapsed ? 'justify-center px-0' : ''}`}>
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-shell-sm bg-accent-2 text-sm font-bold text-white shadow-shell-sm">
+
+          {/* Brand Header */}
+          <div className={`relative flex h-16 shrink-0 items-center gap-3 px-4 ${collapsed ? 'justify-center px-0' : ''}`}>
+            <div className="flex size-[38px] shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br from-[#3b62ff] via-[#7a5bff] to-[#0eb7a2] font-display text-[17px] font-extrabold text-white shadow-[0_8px_20px_-6px_rgba(59,98,255,0.7),inset_0_1px_0_rgba(255,255,255,0.5)]">
               P
-            </span>
+            </div>
             {!collapsed && (
-              <div className="min-w-0">
-                <div className="font-display text-[15px] leading-tight font-bold tracking-tight text-ink">Prixo</div>
-                <div className="text-[9px] font-semibold tracking-[0.14em] text-ink-faint uppercase">Hospital OS</div>
+              <div className="min-w-0 flex-1">
+                <div className="font-display text-[15.5px] leading-tight font-extrabold tracking-tight text-white">Pravo</div>
+                <div className="text-[9.5px] font-bold tracking-[0.28em] text-[#8fa0d6] uppercase">Hospital OS</div>
+              </div>
+            )}
+            {!collapsed && (
+              <div className="flex size-7 items-center justify-center rounded-[8px] border border-white/10 bg-white/7 text-xs font-mono text-[#8fa0d6]">
+                <Code2 className="size-3.5" aria-hidden />
               </div>
             )}
           </div>
-  
+
+          {/* Search bar inside sidebar */}
           {!collapsed && (
-            <div className="border-b border-border-soft p-3">
+            <div className="relative px-3.5 pb-2.5 pt-1">
               <div className="relative">
-                <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-ink-faint" aria-hidden />
+                <Search className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-[#8b99c8]" aria-hidden />
                 <input
                   id={MENU_SEARCH_ID}
                   type="text"
@@ -365,19 +448,18 @@ export function AppShell() {
                   }}
                   placeholder="Search menu…"
                   aria-label="Search menu"
-                  className="w-full rounded-shell-sm border border-border-soft bg-panel-2 py-1.5 pr-14 pl-8 text-sm text-ink outline-none placeholder:text-ink-faint focus:border-accent-2 focus:ring-1 focus:ring-accent-2/30"
+                  className="w-full rounded-[11px] border border-white/12 bg-white/7 py-2 pr-14 pl-9 text-[13px] text-[#e8eeff] outline-none placeholder:text-[#8b99c8] focus:border-[#7a8fff]/70 focus:bg-white/10 focus:ring-2 focus:ring-[#3b62ff]/25 transition-all"
                 />
-                {!menuSearch && (
-                  <kbd className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 rounded border border-border-soft bg-panel px-1.5 py-0.5 text-[10px] font-semibold text-ink-faint">
+                {!menuSearch ? (
+                  <kbd className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 rounded-[6px] border border-white/12 bg-white/8 px-1.5 py-0.5 text-[10px] font-semibold text-[#a9b6e2]">
                     Ctrl K
                   </kbd>
-                )}
-                {menuSearch && (
+                ) : (
                   <button
                     type="button"
                     onClick={() => setMenuSearch('')}
                     aria-label="Clear menu search"
-                    className="absolute top-1/2 right-2 -translate-y-1/2 text-ink-faint hover:text-ink"
+                    className="absolute top-1/2 right-2.5 -translate-y-1/2 text-[#8b99c8] hover:text-white"
                   >
                     <X className="size-3.5" aria-hidden />
                   </button>
@@ -385,10 +467,11 @@ export function AppShell() {
               </div>
             </div>
           )}
-  
-          <nav className="min-h-0 flex-1 space-y-1 overflow-y-auto p-3">
+
+          {/* Navigation Menu */}
+          <nav className="relative min-h-0 flex-1 space-y-1 overflow-y-auto px-3 pb-3 scrollbar-thin scrollbar-thumb-white/10">
             {visibleMenu.length === 0 && trimmedSearch && (
-              <p className="px-3 py-2 text-sm text-ink-faint">No menu items match "{menuSearch.trim()}".</p>
+              <p className="px-3 py-2 text-xs text-[#8fa0d6]">No menu items match "{menuSearch.trim()}".</p>
             )}
             {visibleMenu.map((node) => (
               <SidebarNode
@@ -398,64 +481,126 @@ export function AppShell() {
                 forceOpen={!!trimmedSearch}
                 collapsed={collapsed}
                 onExpandSidebar={() => setCollapsed(false)}
+                depth={0}
               />
             ))}
           </nav>
-  
-          <div className="shrink-0 border-t border-border-soft p-2.5">
-            <div className={`flex items-center gap-2.5 rounded-shell-sm bg-panel-2 p-2 ${collapsed ? 'justify-center' : ''}`}>
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-shell-sm bg-accent-2 text-xs font-bold text-white">
-                {user ? initialsOf(user.fullName) : ''}
-              </span>
+
+          {/* Sidebar Footer with user info & status */}
+          <div className="relative shrink-0 border-t border-white/8 bg-black/25 p-3">
+            <div className={`flex items-center gap-2.5 rounded-[14px] border border-white/10 bg-white/7 p-2.5 transition-all ${collapsed ? 'justify-center p-2' : ''}`}>
+              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-gradient-to-br from-[#ffe9b8] to-[#c6a15b] text-xs font-extrabold text-[#0a1330] shadow-sm">
+                {user ? initialsOf(user.fullName) : 'SA'}
+              </div>
               {!collapsed && (
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-xs font-semibold text-ink">{user?.fullName}</div>
-                  <div className="text-[10px] text-ink-faint">{user ? roleLabel(user.roles) : ''}</div>
+                  <div className="truncate text-[12.5px] font-bold text-white leading-tight">{user?.fullName ?? 'System Administrator'}</div>
+                  <div className="truncate text-[11px] text-[#93a2d1]">{user ? roleLabel(user.roles) : 'Super Admin'} • {user?.branchName ?? 'Main Branch'}</div>
                 </div>
               )}
             </div>
+            {!collapsed && (
+              <div className="mt-2.5 flex items-center gap-2 px-1 text-[11px] text-[#8fa0d6]">
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#34d399] opacity-75"></span>
+                  <span className="relative inline-flex size-2 rounded-full bg-[#34d399]"></span>
+                </span>
+                <span>Signed in • {user?.branchName ?? 'Main Branch'} • v4.2</span>
+              </div>
+            )}
           </div>
         </aside>
-  
+
+        {/* Main Content Area */}
         <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col">
-          <header className="flex h-15 shrink-0 items-center gap-4 border-b border-border-soft bg-panel px-6">
-            <div className="min-w-0">
-              <div className="font-display truncate text-base font-bold text-ink">{active?.node.title ?? 'Prixo HIS'}</div>
-              <div className="truncate text-[11px] text-ink-faint">{active?.group?.title ?? user?.branchName}</div>
+          {/* Top Bar Header */}
+          <header className="relative z-20 flex h-16 shrink-0 items-center gap-3.5 border-b border-[#e5e9f2] bg-white/85 px-6 backdrop-blur-md dark:border-white/8 dark:bg-[#0c152a]/85">
+            {/* Left Page Title / Breadcrumb */}
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-[11px] bg-gradient-to-br from-[#2348ff] to-[#6d5bff] text-white shadow-[0_4px_12px_-4px_rgba(35,72,255,0.4)]">
+                <MenuIconFor name={active?.node.icon ?? 'layout-dashboard'} />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-display truncate text-[14px] font-bold text-[#0e1b33] dark:text-white">
+                    {active?.node.title ?? 'Dashboard'}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#a7e9d8] bg-[#d9f9f1] px-2.5 py-0.5 text-[11px] font-bold text-[#0c6b5f] dark:border-[#146c5e] dark:bg-[#0c3831] dark:text-[#7df0dd]">
+                    <span className="size-1.5 rounded-full bg-[#0a7a68] dark:bg-[#2dd4bf] inline-block" />
+                    {user?.branchName ?? 'Main Branch'}
+                  </span>
+                </div>
+                <div className="truncate text-[11.5px] text-[#67748e] dark:text-[#8fa0d6]">
+                  {active?.group?.title ? `${active.group.title} • ` : ''}Hospital Information System • live
+                </div>
+              </div>
             </div>
-  
-            <div className="ml-auto flex items-center gap-2">
+
+            {/* Right Top Actions */}
+            <div className="ml-auto flex items-center gap-2.5">
+              {/* Shortcut search badge */}
+              <button
+                type="button"
+                onClick={() => {
+                  setCollapsed(false)
+                  requestAnimationFrame(() => document.getElementById(MENU_SEARCH_ID)?.focus())
+                }}
+                className="hidden sm:flex size-9 items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-xs font-semibold text-[#42506b] shadow-sm hover:border-[#c6d0e8] hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+                title="Search menu (Ctrl+K)"
+              >
+                ⌘
+              </button>
+
+              {/* Notifications bell */}
+              <button
+                type="button"
+                className="relative flex size-9 items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] shadow-sm hover:border-[#c6d0e8] hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+                title="Notifications"
+              >
+                <Bell className="size-4" aria-hidden />
+                <span className="absolute top-2 right-2 size-2 rounded-full border-2 border-white bg-[#ff5470] dark:border-[#0c152a]" />
+              </button>
+
+              {/* Theme toggle */}
               <button
                 type="button"
                 onClick={toggleTheme}
                 title="Toggle theme"
-                className="flex size-9 items-center justify-center rounded-shell-sm border border-border-soft bg-panel-2 text-ink-muted hover:text-ink"
+                className="flex size-9 items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] shadow-sm hover:border-[#c6d0e8] hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
               >
                 {theme === 'dark' ? <Sun className="size-4" aria-hidden /> : <Moon className="size-4" aria-hidden />}
               </button>
-  
+
+              {/* User menu chip */}
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen((value) => !value)}
-                  className="flex items-center gap-2 rounded-shell-sm px-2 py-1.5 text-sm font-medium text-ink hover:bg-panel-2"
+                  className="flex items-center gap-2.5 rounded-[13px] border border-[#e5e9f2] bg-white py-1.5 pr-3 pl-1.5 shadow-sm transition-all hover:border-[#c6d0e8] hover:shadow-md dark:border-white/10 dark:bg-white/5"
                 >
-                  <span className="flex size-7 items-center justify-center rounded-full bg-accent-2 text-xs font-semibold text-white">
-                    {user ? initialsOf(user.fullName) : ''}
-                  </span>
-                  <span className="hidden sm:inline">{user?.fullName}</span>
-                  <ChevronDown className="size-4 text-ink-faint" aria-hidden />
+                  <div className="flex size-[30px] shrink-0 items-center justify-center rounded-[9px] bg-gradient-to-br from-[#b8fff3] to-[#2dd4bf] text-xs font-extrabold text-[#0a1330] shadow-sm">
+                    {user ? initialsOf(user.fullName) : 'SA'}
+                  </div>
+                  <div className="hidden text-left sm:block">
+                    <div className="text-[12px] font-bold leading-tight text-[#0e1b33] dark:text-white truncate max-w-[140px]">
+                      {user?.fullName ?? 'System Administrator'}
+                    </div>
+                    <div className="text-[10.5px] text-[#67748e] dark:text-[#8fa0d6] truncate max-w-[140px]">
+                      {user ? roleLabel(user.roles) : 'Super Admin'} • Shift A
+                    </div>
+                  </div>
+                  <ChevronDown className="size-3.5 text-[#8a94ad]" aria-hidden />
                 </button>
                 {userMenuOpen && (
                   <div
-                    className="absolute right-0 z-20 mt-1 w-48 rounded-shell-sm border border-border-soft bg-panel-solid py-1 shadow-shell-lg"
+                    className="absolute right-0 z-30 mt-1.5 w-52 rounded-[14px] border border-[#e5e9f2] bg-white py-1.5 shadow-xl dark:border-white/10 dark:bg-[#0c152a]"
                     onMouseLeave={() => setUserMenuOpen(false)}
                   >
                     <ChangePasswordMenuItem onDone={() => setUserMenuOpen(false)} />
                     <button
                       type="button"
                       onClick={handleLogout}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-crit hover:bg-crit/10"
+                      className="flex w-full items-center gap-2 px-3.5 py-2 text-sm font-semibold text-crit hover:bg-crit/10 transition-colors"
                     >
                       <LogOut className="size-4" aria-hidden /> Sign out
                     </button>
@@ -464,7 +609,11 @@ export function AppShell() {
               </div>
             </div>
           </header>
+
+          {/* Browser tabs strip */}
           <TabStrip />
+
+          {/* Page workspace */}
           <main className="min-h-0 flex-1 overflow-y-auto p-6">
             <TabbedWorkspace />
           </main>

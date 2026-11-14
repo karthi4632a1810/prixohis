@@ -9,7 +9,7 @@ export function TabStrip() {
   const { tabs, activeTabId, splitTabId, activateTab, closeTab, toggleSplit } = useTabWorkspace()
 
   return (
-    <div className="flex h-11 shrink-0 items-center gap-1.5 border-b border-border-soft bg-panel-2 px-3.5">
+    <div className="flex h-11 shrink-0 items-center gap-2 border-b border-[#e2e8f2] bg-[#f0f3f8] px-4 dark:border-white/8 dark:bg-[#0a1020]">
       <div className="flex flex-1 items-center gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {tabs.map((tab) => (
           <TabChip
@@ -31,10 +31,10 @@ export function TabStrip() {
         type="button"
         onClick={toggleSplit}
         title="Split view"
-        className={`flex shrink-0 items-center gap-1.5 rounded-shell-sm border px-2.5 py-1.5 text-[11.5px] font-semibold transition-colors ${
+        className={`flex shrink-0 items-center gap-1.5 rounded-[11px] border px-2.5 py-1.5 text-[11.5px] font-semibold transition-all shadow-sm ${
           splitTabId
-            ? 'border-transparent bg-accent-2 text-white'
-            : 'border-border-soft bg-panel-2 text-ink-muted hover:text-ink'
+            ? 'border-[#3b62ff] bg-gradient-to-r from-[#2348ff] to-[#1a34c8] text-white shadow-[0_4px_12px_-4px_rgba(35,72,255,0.5)]'
+            : 'border-[#d6dfef] bg-white text-[#42506b] hover:border-[#b9c4e2] hover:text-[#0e1b33] dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3]'
         }`}
       >
         <Columns2 className="size-3.5" aria-hidden />
@@ -45,7 +45,13 @@ export function TabStrip() {
 }
 
 function TabChip({
-  tab, meta, isActive, isPrimary, canClose, onActivate, onClose,
+  tab,
+  meta,
+  isActive,
+  isPrimary,
+  canClose,
+  onActivate,
+  onClose,
 }: {
   tab: WorkspaceTab
   meta: { label: string; icon: string | null }
@@ -55,31 +61,33 @@ function TabChip({
   onActivate: () => void
   onClose: (e: React.MouseEvent) => void
 }) {
-  // A wrapper div rather than nesting the close control inside the activate <button>: a button
-  // inside a button is invalid HTML, and the close target was `tabIndex={-1}` + `opacity-0`,
-  // so closing a tab was mouse-hover-only — unreachable by keyboard entirely.
   return (
     <div
-      className={`group flex shrink-0 items-center rounded-shell-sm border pr-1 transition-colors ${
+      className={`group flex shrink-0 items-center rounded-[11px] border transition-all ${
         isActive
-          ? 'border-border-strong bg-panel-solid text-ink shadow-shell-sm'
-          : 'border-transparent text-ink-muted hover:bg-panel hover:text-ink'
-      } ${isPrimary && isActive ? 'ring-1 ring-accent-2/40' : ''}`}
+          ? 'border-[#d6dfef] bg-white text-[#1a34c8] shadow-sm ring-1 ring-[#3b62ff]/25 dark:border-white/15 dark:bg-[#121c38] dark:text-[#7a9aff]'
+          : 'border-transparent text-[#627290] hover:bg-white/60 hover:text-[#0e1b33] dark:text-[#8fa0d6] dark:hover:bg-white/5 dark:hover:text-white'
+      } ${isPrimary && isActive ? 'font-bold' : 'font-medium'}`}
     >
       <button
         type="button"
         onClick={onActivate}
-        // Middle-click closes, matching browser tabs.
         onAuxClick={(e) => {
           if (e.button === 1 && canClose) onClose(e)
         }}
-        // Two tabs can share a label (e.g. two patient detail pages), so the tooltip stays the
-        // path — that's what tells them apart.
         title={tab.path}
         aria-current={isActive ? 'page' : undefined}
-        className="flex items-center gap-2 py-1.5 pl-3 text-[12px] font-semibold"
+        className="flex items-center gap-2 py-1.5 pl-2.5 pr-2 text-[12px]"
       >
-        <MenuIconFor name={meta.icon} />
+        <span
+          className={`flex size-5 shrink-0 items-center justify-center rounded-[6px] text-[11px] ${
+            isActive
+              ? 'bg-[#e9edff] text-[#2348ff] dark:bg-[#1e2a52] dark:text-[#6d8eff]'
+              : 'text-inherit opacity-70'
+          }`}
+        >
+          <MenuIconFor name={meta.icon} />
+        </span>
         <span className="whitespace-nowrap">{meta.label}</span>
       </button>
       {canClose && (
@@ -88,8 +96,8 @@ function TabChip({
           onClick={onClose}
           aria-label={`Close ${meta.label}`}
           title={`Close ${meta.label}`}
-          className={`ml-1 flex size-4.5 shrink-0 items-center justify-center rounded text-ink-faint transition-opacity hover:bg-panel-2 hover:text-ink focus-visible:opacity-100 ${
-            isActive ? 'opacity-70' : 'opacity-0 group-hover:opacity-100'
+          className={`mr-1.5 flex size-4 shrink-0 items-center justify-center rounded-full text-[#8fa0d6] transition-all hover:bg-black/5 hover:text-[#0e1b33] dark:hover:bg-white/10 dark:hover:text-white ${
+            isActive ? 'opacity-80' : 'opacity-0 group-hover:opacity-100'
           }`}
         >
           <X className="size-3" aria-hidden />

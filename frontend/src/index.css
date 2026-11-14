@@ -38,8 +38,8 @@
      `font-display` headings stay addressable if a distinct display face is wanted later;
      `--font-mono` stays a real monospace (Roboto's own) because the 180-odd `font-mono`
      spans are UHIDs, bill numbers and amounts that have to stay column-aligned. */
-  --font-display: 'Roboto', ui-sans-serif, system-ui, sans-serif;
-  --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Sora', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace;
 
   --radius-shell: 8px;
