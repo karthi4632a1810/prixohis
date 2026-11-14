@@ -200,21 +200,22 @@ export function ManagementDashboardPage() {
     <div className="relative min-h-screen text-[#0f1e33] antialiased">
       {/* Background Ambient Glow & Subtle Grid from UI/UX design */}
       <div
-        className="pointer-events-none fixed inset-0 z-0 opacity-70"
+        className="pointer-events-none fixed inset-0 z-0 opacity-80"
         style={{
           background: `
-            radial-gradient(700px 380px at 18% -8%, rgba(35,72,255,0.08), transparent 60%),
-            radial-gradient(600px 420px at 88% 0%, rgba(14,183,162,0.08), transparent 60%),
-            radial-gradient(900px 600px at 50% 110%, rgba(198,161,91,0.06), transparent 60%)
+            radial-gradient(700px 380px at 18% -8%, rgba(35,72,255,0.12), transparent 60%),
+            radial-gradient(600px 420px at 88% 0%, rgba(14,183,162,0.12), transparent 60%),
+            radial-gradient(900px 600px at 50% 110%, rgba(198,161,91,0.10), transparent 60%)
           `,
         }}
       />
       <div
-        className="pointer-events-none fixed inset-0 z-0 opacity-40"
+        className="pointer-events-none fixed inset-0 z-0 opacity-50"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(15,30,60,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(15,30,60,0.035) 1px, transparent 1px)',
+            'linear-gradient(rgba(15,30,60,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(15,30,60,0.045) 1px, transparent 1px)',
           backgroundSize: '28px 28px',
+          maskImage: 'radial-gradient(90% 70% at 50% 0%, black 30%, transparent 100%)',
         }}
       />
 
@@ -222,11 +223,11 @@ export function ManagementDashboardPage() {
         {/* Top Mini-Tabs / Action Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <span className="inline-flex items-center gap-1.5 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#1a34c8] shadow-sm">
-              <span className="grid size-5 place-items-center rounded-md bg-[#e9edff] text-[11px] text-[#2348ff]">◈</span>
+            <span className="inline-flex items-center gap-2 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-[7px] text-[12px] font-bold text-[#1a34c8] shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)]">
+              <span className="grid size-5 place-items-center rounded-[7px] bg-[#e9edff] text-[11px] text-[#2348ff]">◈</span>
               Dashboard
             </span>
-            <span className="text-xs text-[#8a94ad]">
+            <span className="text-[12px] text-[#8a94ad]">
               {data?.isCrossBranch
                 ? 'All branches (you hold cross-branch reporting access)'
                 : 'Current branch view'}
@@ -234,7 +235,7 @@ export function ManagementDashboardPage() {
           </div>
           <Link
             to="/patients/new"
-            className="inline-flex items-center gap-1.5 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-semibold text-[#42506b] shadow-sm transition hover:border-[#c6d0e8] hover:text-[#1a34c8]"
+            className="inline-flex items-center gap-2 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-2 text-[12.5px] font-semibold text-[#42506b] shadow-sm transition hover:border-[#c6d0e8] hover:text-[#1a34c8]"
           >
             ＋ New Registration
           </Link>
@@ -243,18 +244,18 @@ export function ManagementDashboardPage() {
         {/* Hero Header Card */}
         <section className="relative overflow-hidden rounded-[20px] border border-[#e5e9f2] bg-gradient-to-b from-white to-[#fbfcff] shadow-[0_1px_2px_rgba(16,24,64,0.06),0_12px_32px_-12px_rgba(16,24,64,0.18)]">
           {/* Animated Gradient Accent Stripe */}
-          <div className="h-[3px] w-full bg-gradient-to-r from-[#2348ff] via-[#2dd4bf] to-[#c6a15b]" />
+          <div className="h-[3px] w-full bg-gradient-to-r from-[#2348ff] via-[#2dd4bf] via-[#c6a15b] to-[#2348ff] animate-slide" />
 
           <div className="flex flex-wrap items-end justify-between gap-4 p-5 md:p-6">
             <div className="space-y-1.5">
-              <h1 className="text-xl font-extrabold tracking-tight text-[#0e1b33] sm:text-2xl">
+              <h1 className="font-display text-[21px] font-extrabold tracking-tight text-[#0e1b33]">
                 Hospital{' '}
                 <span className="bg-gradient-to-r from-[#9a7a2e] to-[#d8b96a] bg-clip-text text-transparent">
                   Dashboard
                 </span>
               </h1>
-              <p className="flex flex-wrap items-center gap-2 text-xs text-[#67748e]">
-                <span className="rounded-full bg-gradient-to-r from-[#2348ff] to-[#5b6cff] px-2.5 py-0.5 text-[10.5px] font-extrabold tracking-wider text-white">
+              <p className="flex flex-wrap items-center gap-2 text-[12.8px] text-[#67748e]">
+                <span className="rounded-full bg-gradient-to-r from-[#2348ff] to-[#5b6cff] px-[9px] py-[3px] text-[11px] font-extrabold tracking-wider text-white">
                   {data?.isCrossBranch ? 'ALL BRANCHES' : 'MAIN BRANCH'}
                 </span>
                 <span>
@@ -266,15 +267,15 @@ export function ManagementDashboardPage() {
             {/* Date Range Bar */}
             <div className="flex flex-wrap items-end gap-2.5">
               {/* Presets */}
-              <div className="flex items-center gap-1 rounded-xl border border-[#e5e9f2] bg-[#eef1f8] p-1">
+              <div className="flex items-center gap-1.5 rounded-[12px] border border-[#e5e9f2] bg-[#eef1f8] p-1">
                 {[7, 30, 90].map((d) => (
                   <button
                     key={d}
                     type="button"
                     onClick={() => applyPreset(d)}
-                    className={`rounded-lg px-2.5 py-1 text-xs font-bold transition ${
+                    className={`rounded-[9px] px-3 py-2 text-[12.5px] font-bold transition ${
                       activePreset === d
-                        ? 'bg-[#0a1330] text-white shadow-sm'
+                        ? 'bg-[#0a1330] text-white shadow-[0_6px_14px_-6px_rgba(10,19,48,0.6)]'
                         : 'text-[#5b6a8a] hover:text-[#0f1e33]'
                     }`}
                   >
@@ -285,7 +286,7 @@ export function ManagementDashboardPage() {
 
               {/* From Date */}
               <div>
-                <label className="mb-1 block text-[10px] font-extrabold tracking-wider text-[#8a94ad] uppercase">
+                <label className="mb-1.5 block text-[10px] font-extrabold tracking-[0.14em] text-[#8a94ad] uppercase">
                   From
                 </label>
                 <div className="relative">
@@ -296,14 +297,14 @@ export function ManagementDashboardPage() {
                       setDraftFrom(e.target.value)
                       setActivePreset(null)
                     }}
-                    className="rounded-xl border border-[#e1e7f2] bg-[#f8faff] px-2.5 py-1.5 text-xs font-medium text-[#0f1e33] outline-none transition focus:border-[#2348ff] focus:bg-white focus:ring-2 focus:ring-[#2348ff]/20"
+                    className="rounded-[12px] border-[1.5px] border-[#e1e7f2] bg-[#f8faff] px-[11px] py-[9px] text-[13px] font-medium text-[#0e1b33] outline-none transition focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/12"
                   />
                 </div>
               </div>
 
               {/* To Date */}
               <div>
-                <label className="mb-1 block text-[10px] font-extrabold tracking-wider text-[#8a94ad] uppercase">
+                <label className="mb-1.5 block text-[10px] font-extrabold tracking-[0.14em] text-[#8a94ad] uppercase">
                   To
                 </label>
                 <div className="relative">
@@ -314,7 +315,7 @@ export function ManagementDashboardPage() {
                       setDraftTo(e.target.value)
                       setActivePreset(null)
                     }}
-                    className="rounded-xl border border-[#e1e7f2] bg-[#f8faff] px-2.5 py-1.5 text-xs font-medium text-[#0f1e33] outline-none transition focus:border-[#2348ff] focus:bg-white focus:ring-2 focus:ring-[#2348ff]/20"
+                    className="rounded-[12px] border-[1.5px] border-[#e1e7f2] bg-[#f8faff] px-[11px] py-[9px] text-[13px] font-medium text-[#0e1b33] outline-none transition focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/12"
                   />
                 </div>
               </div>
@@ -323,7 +324,7 @@ export function ManagementDashboardPage() {
               <button
                 type="button"
                 onClick={handleApply}
-                className="inline-flex items-center gap-1 rounded-xl bg-gradient-to-r from-[#2b54ff] to-[#1a34c8] px-3.5 py-2 text-xs font-bold text-white shadow-[0_12px_22px_-10px_rgba(35,72,255,0.7)] transition hover:-translate-y-0.5 active:translate-y-0"
+                className="inline-flex items-center gap-2 rounded-[12px] bg-gradient-to-br from-[#2b54ff] to-[#1a34c8] px-4 py-[11px] text-[13px] font-bold text-white shadow-[0_12px_22px_-10px_rgba(35,72,255,0.7),inset_0_1px_0_rgba(255,255,255,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
               >
                 Apply →
               </button>
@@ -332,10 +333,10 @@ export function ManagementDashboardPage() {
               <button
                 type="button"
                 onClick={handleExportCsv}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-[#e5e9f2] bg-white px-3 py-2 text-xs font-bold text-[#33415e] shadow-sm transition hover:border-[#b9c4e2] hover:text-[#0f1e33]"
+                className="inline-flex items-center gap-2 rounded-[12px] border-[1.5px] border-[#e5e9f2] bg-white px-[14px] py-[10px] text-[13px] font-bold text-[#33415e] shadow-sm transition hover:border-[#b9c4e2]"
               >
                 <Download className="size-3.5" />
-                Export
+                ⤓ Export
               </button>
             </div>
           </div>
@@ -350,7 +351,7 @@ export function ManagementDashboardPage() {
             {/* KPI Cards (6 Grid matching UI/UX design) */}
             <section className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
               {/* 1. Revenue */}
-              <div className="group relative overflow-hidden rounded-2xl border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div className="absolute inset-x-0 top-0 h-[3px] bg-[#2348ff]" />
                 <div className="flex items-center justify-between gap-1.5">
                   <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#e9edff] text-[#2348ff]">
@@ -358,11 +359,11 @@ export function ManagementDashboardPage() {
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">Revenue</span>
                 </div>
-                <div className="mt-2.5 text-[20px] font-extrabold tracking-tight text-[#0f1e33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0f1e33]">
                   ₹{data.totalRevenue.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#e6fbf4] px-2 py-0.5 text-[10px] font-bold text-[#0a7a68]">
+                  <span className="rounded-full bg-[#e6fbf4] px-2 py-0.5 text-[11px] font-extrabold text-[#0a7a68]">
                     ▲ 12.4%
                   </span>
                 </div>
@@ -377,11 +378,11 @@ export function ManagementDashboardPage() {
                   <path d={sparkRev.area} fill="url(#grad-rev)" />
                   <path d={sparkRev.line} fill="none" stroke="#2348ff" strokeWidth="2" strokeLinecap="round" />
                 </svg>
-                <p className="mt-1 text-[10.5px] text-[#8a94ad]">Billed across all branches</p>
+                <p className="mt-1 text-[11px] text-[#8a94ad]">Billed across all branches</p>
               </div>
 
               {/* 2. Collection */}
-              <div className="group relative overflow-hidden rounded-2xl border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div className="absolute inset-x-0 top-0 h-[3px] bg-[#0eb7a2]" />
                 <div className="flex items-center justify-between gap-1.5">
                   <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#d9f9f1] text-[#0eb7a2]">
@@ -389,11 +390,11 @@ export function ManagementDashboardPage() {
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">Collection</span>
                 </div>
-                <div className="mt-2.5 text-[20px] font-extrabold tracking-tight text-[#0f1e33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0f1e33]">
                   ₹{data.totalCollection.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#e6fbf4] px-2 py-0.5 text-[10px] font-bold text-[#0a7a68]">
+                  <span className="rounded-full bg-[#e6fbf4] px-2 py-0.5 text-[11px] font-extrabold text-[#0a7a68]">
                     ▲ 8.1%
                   </span>
                 </div>
@@ -407,7 +408,7 @@ export function ManagementDashboardPage() {
                   <path d={sparkCol.area} fill="url(#grad-col)" />
                   <path d={sparkCol.line} fill="none" stroke="#0eb7a2" strokeWidth="2" strokeLinecap="round" />
                 </svg>
-                <p className="mt-1 text-[10.5px] text-[#8a94ad]">
+                <p className="mt-1 text-[11px] text-[#8a94ad]">
                   {data.totalRevenue > 0
                     ? `${Math.round((data.totalCollection / data.totalRevenue) * 100)}% of billed`
                     : '100% collected'}
@@ -415,7 +416,7 @@ export function ManagementDashboardPage() {
               </div>
 
               {/* 3. OP Visits */}
-              <div className="group relative overflow-hidden rounded-2xl border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div className="absolute inset-x-0 top-0 h-[3px] bg-[#7a5bff]" />
                 <div className="flex items-center justify-between gap-1.5">
                   <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#ece7ff] text-[#7a5bff]">
@@ -423,11 +424,11 @@ export function ManagementDashboardPage() {
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">OP Visits</span>
                 </div>
-                <div className="mt-2.5 text-[20px] font-extrabold tracking-tight text-[#0f1e33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0f1e33]">
                   {data.opVisitCount.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#e6fbf4] px-2 py-0.5 text-[10px] font-bold text-[#0a7a68]">
+                  <span className="rounded-full bg-[#e6fbf4] px-2 py-0.5 text-[11px] font-extrabold text-[#0a7a68]">
                     ▲ 6.3%
                   </span>
                 </div>
@@ -441,11 +442,11 @@ export function ManagementDashboardPage() {
                   <path d={sparkOp.area} fill="url(#grad-op)" />
                   <path d={sparkOp.line} fill="none" stroke="#7a5bff" strokeWidth="2" strokeLinecap="round" />
                 </svg>
-                <p className="mt-1 text-[10.5px] text-[#8a94ad]">Queue token active</p>
+                <p className="mt-1 text-[11px] text-[#8a94ad]">Queue token active</p>
               </div>
 
               {/* 4. Active Inpatients */}
-              <div className="group relative overflow-hidden rounded-2xl border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div className="absolute inset-x-0 top-0 h-[3px] bg-[#b98a1e]" />
                 <div className="flex items-center justify-between gap-1.5">
                   <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#fdf3dc] text-[#b98a1e]">
@@ -453,11 +454,11 @@ export function ManagementDashboardPage() {
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">Active IP</span>
                 </div>
-                <div className="mt-2.5 text-[20px] font-extrabold tracking-tight text-[#0f1e33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0f1e33]">
                   {data.activeInpatients.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#eef1f8] px-2 py-0.5 text-[10px] font-bold text-[#5b6a8a]">
+                  <span className="rounded-full bg-[#eef1f8] px-2 py-0.5 text-[11px] font-extrabold text-[#5b6a8a]">
                     ▬ stable
                   </span>
                 </div>
@@ -471,11 +472,11 @@ export function ManagementDashboardPage() {
                   <path d={sparkIp.area} fill="url(#grad-ip)" />
                   <path d={sparkIp.line} fill="none" stroke="#b98a1e" strokeWidth="2" strokeLinecap="round" />
                 </svg>
-                <p className="mt-1 text-[10.5px] text-[#8a94ad]">Wards occupied</p>
+                <p className="mt-1 text-[11px] text-[#8a94ad]">Wards occupied</p>
               </div>
 
               {/* 5. Bed Occupancy */}
-              <div className="group relative overflow-hidden rounded-2xl border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div className="absolute inset-x-0 top-0 h-[3px] bg-[#0e9d8b]" />
                 <div className="flex items-center justify-between gap-1.5">
                   <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#d9f9f1] text-[#0e9d8b]">
@@ -483,11 +484,11 @@ export function ManagementDashboardPage() {
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">Occupancy</span>
                 </div>
-                <div className="mt-2.5 text-[20px] font-extrabold tracking-tight text-[#0f1e33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0f1e33]">
                   {data.bedOccupancyPercent}%
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#eef1f8] px-2 py-0.5 text-[10px] font-bold text-[#5b6a8a]">
+                  <span className="rounded-full bg-[#eef1f8] px-2 py-0.5 text-[11px] font-extrabold text-[#5b6a8a]">
                     ▬ capacity
                   </span>
                 </div>
@@ -501,11 +502,11 @@ export function ManagementDashboardPage() {
                   <path d={sparkBed.area} fill="url(#grad-bed)" />
                   <path d={sparkBed.line} fill="none" stroke="#0e9d8b" strokeWidth="2" strokeLinecap="round" />
                 </svg>
-                <p className="mt-1 text-[10.5px] text-[#8a94ad]">Main + Speed wards</p>
+                <p className="mt-1 text-[11px] text-[#8a94ad]">Main + Speed wards</p>
               </div>
 
               {/* 6. Unacknowledged Alerts */}
-              <div className="group relative overflow-hidden rounded-2xl border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div className="absolute inset-x-0 top-0 h-[3px] bg-[#ff5470]" />
                 <div className="flex items-center justify-between gap-1.5">
                   <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#ffe3e8] text-[#ff5470]">
@@ -514,7 +515,7 @@ export function ManagementDashboardPage() {
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">Alerts</span>
                 </div>
                 <div
-                  className={`mt-2.5 text-[20px] font-extrabold tracking-tight ${
+                  className={`mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] ${
                     effectiveAlerts > 0 ? 'text-[#ff5470]' : 'text-[#0a7a68]'
                   }`}
                 >
@@ -522,7 +523,7 @@ export function ManagementDashboardPage() {
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
                   <span
-                    className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                    className={`rounded-full px-2 py-0.5 text-[11px] font-extrabold ${
                       effectiveAlerts > 0 ? 'bg-[#ffeef1] text-[#d33a5c]' : 'bg-[#e6fbf4] text-[#0a7a68]'
                     }`}
                   >
@@ -769,15 +770,15 @@ export function ManagementDashboardPage() {
                       ))}
                     </tbody>
                     <tfoot>
-                      <tr className="border-t-2 border-[#eef1f7] bg-[#f8faff] font-bold text-[#0f1e33]">
-                        <td className="px-5 py-3">Total • {filteredBranches.length} branch(es)</td>
-                        <td className="px-5 py-3 text-right font-mono">₹{branchTotals.rev.toLocaleString()}</td>
-                        <td className="px-5 py-3 text-right font-mono text-[#0a7a68]">
+                      <tr className="bg-[#0a1330] text-white text-[13px] font-semibold">
+                        <td className="px-5 py-3.5 font-bold">Total • {filteredBranches.length} branch(es)</td>
+                        <td className="px-5 py-3.5 text-right font-display font-bold text-white">₹{branchTotals.rev.toLocaleString()}</td>
+                        <td className="px-5 py-3.5 text-right font-display font-bold text-[#7df0dd]">
                           ₹{branchTotals.col.toLocaleString()}
                         </td>
-                        <td className="px-5 py-3 text-right font-mono">{branchTotals.op.toLocaleString()}</td>
-                        <td className="px-5 py-3 text-right font-mono">{branchTotals.ip.toLocaleString()}</td>
-                        <td className="px-5 py-3 text-center text-[#8a94ad]">—</td>
+                        <td className="px-5 py-3.5 text-right font-display font-bold text-white">{branchTotals.op.toLocaleString()}</td>
+                        <td className="px-5 py-3.5 text-right font-display font-bold text-white">{branchTotals.ip.toLocaleString()}</td>
+                        <td className="px-5 py-3.5 text-center text-[#aebcf3]">—</td>
                       </tr>
                     </tfoot>
                   </table>

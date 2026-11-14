@@ -46,7 +46,8 @@
   .sideSearch input:focus{border-color:rgba(122,143,255,.7);box-shadow:0 0 0 3px rgba(59,98,255,.25)}
   .sideSearch svg{position:absolute;left:10px;top:50%;transform:translateY(-50%)}
   .kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10.5px;color:#a9b6e2;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:2px 6px;border-radius:6px}
-  .nav{flex:1;overflow:auto;padding:2px 10px 10px;position:relative;scrollbar-width:thin}
+  .nav{flex:1;overflow:auto;padding:2px 10px 10px;position:relative;scrollbar-width:none;-ms-overflow-style:none}
+  .nav::-webkit-scrollbar{width:0;height:0}
   .navSec{font-size:10px;letter-spacing:.22em;color:#7c8cc0;font-weight:800;padding:14px 10px 7px}
   .navItem{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:transparent;border:0;color:#c2cdf3;padding:9px 10px;border-radius:11px;font-size:13.2px;font-weight:500;cursor:pointer;transition:.15s;text-decoration:none}
   .navItem:hover{background:rgba(255,255,255,.06);color:#fff}
@@ -56,7 +57,7 @@
   .sideFoot{padding:12px 14px 14px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.18);position:relative}
   .adminCard{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px}
   .avatar{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:12px;color:#0a1330;background:linear-gradient(135deg,#ffe9b8,#c6a15b);flex:0 0 auto}
-  .avatar.teal{background:linear-gradient(135deg,#b8fff3,#2dd4bf)}
+  .avatar.teal{background:#285a91;color:#fff}
   .adminCard b{display:block;font-size:12.5px;color:#fff}
   .adminCard span{font-size:11px;color:#93a2d1}
   .sysStatus{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#8fa0d6}
@@ -65,20 +66,20 @@
 
   /* ===== Main ===== */
   .main{flex:1;min-width:0;display:flex;flex-direction:column}
-  .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:11px 22px}
+  .topbar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);color:#1e4265;display:flex;align-items:center;gap:14px;padding:11px 22px;box-shadow:none}
   .crumb{display:flex;align-items:center;gap:12px}
-  .crumbIcon{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#2348ff,#6d5bff);color:#fff;display:grid;place-items:center;box-shadow:var(--shadow-sm)}
-  .crumb b{font-size:14px;display:block;line-height:1.1}
-  .crumb small{color:var(--muted);font-size:11.5px}
-  .envPill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#0c6b5f;background:#d9f9f1;border:1px solid #a7e9d8;padding:3px 9px;border-radius:99px;margin-left:8px;vertical-align:middle}
+  .crumbIcon{width:34px;height:34px;border-radius:11px;background:#326fb1;border:1px solid #285a91;color:#fff;display:grid;place-items:center;box-shadow:none}
+  .crumb b{font-size:14px;display:block;line-height:1.1;color:#1e4265}
+  .crumb small{color:#5b6a8a;font-size:11.5px}
+  .envPill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#285a91;background:#dce8f3;border:1px solid #b8cfe3;padding:3px 9px;border-radius:99px;margin-left:8px;vertical-align:middle}
   .topActions{margin-left:auto;display:flex;align-items:center;gap:10px}
   .iconBtn{width:34px;height:34px;border-radius:11px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;cursor:pointer;color:#42506b;position:relative}
-  .iconBtn:hover{border-color:#c6d0e8;box-shadow:var(--shadow-sm)}
+  .iconBtn:hover{background:#eef3f9;border-color:#c6d0e8;box-shadow:none}
   .notifDot{position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:99px;background:#ff5470;border:2px solid #fff}
-  .userChip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:5px 10px 5px 5px;cursor:pointer}
+  .userChip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);color:#1e4265;border-radius:13px;padding:5px 10px 5px 5px;cursor:pointer}
   .userChip .avatar{width:30px;height:30px;border-radius:9px}
-  .userChip b{font-size:12.5px;display:block;line-height:1.1}
-  .userChip small{font-size:11px;color:var(--muted)}
+  .userChip b{font-size:12.5px;display:block;line-height:1.1;color:#1e4265}
+  .userChip small{font-size:11px;color:#5b6a8a}
   .hamburger{display:none}
 
   .page{padding:22px 26px 46px;max-width:1360px;width:100%;margin:0 auto}
@@ -273,11 +274,11 @@
       <button class="iconBtn hamburger" id="menuBtn">☰</button>
       <div class="crumb">
         <div class="crumbIcon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></div>
-        <div><b>Dashboard <span class="envPill"><span style="width:7px;height:7px;border-radius:99px;background:#0a7a68;display:inline-block"></span> Main Branch</span></b><small>Cross-branch reporting • live</small></div>
+        <div><b>Dashboard <span class="envPill"><span style="width:7px;height:7px;border-radius:99px;background:#285a91;display:inline-block"></span> Main Branch</span></b><small>Cross-branch reporting • live</small></div>
       </div>
       <div class="topActions">
         <button class="iconBtn" id="bellBtn">◉<span class="notifDot"></span></button>
-        <div class="userChip"><div class="avatar teal">SA</div><div><b>System Administrator</b><small>Front Office • Shift A</small></div><span style="color:#8a94ad">▾</span></div>
+        <div class="userChip"><div class="avatar teal">SA</div><div><b>System Administrator</b><small>Front Office • Shift A</small></div><span style="color:#5b6a8a">▾</span></div>
       </div>
     </header>
 

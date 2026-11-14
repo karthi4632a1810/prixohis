@@ -31,10 +31,10 @@ export function TabStrip() {
         type="button"
         onClick={toggleSplit}
         title="Split view"
-        className={`flex shrink-0 items-center gap-1.5 rounded-[11px] border px-2.5 py-1.5 text-[11.5px] font-semibold transition-all shadow-sm ${
+        className={`flex shrink-0 items-center gap-1.5 rounded-[11px] border px-3 py-1.5 text-[12.5px] font-semibold transition-all ${
           splitTabId
             ? 'border-[#3b62ff] bg-gradient-to-r from-[#2348ff] to-[#1a34c8] text-white shadow-[0_4px_12px_-4px_rgba(35,72,255,0.5)]'
-            : 'border-[#d6dfef] bg-white text-[#42506b] hover:border-[#b9c4e2] hover:text-[#0e1b33] dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3]'
+            : 'border-[#e5e9f2] bg-white text-[#42506b] hover:border-[#c6d0e8] hover:text-[#0e1b33] dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3]'
         }`}
       >
         <Columns2 className="size-3.5" aria-hidden />
@@ -65,7 +65,7 @@ function TabChip({
     <div
       className={`group flex shrink-0 items-center rounded-[11px] border transition-all ${
         isActive
-          ? 'border-[#d6dfef] bg-white text-[#1a34c8] shadow-sm ring-1 ring-[#3b62ff]/25 dark:border-white/15 dark:bg-[#121c38] dark:text-[#7a9aff]'
+          ? 'border-[#e5e9f2] bg-white text-[#1a34c8] shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] dark:border-white/15 dark:bg-[#121c38] dark:text-[#7a9aff]'
           : 'border-transparent text-[#627290] hover:bg-white/60 hover:text-[#0e1b33] dark:text-[#8fa0d6] dark:hover:bg-white/5 dark:hover:text-white'
       } ${isPrimary && isActive ? 'font-bold' : 'font-medium'}`}
     >
@@ -77,10 +77,10 @@ function TabChip({
         }}
         title={tab.path}
         aria-current={isActive ? 'page' : undefined}
-        className="flex items-center gap-2 py-1.5 pl-2.5 pr-2 text-[12px]"
+        className="flex items-center gap-2 py-[7px] pl-2.5 pr-2 text-[12px]"
       >
         <span
-          className={`flex size-5 shrink-0 items-center justify-center rounded-[6px] text-[11px] ${
+          className={`flex size-5 shrink-0 items-center justify-center rounded-[7px] text-[11px] ${
             isActive
               ? 'bg-[#e9edff] text-[#2348ff] dark:bg-[#1e2a52] dark:text-[#6d8eff]'
               : 'text-inherit opacity-70'

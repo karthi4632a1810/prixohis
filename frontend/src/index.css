@@ -241,3 +241,14 @@ body {
 .tabular {
   font-variant-numeric: tabular-nums;
 }
+
+@keyframes slide {
+  to {
+    background-position: 200% 0;
+  }
+}
+
+.animate-slide {
+  background-size: 200% 100%;
+  animation: slide 8s linear infinite;
+}

@@ -141,19 +141,19 @@ function SidebarNode({
 
   const isAppointments = node.title.toLowerCase().includes('appointment')
   const badgeEl = isAppointments ? (
-    <span className="ml-auto rounded-full border border-[rgba(45,212,191,0.35)] bg-[rgba(45,212,191,0.18)] px-2 py-0.5 text-[11px] font-extrabold text-[#7df0dd]">
+    <span className="ml-auto rounded-full border border-[rgba(45,212,191,0.35)] bg-[rgba(45,212,191,0.18)] px-[7px] py-[1px] text-[11px] font-extrabold text-[#7df0dd]">
       24
     </span>
   ) : null
 
-  const linkClass = `group relative flex items-center gap-2.5 rounded-[11px] px-2.5 py-2 text-[13.2px] font-medium transition-all ${
+  const linkClass = `group relative flex items-center gap-[11px] rounded-[11px] px-[10px] py-[9px] text-[13.2px] font-medium transition-all ${
     collapsed ? 'justify-center' : ''
   } ${
     isActive
-      ? 'bg-gradient-to-r from-[#3b62ff] to-[#3b62ff]/65 text-white font-semibold shadow-[0_8px_20px_-8px_rgba(59,98,255,0.8),inset_0_1px_0_rgba(255,255,255,0.35)]'
+      ? 'bg-gradient-to-r from-[#3b62ff]/95 to-[#3b62ff]/55 text-white font-medium shadow-[0_10px_22px_-10px_rgba(59,98,255,0.8),inset_0_1px_0_rgba(255,255,255,0.35)]'
       : holdsActive
       ? 'bg-white/10 text-white font-semibold'
-      : 'text-[#c2cdf3] hover:bg-white/8 hover:text-white'
+      : 'text-[#c2cdf3] hover:bg-white/6 hover:text-white'
   }`
 
   const handleLinkClick = (path: string) => (e: React.MouseEvent) => {
@@ -363,7 +363,7 @@ export function AppShell() {
             background: 'linear-gradient(180deg, #0a1330 0%, #0d1a41 55%, #0b1537 100%)',
           }}
           className={`relative z-30 flex min-h-0 shrink-0 flex-col border-r border-white/8 text-[#dbe3ff] shadow-xl transition-[width] duration-200 ${
-            collapsed ? 'w-[72px]' : 'w-[272px]'
+            collapsed ? 'w-[84px]' : 'w-[288px]'
           }`}
         >
           {/* Ambient glow pseudo-elements on sidebar */}
@@ -381,14 +381,14 @@ export function AppShell() {
           </button>
 
           {/* Brand Header */}
-          <div className={`relative flex h-16 shrink-0 items-center gap-3 px-4 ${collapsed ? 'justify-center px-0' : ''}`}>
-            <div className="flex size-[38px] shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br from-[#3b62ff] via-[#7a5bff] to-[#0eb7a2] font-display text-[17px] font-extrabold text-white shadow-[0_8px_20px_-6px_rgba(59,98,255,0.7),inset_0_1px_0_rgba(255,255,255,0.5)]">
+          <div className={`relative flex items-center gap-3 p-[18px_16px_14px] ${collapsed ? 'justify-center px-0' : ''}`}>
+            <div className="flex size-[38px] shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br from-[#3b62ff] via-[#7a5bff] to-[#0eb7a2] font-display text-[18px] font-extrabold text-white shadow-[0_8px_20px_-6px_rgba(59,98,255,0.7),inset_0_1px_0_rgba(255,255,255,0.5)]">
               P
             </div>
             {!collapsed && (
               <div className="min-w-0 flex-1">
-                <div className="font-display text-[15.5px] leading-tight font-extrabold tracking-tight text-white">Pravo</div>
-                <div className="text-[9.5px] font-bold tracking-[0.28em] text-[#8fa0d6] uppercase">Hospital OS</div>
+                <div className="font-display text-[15.5px] leading-[1.05] font-extrabold text-white">Pravo</div>
+                <div className="text-[10px] font-bold tracking-[0.28em] text-[#8fa0d6] uppercase">Hospital OS</div>
               </div>
             )}
             {!collapsed && (
@@ -400,9 +400,9 @@ export function AppShell() {
 
           {/* Search bar inside sidebar */}
           {!collapsed && (
-            <div className="relative px-3.5 pb-2.5 pt-1">
+            <div className="relative mx-[14px] mt-[2px] mb-[12px]">
               <div className="relative">
-                <Search className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-[#8b99c8]" aria-hidden />
+                <Search className="pointer-events-none absolute top-1/2 left-[10px] size-3.5 -translate-y-1/2 text-[#8b99c8]" aria-hidden />
                 <input
                   id={MENU_SEARCH_ID}
                   type="text"
@@ -413,10 +413,10 @@ export function AppShell() {
                   }}
                   placeholder="Search menu…"
                   aria-label="Search menu"
-                  className="w-full rounded-[11px] border border-white/12 bg-white/7 py-2 pr-14 pl-9 text-[13px] text-[#e8eeff] outline-none placeholder:text-[#8b99c8] focus:border-[#7a8fff]/70 focus:bg-white/10 focus:ring-2 focus:ring-[#3b62ff]/25 transition-all"
+                  className="w-full rounded-[11px] border border-white/12 bg-white/7 py-[10px] pr-[52px] pl-[34px] text-[13px] text-[#e8eeff] outline-none placeholder:text-[#8b99c8] focus:border-[#7a8fff]/70 focus:bg-white/10 focus:ring-0 focus:shadow-[0_0_0_3px_rgba(59,98,255,0.25)] transition-all"
                 />
                 {!menuSearch ? (
-                  <kbd className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 rounded-[6px] border border-white/12 bg-white/8 px-1.5 py-0.5 text-[10px] font-semibold text-[#a9b6e2]">
+                  <kbd className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 rounded-[6px] border border-white/12 bg-white/8 px-[6px] py-[2px] text-[10.5px] font-semibold text-[#a9b6e2]">
                     Ctrl K
                   </kbd>
                 ) : (
@@ -434,7 +434,7 @@ export function AppShell() {
           )}
 
           {/* Navigation Menu */}
-          <nav className="relative min-h-0 flex-1 space-y-1 overflow-y-auto px-3 pb-3 scrollbar-thin scrollbar-thumb-white/10">
+          <nav className="relative min-h-0 flex-1 space-y-1 overflow-y-auto px-[10px] pt-[2px] pb-[10px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {visibleMenu.length === 0 && trimmedSearch && (
               <p className="px-3 py-2 text-xs text-[#8fa0d6]">No menu items match "{menuSearch.trim()}".</p>
             )}
@@ -452,9 +452,9 @@ export function AppShell() {
           </nav>
 
           {/* Sidebar Footer with user info & status */}
-          <div className="relative shrink-0 border-t border-white/8 bg-black/25 p-3">
-            <div className={`flex items-center gap-2.5 rounded-[14px] border border-white/10 bg-white/7 p-2.5 transition-all ${collapsed ? 'justify-center p-2' : ''}`}>
-              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-gradient-to-br from-[#ffe9b8] to-[#c6a15b] text-xs font-extrabold text-[#0a1330] shadow-sm">
+          <div className="relative shrink-0 border-t border-white/8 bg-black/18 p-[12px_14px_14px]">
+            <div className={`flex items-center gap-[10px] rounded-[14px] border border-white/10 bg-white/7 p-[10px] transition-all ${collapsed ? 'justify-center p-2' : ''}`}>
+              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-gradient-to-br from-[#ffe9b8] to-[#c6a15b] font-display text-[12px] font-extrabold text-[#0a1330] shadow-sm">
                 {user ? initialsOf(user.fullName) : 'SA'}
               </div>
               {!collapsed && (
@@ -479,23 +479,23 @@ export function AppShell() {
         {/* Main Content Area */}
         <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col">
           {/* Top Bar Header */}
-          <header className="relative z-20 flex h-16 shrink-0 items-center gap-3.5 border-b border-[#e5e9f2] bg-white/85 px-6 backdrop-blur-md dark:border-white/8 dark:bg-[#0c152a]/85">
+          <header className="relative z-20 flex h-[58px] shrink-0 items-center gap-[14px] border-b border-[#e5e9f2] bg-white px-[22px] text-[#1e4265] shadow-none dark:border-white/8 dark:bg-[#0c152a] dark:text-[#dbe3ff]">
             {/* Left Page Title / Breadcrumb */}
             <div className="flex items-center gap-3 min-w-0">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-[11px] bg-gradient-to-br from-[#2348ff] to-[#6d5bff] text-white shadow-[0_4px_12px_-4px_rgba(35,72,255,0.4)]">
+              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-[#326fb1] border border-[#285a91] text-white shadow-none">
                 <MenuIconFor name={active?.node.icon ?? 'layout-dashboard'} />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-display truncate text-[14px] font-bold text-[#0e1b33] dark:text-white">
+                  <span className="font-display truncate text-[14px] font-bold text-[#1e4265] leading-[1.1] dark:text-white">
                     {active?.node.title ?? 'Dashboard'}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#a7e9d8] bg-[#d9f9f1] px-2.5 py-0.5 text-[11px] font-bold text-[#0c6b5f] dark:border-[#146c5e] dark:bg-[#0c3831] dark:text-[#7df0dd]">
-                    <span className="size-1.5 rounded-full bg-[#0a7a68] dark:bg-[#2dd4bf] inline-block" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#b8cfe3] bg-[#dce8f3] px-[9px] py-[3px] text-[11px] font-bold text-[#285a91] dark:border-[#285a91] dark:bg-[#1a3460] dark:text-[#8fc3ff]">
+                    <span className="size-[7px] rounded-full bg-[#285a91] dark:bg-[#8fc3ff] inline-block" />
                     {user?.branchName ?? 'Main Branch'}
                   </span>
                 </div>
-                <div className="truncate text-[11.5px] text-[#67748e] dark:text-[#8fa0d6]">
+                <div className="truncate text-[11.5px] text-[#5b6a8a] dark:text-[#8fa0d6]">
                   {active?.group?.title ? `${active.group.title} • ` : ''}Hospital Information System • live
                 </div>
               </div>
@@ -510,7 +510,7 @@ export function AppShell() {
                   setCollapsed(false)
                   requestAnimationFrame(() => document.getElementById(MENU_SEARCH_ID)?.focus())
                 }}
-                className="hidden sm:flex size-9 items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-xs font-semibold text-[#42506b] shadow-sm hover:border-[#c6d0e8] hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+                className="hidden sm:flex size-[34px] items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-xs font-semibold text-[#42506b] hover:bg-[#eef3f9] hover:border-[#c6d0e8] shadow-none dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
                 title="Search menu (Ctrl+K)"
               >
                 ⌘
@@ -519,11 +519,11 @@ export function AppShell() {
               {/* Notifications bell */}
               <button
                 type="button"
-                className="relative flex size-9 items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] shadow-sm hover:border-[#c6d0e8] hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+                className="relative flex size-[34px] items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] hover:bg-[#eef3f9] hover:border-[#c6d0e8] shadow-none dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
                 title="Notifications"
               >
                 <Bell className="size-4" aria-hidden />
-                <span className="absolute top-2 right-2 size-2 rounded-full border-2 border-white bg-[#ff5470] dark:border-[#0c152a]" />
+                <span className="absolute top-[7px] right-[8px] size-2 rounded-full border-2 border-white bg-[#ff5470] dark:border-[#0c152a]" />
               </button>
 
               {/* Theme toggle */}
@@ -531,7 +531,7 @@ export function AppShell() {
                 type="button"
                 onClick={toggleTheme}
                 title="Toggle theme"
-                className="flex size-9 items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] shadow-sm hover:border-[#c6d0e8] hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+                className="flex size-[34px] items-center justify-center rounded-[11px] border border-[#e5e9f2] bg-white text-[#42506b] hover:bg-[#eef3f9] hover:border-[#c6d0e8] shadow-none dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
               >
                 {theme === 'dark' ? <Sun className="size-4" aria-hidden /> : <Moon className="size-4" aria-hidden />}
               </button>
@@ -541,20 +541,20 @@ export function AppShell() {
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen((value) => !value)}
-                  className="flex items-center gap-2.5 rounded-[13px] border border-[#e5e9f2] bg-white py-1.5 pr-3 pl-1.5 shadow-sm transition-all hover:border-[#c6d0e8] hover:shadow-md dark:border-white/10 dark:bg-white/5"
+                  className="flex items-center gap-2.5 rounded-[13px] border border-[#e5e9f2] bg-white p-[5px_10px_5px_5px] text-[#1e4265] shadow-none transition-all hover:bg-[#eef3f9] hover:border-[#c6d0e8] dark:border-white/10 dark:bg-white/5"
                 >
-                  <div className="flex size-[30px] shrink-0 items-center justify-center rounded-[9px] bg-gradient-to-br from-[#b8fff3] to-[#2dd4bf] text-xs font-extrabold text-[#0a1330] shadow-sm">
+                  <div className="flex size-[30px] shrink-0 items-center justify-center rounded-[9px] bg-[#285a91] text-xs font-extrabold text-white shadow-none">
                     {user ? initialsOf(user.fullName) : 'SA'}
                   </div>
                   <div className="hidden text-left sm:block">
-                    <div className="text-[12px] font-bold leading-tight text-[#0e1b33] dark:text-white truncate max-w-[140px]">
+                    <div className="text-[12.5px] font-bold leading-[1.1] text-[#1e4265] dark:text-white truncate max-w-[140px]">
                       {user?.fullName ?? 'System Administrator'}
                     </div>
-                    <div className="text-[10.5px] text-[#67748e] dark:text-[#8fa0d6] truncate max-w-[140px]">
+                    <div className="text-[11px] text-[#5b6a8a] dark:text-[#8fa0d6] truncate max-w-[140px]">
                       {user ? roleLabel(user.roles) : 'Super Admin'} • Shift A
                     </div>
                   </div>
-                  <ChevronDown className="size-3.5 text-[#8a94ad]" aria-hidden />
+                  <ChevronDown className="size-3.5 text-[#5b6a8a] dark:text-[#8fa0d6]" aria-hidden />
                 </button>
                 {userMenuOpen && (
                   <div
