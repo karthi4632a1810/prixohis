@@ -12,27 +12,26 @@
   --color-primary-600: #2563eb;
   --color-primary-700: #1d4ed8;
 
-  /* Shell tokens — used by AppShell, auth pages and shared ui/ primitives.
-     Values are re-pointed at runtime by the `.dark` block below. */
-  --color-shell-bg: #f7f2ec;
-  --color-shell-bg2: #f0eae2;
+  /* Shell tokens — Pravo Hospital OS palette matching dashboard.html & op-registration.html */
+  --color-shell-bg: #eef1f7;
+  --color-shell-bg2: #e5eaf3;
   --color-panel: #ffffff;
-  --color-panel-2: #fdf8f2;
+  --color-panel-2: #f8faff;
   --color-panel-solid: #ffffff;
-  --color-border-soft: rgb(15 23 42 / 0.08);
-  --color-border-strong: rgb(15 23 42 / 0.15);
-  --color-ink: #191919;
+  --color-border-soft: #e5e9f2;
+  --color-border-strong: #d5dce8;
+  --color-ink: #0e1b33;
   --color-ink-muted: #67748e;
   --color-ink-faint: #8a94ad;
 
-  --color-accent: #c66328;
-  --color-accent-2: #9e4f20;
-  --color-indigo: #1e40af;
-  --color-violet: #334155;
-  --color-crit: #e11d48;
-  --color-ok: #059669;
-  --color-warn: #d97706;
-  --color-info: #2563eb;
+  --color-accent: #2348ff;
+  --color-accent-2: #1a34c8;
+  --color-indigo: #2348ff;
+  --color-violet: #7a5bff;
+  --color-crit: #ff5470;
+  --color-ok: #0eb7a2;
+  --color-warn: #f59e0b;
+  --color-info: #2348ff;
 
   /* Roboto across the whole ERP. `--font-display` is kept as a separate token so the ~10
      `font-display` headings stay addressable if a distinct display face is wanted later;
@@ -51,19 +50,19 @@
 }
 
 .dark {
-  --color-shell-bg: #070a13;
-  --color-shell-bg2: #0b1022;
-  --color-panel: #0e1526;
-  --color-panel-2: #131b2e;
-  --color-panel-solid: #0e1526;
-  --color-border-soft: rgb(255 255 255 / 0.09);
-  --color-border-strong: rgb(255 255 255 / 0.15);
-  --color-ink: #e8edf7;
-  --color-ink-muted: #93a1b8;
-  --color-ink-faint: #5d6b83;
+  --color-shell-bg: #0b1020;
+  --color-shell-bg2: #0f162c;
+  --color-panel: #141b31;
+  --color-panel-2: #1a2342;
+  --color-panel-solid: #141b31;
+  --color-border-soft: #24304d;
+  --color-border-strong: #2a3763;
+  --color-ink: #e8edf8;
+  --color-ink-muted: #9aa6c4;
+  --color-ink-faint: #6f7b9c;
 
-  --color-accent: #3b82f6;
-  --color-accent-2: #60a5fa;
+  --color-accent: #2348ff;
+  --color-accent-2: #3b62ff;
 
   --shadow-shell-sm: 0 1px 2px rgb(0 0 0 / 0.3);
   --shadow-shell-md: 0 6px 16px -8px rgb(0 0 0 / 0.5);
