@@ -24,13 +24,19 @@ public class RazorpayAnalyticsService
         _config = config;
         _logger = logger;
 
-        var baseDir = AppContext.BaseDirectory;
-        var appData = Path.Combine(baseDir, "App_Data");
-        if (!Directory.Exists(appData))
+        var appData = Path.Combine(Path.GetTempPath(), "prixo_data");
+        try
         {
-            Directory.CreateDirectory(appData);
+            if (!Directory.Exists(appData))
+            {
+                Directory.CreateDirectory(appData);
+            }
+            _cacheFilePath = Path.Combine(appData, "razorpay_payments_cache.json");
         }
-        _cacheFilePath = Path.Combine(appData, "razorpay_payments_cache.json");
+        catch
+        {
+            _cacheFilePath = Path.Combine(Path.GetTempPath(), "razorpay_payments_cache.json");
+        }
     }
 
     private (string KeyId, string KeySecret) GetCredentials()
