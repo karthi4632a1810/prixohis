@@ -233,6 +233,11 @@ export const appRoutes: RouteObject[] = [
     children: [{ index: true, element: <FrontOfficePage /> }],
   },
   {
+    path: 'op',
+    element: <RequirePermission permission="PATIENT.PATIENT.CREATE" />,
+    children: [{ index: true, element: <PatientRegistrationWizard /> }],
+  },
+  {
     path: 'patients',
     children: [
       {

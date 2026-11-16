@@ -540,9 +540,9 @@ export function PatientRegistrationWizard() {
             <span>Step {step + 1} of 4 • {steps[step].title}</span>
             <span>{((step + 1) / 4) * 100}% complete</span>
           </div>
-          <div className="relative h-2 overflow-hidden rounded-full bg-[#e8ecf6] dark:bg-[#232e52]">
+          <div className="relative h-2 overflow-hidden rounded-full bg-[#f0eae2] dark:bg-white/10">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#c66328] via-[#d07f4e] to-[#c6a15b] shadow-[0_0_12px_rgba(35,72,255,0.5)] transition-all duration-500 ease-out"
+              className="h-full rounded-full bg-gradient-to-r from-[#c66328] via-[#d07f4e] to-[#c6a15b] shadow-[0_0_12px_rgba(198,99,40,0.5)] transition-all duration-500 ease-out"
               style={{ width: `${((step + 1) / 4) * 100}%` }}
             />
           </div>
@@ -552,10 +552,10 @@ export function PatientRegistrationWizard() {
       {/* Main 2-column layout (Form + Preview Rail) */}
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-4.5 items-start">
         {/* FORM CONTAINER CARD */}
-        <section className="overflow-hidden rounded-[18px] border border-[#e5e9f2] bg-white shadow-sm dark:border-white/8 dark:bg-[#141b31]">
+        <section className="overflow-hidden rounded-[18px] border border-[#e5e9f2] bg-white shadow-sm dark:border-white/8 dark:bg-[#191919]">
           {/* Form Header */}
           <div className="flex items-center gap-3 border-b border-[#eef1f7] bg-gradient-to-b from-[#fdf8f2] to-white px-5 py-4 dark:border-white/8 dark:from-[#17203c] dark:to-[#141b31]">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-[12px] border border-[#e5e9f2] bg-gradient-to-br from-[#e9edff] to-[#d9f9f1] text-[#c66328] shadow-sm dark:border-white/10 dark:from-[#1f2b52] dark:to-[#153e3c]">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-[12px] border border-[#e5e9f2] bg-gradient-to-br from-[#e9edff] to-[#d9f9f1] text-[#c66328] shadow-sm dark:border-white/10 dark:from-[#1f2b52] dark:to-[#241912]">
               <User className="size-4.5" />
             </div>
             <div className="min-w-0">
@@ -575,7 +575,7 @@ export function PatientRegistrationWizard() {
             <div className="ml-auto text-right">
               <small className="block text-[9.5px] font-extrabold tracking-wider text-[#8a94ad] uppercase">AUTO UHID</small>
               <b className="font-display text-sm font-bold text-[#191919] dark:text-white">PRV-2026-08417</b>
-              <em className="inline-block rounded-full border border-[#a7e9d8] bg-[#d9f9f1] px-2 py-0.5 text-[10px] font-extrabold text-[#0a7a68] not-italic dark:border-[#146c5e] dark:bg-[#0c3831] dark:text-[#c6a15b] ml-1.5">
+              <em className="inline-block rounded-full border border-[#eed0be] bg-[#f8ece5] px-2 py-0.5 text-[10px] font-extrabold text-[#0a7a68] not-italic dark:border-[#9e4f20]/40 dark:bg-[#2e1d12] dark:text-[#c6a15b] ml-1.5">
                 ● New
               </em>
             </div>
@@ -602,7 +602,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.salutationId}
                       onChange={(e) => set('salutationId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— Select —</option>
                       {salutations.map((s) => (
@@ -623,7 +623,7 @@ export function PatientRegistrationWizard() {
                       className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                         fieldErrors.firstName
                           ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                          : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                          : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-white/10 dark:bg-[#1a1a1a]'
                       }`}
                     />
                     {fieldErrors.firstName && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.firstName}</span>}
@@ -638,7 +638,7 @@ export function PatientRegistrationWizard() {
                       placeholder="Optional"
                       value={form.middleName}
                       onChange={(e) => set('middleName', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     />
                   </div>
 
@@ -654,7 +654,7 @@ export function PatientRegistrationWizard() {
                       className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                         fieldErrors.lastName
                           ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                          : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                          : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-white/10 dark:bg-[#1a1a1a]'
                       }`}
                     />
                     {fieldErrors.lastName && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.lastName}</span>}
@@ -670,7 +670,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={String(form.gender)}
                       onChange={(e) => set('gender', Number(e.target.value) as Gender)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       {Object.entries(GENDER_LABELS).map(([val, lbl]) => (
                         <option key={val} value={val}>{lbl}</option>
@@ -685,7 +685,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.bloodGroup}
                       onChange={(e) => set('bloodGroup', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">e.g. O+</option>
                       <option value="A+">A+</option>
@@ -707,7 +707,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.maritalStatusId}
                       onChange={(e) => set('maritalStatusId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— Select —</option>
                       {maritalStatuses.map((m) => (
@@ -753,7 +753,7 @@ export function PatientRegistrationWizard() {
                           className={`w-full rounded-xl border p-2.5 pr-24 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                             fieldErrors.dateOfBirth
                               ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                              : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                              : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-white/10 dark:bg-[#1a1a1a]'
                           }`}
                         />
                         {calculatedDobAge !== null && (
@@ -773,7 +773,7 @@ export function PatientRegistrationWizard() {
                         className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                           fieldErrors.estimatedAge
                             ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                            : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                            : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-white/10 dark:bg-[#1a1a1a]'
                         }`}
                       />
                     )}
@@ -796,7 +796,7 @@ export function PatientRegistrationWizard() {
                   <select
                     value={form.languageId}
                     onChange={(e) => set('languageId', e.target.value)}
-                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                   >
                     <option value="">— Select preferred language —</option>
                     {languages.map((l) => (
@@ -814,7 +814,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.patientCaseTypeId}
                       onChange={(e) => set('patientCaseTypeId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— Select —</option>
                       {patientCaseTypes.map((c) => (
@@ -830,7 +830,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.patientHcTagId}
                       onChange={(e) => set('patientHcTagId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— Select —</option>
                       {patientHcTags.map((t) => (
@@ -848,7 +848,7 @@ export function PatientRegistrationWizard() {
                   <select
                     value={form.speciallyAbledCategoryId}
                     onChange={(e) => set('speciallyAbledCategoryId', e.target.value)}
-                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                   >
                     <option value="">— None —</option>
                     {speciallyAbledCategories.map((c) => (
@@ -864,12 +864,12 @@ export function PatientRegistrationWizard() {
                     className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-3 transition-all select-none ${
                       form.isVip
                         ? 'border-[#c6a15b] bg-[#fffbf0] shadow-[0_0_0_4px_rgba(198,161,91,0.16)] dark:border-[#c6a15b] dark:bg-[#2b2413]'
-                        : 'border-[#e5e9f2] bg-[#fdf8f2] hover:border-[#c6d0e8] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                        : 'border-[#e5e9f2] bg-[#fdf8f2] hover:border-[#c6d0e8] dark:border-white/10 dark:bg-[#1a1a1a]'
                     }`}
                   >
                     <div
                       className={`relative h-6 w-10 shrink-0 rounded-full transition-colors ${
-                        form.isVip ? 'bg-gradient-to-r from-[#c6a15b] to-[#e6ca85]' : 'bg-[#d3dae9] dark:bg-[#2a3763]'
+                        form.isVip ? 'bg-gradient-to-r from-[#c6a15b] to-[#e6ca85]' : 'bg-[#e2dacf] dark:bg-[#2a3763]'
                       }`}
                     >
                       <span
@@ -896,12 +896,12 @@ export function PatientRegistrationWizard() {
                     className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-3 transition-all select-none ${
                       form.smsOptIn
                         ? 'border-[#c66328] bg-[#f8ece5] shadow-[0_0_0_4px_rgba(35,72,255,0.1)] dark:border-[#3b82f6] dark:bg-[#16213e]'
-                        : 'border-[#e5e9f2] bg-[#fdf8f2] hover:border-[#c6d0e8] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                        : 'border-[#e5e9f2] bg-[#fdf8f2] hover:border-[#c6d0e8] dark:border-white/10 dark:bg-[#1a1a1a]'
                     }`}
                   >
                     <div
                       className={`relative h-6 w-10 shrink-0 rounded-full transition-colors ${
-                        form.smsOptIn ? 'bg-gradient-to-r from-[#c66328] to-[#c6a15b]' : 'bg-[#d3dae9] dark:bg-[#2a3763]'
+                        form.smsOptIn ? 'bg-gradient-to-r from-[#c66328] to-[#c6a15b]' : 'bg-[#e2dacf] dark:bg-[#2a3763]'
                       }`}
                     >
                       <span
@@ -930,7 +930,7 @@ export function PatientRegistrationWizard() {
                       placeholder="e.g. Teacher"
                       value={form.occupation}
                       onChange={(e) => set('occupation', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     />
                   </div>
 
@@ -944,7 +944,7 @@ export function PatientRegistrationWizard() {
                       placeholder="e.g. ₹ 45,000"
                       value={form.monthlyIncome}
                       onChange={(e) => set('monthlyIncome', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     />
                   </div>
 
@@ -957,7 +957,7 @@ export function PatientRegistrationWizard() {
                       placeholder="For minor / verification"
                       value={form.motherName}
                       onChange={(e) => set('motherName', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     />
                   </div>
                 </div>
@@ -980,7 +980,7 @@ export function PatientRegistrationWizard() {
                       className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                         fieldErrors.mobile
                           ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                          : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                          : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-white/10 dark:bg-[#1a1a1a]'
                       }`}
                     />
                     {fieldErrors.mobile && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.mobile}</span>}
@@ -995,7 +995,7 @@ export function PatientRegistrationWizard() {
                       placeholder="Optional"
                       value={form.alternateMobile}
                       onChange={(e) => set('alternateMobile', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     />
                   </div>
 
@@ -1008,7 +1008,7 @@ export function PatientRegistrationWizard() {
                       placeholder="Optional"
                       value={form.whatsAppNumber}
                       onChange={(e) => set('whatsAppNumber', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     />
                   </div>
                 </div>
@@ -1022,7 +1022,7 @@ export function PatientRegistrationWizard() {
                     placeholder="name@example.com"
                     value={form.email}
                     onChange={(e) => set('email', e.target.value)}
-                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                   />
                   {fieldErrors.email && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.email}</span>}
                 </div>
@@ -1036,11 +1036,11 @@ export function PatientRegistrationWizard() {
                     placeholder="Flat / Building / Street address"
                     value={form.address}
                     onChange={(e) => set('address', e.target.value)}
-                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                   />
                 </div>
 
-                <div className="rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-3 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                <div className="rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-3 dark:border-white/10 dark:bg-[#1a1a1a]">
                   <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold text-[#191919] dark:text-white">
                     <input
                       type="checkbox"
@@ -1057,7 +1057,7 @@ export function PatientRegistrationWizard() {
                         placeholder="Permanent flat / street address"
                         value={form.permanentAddress}
                         onChange={(e) => set('permanentAddress', e.target.value)}
-                        className="w-full rounded-xl border border-[#e5e9f2] bg-white p-2.5 text-sm text-[#191919] outline-none focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#141b31] dark:text-white"
+                        className="w-full rounded-xl border border-[#e5e9f2] bg-white p-2.5 text-sm text-[#191919] outline-none focus:border-[#c66328] dark:border-white/10 dark:bg-[#191919] dark:text-white"
                       />
                     </div>
                   )}
@@ -1072,7 +1072,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.countryId}
                       onChange={(e) => set('countryId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— India —</option>
                       {countries.map((c) => (
@@ -1088,7 +1088,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.nationalityId}
                       onChange={(e) => set('nationalityId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— Indian —</option>
                       {countries.map((c) => (
@@ -1106,7 +1106,7 @@ export function PatientRegistrationWizard() {
                       placeholder="e.g. 411001"
                       value={form.pincode}
                       onChange={(e) => set('pincode', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     />
                   </div>
                 </div>
@@ -1120,7 +1120,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.stateId}
                       onChange={(e) => set('stateId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— Select State —</option>
                       {states.map((s) => (
@@ -1139,7 +1139,7 @@ export function PatientRegistrationWizard() {
                         set('cityId', e.target.value)
                         set('areaId', '')
                       }}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— Select City —</option>
                       {cities.map((c) => (
@@ -1156,7 +1156,7 @@ export function PatientRegistrationWizard() {
                       value={form.areaId}
                       onChange={(e) => set('areaId', e.target.value)}
                       disabled={!form.cityId}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white disabled:opacity-50"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white disabled:opacity-50"
                     >
                       <option value="">— Select Area —</option>
                       {areas.map((a) => (
@@ -1175,7 +1175,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.patientCategoryId}
                       onChange={(e) => set('patientCategoryId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— None —</option>
                       {categories.map((c) => (
@@ -1191,7 +1191,7 @@ export function PatientRegistrationWizard() {
                     <select
                       value={form.referrerId}
                       onChange={(e) => set('referrerId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                     >
                       <option value="">— None —</option>
                       {(referrersResult?.items ?? []).map((r) => (
@@ -1210,7 +1210,7 @@ export function PatientRegistrationWizard() {
                     placeholder="Optional notes"
                     value={form.remarks}
                     onChange={(e) => set('remarks', e.target.value)}
-                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                   />
                 </div>
               </div>
@@ -1220,7 +1220,7 @@ export function PatientRegistrationWizard() {
             {step === 2 && (
               <div className="space-y-6">
                 {/* Guardian / Attender */}
-                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-white/10 dark:bg-[#1a1a1a]">
                   <div className="mb-3 flex items-center justify-between">
                     <div>
                       <b className="block text-sm font-bold text-[#191919] dark:text-white">Guardian / Attender</b>
@@ -1236,21 +1236,21 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   {form.contacts.length === 0 && (
-                    <p className="rounded-xl border border-dashed border-[#cbd5ec] bg-white/50 p-4 text-center text-xs text-[#8a94ad] dark:border-white/10 dark:bg-white/5">
+                    <p className="rounded-xl border border-dashed border-[#eed0be] bg-white/50 p-4 text-center text-xs text-[#8a94ad] dark:border-white/10 dark:bg-white/5">
                       No guardian or attender added yet. Click "+ Add Contact" if applicable.
                     </p>
                   )}
 
                   <div className="space-y-3">
                     {form.contacts.map((contact, index) => (
-                      <div key={index} className="rounded-xl border border-[#e5e9f2] bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-[#141b31]">
+                      <div key={index} className="rounded-xl border border-[#e5e9f2] bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-[#191919]">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
                             <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">TYPE</label>
                             <select
                               value={String(contact.contactType)}
                               onChange={(e) => updateContact(index, { contactType: Number(e.target.value) as ContactType })}
-                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                             >
                               {Object.entries(CONTACT_TYPE_LABELS).map(([v, l]) => (
                                 <option key={v} value={v}>{l}</option>
@@ -1264,7 +1264,7 @@ export function PatientRegistrationWizard() {
                               type="text"
                               value={contact.name}
                               onChange={(e) => updateContact(index, { name: e.target.value })}
-                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                             />
                             {fieldErrors[`contact-${index}-name`] && (
                               <span className="text-[10px] text-red-600">{fieldErrors[`contact-${index}-name`]}</span>
@@ -1278,7 +1278,7 @@ export function PatientRegistrationWizard() {
                               placeholder="e.g. Father, Spouse"
                               value={contact.relationship ?? ''}
                               onChange={(e) => updateContact(index, { relationship: e.target.value })}
-                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                             />
                           </div>
 
@@ -1288,7 +1288,7 @@ export function PatientRegistrationWizard() {
                               type="tel"
                               value={contact.phone ?? ''}
                               onChange={(e) => updateContact(index, { phone: e.target.value })}
-                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                             />
                           </div>
                         </div>
@@ -1317,7 +1317,7 @@ export function PatientRegistrationWizard() {
                 </div>
 
                 {/* Identity Documents */}
-                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-white/10 dark:bg-[#1a1a1a]">
                   <div className="mb-3 flex items-center justify-between">
                     <div>
                       <b className="block text-sm font-bold text-[#191919] dark:text-white">Identity Documents</b>
@@ -1333,20 +1333,20 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   {form.identifiers.length === 0 && (
-                    <p className="rounded-xl border border-dashed border-[#cbd5ec] bg-white/50 p-4 text-center text-xs text-[#8a94ad] dark:border-white/10 dark:bg-white/5">
+                    <p className="rounded-xl border border-dashed border-[#eed0be] bg-white/50 p-4 text-center text-xs text-[#8a94ad] dark:border-white/10 dark:bg-white/5">
                       No identity documents added.
                     </p>
                   )}
 
                   <div className="space-y-2.5">
                     {form.identifiers.map((identifier, index) => (
-                      <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e5e9f2] bg-white p-3 dark:border-white/10 dark:bg-[#141b31]">
+                      <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e5e9f2] bg-white p-3 dark:border-white/10 dark:bg-[#191919]">
                         <div className="w-32">
                           <label className="mb-1 text-[10px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">TYPE</label>
                           <select
                             value={String(identifier.type)}
                             onChange={(e) => updateIdentifier(index, { type: Number(e.target.value) as IdentifierType })}
-                            className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                           >
                             {Object.entries(IDENTIFIER_TYPE_LABELS).map(([v, l]) => (
                               <option key={v} value={v}>{l}</option>
@@ -1360,7 +1360,7 @@ export function PatientRegistrationWizard() {
                             <select
                               value={identifier.identityDocumentTypeId ?? ''}
                               onChange={(e) => updateIdentifier(index, { identityDocumentTypeId: e.target.value ? Number(e.target.value) : null })}
-                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                             >
                               <option value="">— Select —</option>
                               {identityDocumentTypes.map((t) => (
@@ -1377,7 +1377,7 @@ export function PatientRegistrationWizard() {
                             placeholder="Enter document number"
                             value={identifier.value}
                             onChange={(e) => updateIdentifier(index, { value: e.target.value })}
-                            className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                           />
                         </div>
 
@@ -1394,7 +1394,7 @@ export function PatientRegistrationWizard() {
                 </div>
 
                 {/* Insurance Policies */}
-                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-white/10 dark:bg-[#1a1a1a]">
                   <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-[#191919] dark:text-white">
                     <input
                       type="checkbox"
@@ -1423,13 +1423,13 @@ export function PatientRegistrationWizard() {
                       )}
 
                       {form.insurancePolicies.map((policy, index) => (
-                        <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e5e9f2] bg-white p-3 dark:border-white/10 dark:bg-[#141b31]">
+                        <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e5e9f2] bg-white p-3 dark:border-white/10 dark:bg-[#191919]">
                           <div className="flex-1 min-w-[160px]">
                             <label className="mb-1 text-[10px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">INSURER / TPA *</label>
                             <select
                               value={policy.insuranceCompanyId || ''}
                               onChange={(e) => updateInsurancePolicy(index, { insuranceCompanyId: Number(e.target.value) })}
-                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                             >
                               <option value="">— Select Insurer —</option>
                               {insuranceCompanies.map((c) => (
@@ -1445,7 +1445,7 @@ export function PatientRegistrationWizard() {
                               placeholder="Policy / Card number"
                               value={policy.policyNumber}
                               onChange={(e) => updateInsurancePolicy(index, { policyNumber: e.target.value })}
-                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                             />
                           </div>
 
@@ -1455,7 +1455,7 @@ export function PatientRegistrationWizard() {
                               type="date"
                               value={policy.policyValidTo ?? ''}
                               onChange={(e) => updateInsurancePolicy(index, { policyValidTo: e.target.value || null })}
-                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white"
                             />
                           </div>
 
@@ -1478,7 +1478,7 @@ export function PatientRegistrationWizard() {
             {step === 3 && (
               <div className="space-y-4">
                 {/* Photo Capture */}
-                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-white/10 dark:bg-[#1a1a1a]">
                   <b className="mb-2 block text-xs font-extrabold tracking-wider text-[#67748e] uppercase dark:text-[#a09a90]">
                     PATIENT PHOTO (OPTIONAL)
                   </b>
@@ -1486,7 +1486,7 @@ export function PatientRegistrationWizard() {
                 </div>
 
                 {/* Summary Box */}
-                <div className="rounded-2xl border border-[#cbd5ec] bg-[#fdf8f2] p-5 text-center dark:border-[#2a3763] dark:bg-[#0f1830]">
+                <div className="rounded-2xl border border-[#eed0be] bg-[#fdf8f2] p-5 text-center dark:border-white/10 dark:bg-[#1a1a1a]">
                   <b className="text-sm font-bold text-[#191919] dark:text-white">
                     Review summary, capture consent & generate OP slip.
                   </b>
@@ -1497,7 +1497,7 @@ export function PatientRegistrationWizard() {
                     <span className="rounded-full border border-[#eed0be] bg-[#fdf8f2] px-3 py-1 text-xs font-bold text-[#c66328] dark:border-[#203a9e] dark:bg-[#1a2b66] dark:text-[#e0a989]">
                       Consent ✔
                     </span>
-                    <span className="rounded-full border border-[#a7e9d8] bg-[#d9f9f1] px-3 py-1 text-xs font-bold text-[#0c6b5f] dark:border-[#146c5e] dark:bg-[#0c3831] dark:text-[#7df0dd]">
+                    <span className="rounded-full border border-[#eed0be] bg-[#f8ece5] px-3 py-1 text-xs font-bold text-[#9e4f20] dark:border-[#9e4f20]/40 dark:bg-[#2e1d12] dark:text-[#e0a989]">
                       ABHA ✔
                     </span>
                     <span className="rounded-full border border-[#ffe9b0] bg-[#fffbf0] px-3 py-1 text-xs font-bold text-[#9a7a2e] dark:border-[#5c4a16] dark:bg-[#2b2413] dark:text-[#d8b96a]">
@@ -1528,7 +1528,7 @@ export function PatientRegistrationWizard() {
                   className={`h-2 rounded-full transition-all ${
                     i === step
                       ? 'w-6 bg-gradient-to-r from-[#c66328] to-[#c6a15b]'
-                      : 'w-2 bg-[#d3dae9] dark:bg-[#2a3763]'
+                      : 'w-2 bg-[#e2dacf] dark:bg-[#2a3763]'
                   }`}
                 />
               ))}
@@ -1619,12 +1619,12 @@ export function PatientRegistrationWizard() {
           </div>
 
           {/* Form Completeness Meter Card */}
-          <div className="rounded-[18px] border border-[#e5e9f2] bg-white p-4.5 shadow-sm dark:border-white/8 dark:bg-[#141b31]">
+          <div className="rounded-[18px] border border-[#e5e9f2] bg-white p-4.5 shadow-sm dark:border-white/8 dark:bg-[#191919]">
             <h4 className="text-xs font-bold text-[#191919] dark:text-white">Form completeness</h4>
             <p className="mt-0.5 text-[11.5px] text-[#67748e] dark:text-[#a09a90]">
               {score}% — {score < 50 ? 'add name & age to generate UHID' : score < 85 ? 'looking good — continue to contact' : 'ready for review & print'}
             </p>
-            <div className="my-2.5 h-2 overflow-hidden rounded-full bg-[#edf0f8] dark:bg-[#232e52]">
+            <div className="my-2.5 h-2 overflow-hidden rounded-full bg-[#f0eae2] dark:bg-white/10">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-[#c6a15b] via-[#c6a15b] to-[#c66328] transition-all duration-300"
                 style={{ width: `${score}%` }}
@@ -1632,25 +1632,25 @@ export function PatientRegistrationWizard() {
             </div>
             <ul className="space-y-2 pt-1 text-xs">
               <li className={`flex items-center gap-2 ${checks.name ? 'font-semibold text-[#191919] dark:text-white' : 'text-[#67748e] dark:text-[#a09a90]'}`}>
-                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.name ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#c6a15b]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.name ? 'bg-[#f8ece5] text-[#9e4f20] dark:bg-[#2e1d12] dark:text-[#c6a15b]' : 'bg-[#f0eae2] text-[#8a94ad] dark:bg-white/10'}`}>
                   ✓
                 </span>
                 Patient full name
               </li>
               <li className={`flex items-center gap-2 ${checks.age ? 'font-semibold text-[#191919] dark:text-white' : 'text-[#67748e] dark:text-[#a09a90]'}`}>
-                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.age ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#c6a15b]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.age ? 'bg-[#f8ece5] text-[#9e4f20] dark:bg-[#2e1d12] dark:text-[#c6a15b]' : 'bg-[#f0eae2] text-[#8a94ad] dark:bg-white/10'}`}>
                   ✓
                 </span>
                 Age / date of birth
               </li>
               <li className={`flex items-center gap-2 ${checks.blood ? 'font-semibold text-[#191919] dark:text-white' : 'text-[#67748e] dark:text-[#a09a90]'}`}>
-                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.blood ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#c6a15b]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.blood ? 'bg-[#f8ece5] text-[#9e4f20] dark:bg-[#2e1d12] dark:text-[#c6a15b]' : 'bg-[#f0eae2] text-[#8a94ad] dark:bg-white/10'}`}>
                   ✓
                 </span>
                 Blood group
               </li>
               <li className={`flex items-center gap-2 ${checks.contact ? 'font-semibold text-[#191919] dark:text-white' : 'text-[#67748e] dark:text-[#a09a90]'}`}>
-                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.contact ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#c6a15b]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.contact ? 'bg-[#f8ece5] text-[#9e4f20] dark:bg-[#2e1d12] dark:text-[#c6a15b]' : 'bg-[#f0eae2] text-[#8a94ad] dark:bg-white/10'}`}>
                   ✓
                 </span>
                 Contact (mobile number)

@@ -1,12 +1,13 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Prixo.Api.Authorization;
 using Prixo.Application.Common.Models;
+using Prixo.Application.Common.Security;
 using Prixo.Application.Features.Analytics;
 
 namespace Prixo.Api.Controllers.Analytics;
 
 [Route("api/v1/customer-analytics")]
-[Authorize]
+[HasPermission(PermissionRegistry.DashboardHomeView)]
 public class CustomerAnalyticsController(RazorpayAnalyticsService analyticsService) : ApiControllerBase
 {
     /// <summary>
