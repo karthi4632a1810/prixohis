@@ -192,19 +192,19 @@ export function ManagementDashboardPage() {
     return Math.round((sum / deptTotal) * 100)
   }, [depts, deptTotal])
 
-  const deptColors = ['#2348ff', '#2dd4bf', '#7a5bff', '#c6a15b', '#ff9f6b', '#8a94ad']
+  const deptColors = ['#c66328', '#d07f4e', '#9e4f20', '#c6a15b', '#ff9f6b', '#8a94ad']
 
   const effectiveAlerts = (data?.unacknowledgedAlerts ?? 0) - ackAlerts.length
 
   return (
-    <div className="relative min-h-screen text-[#0e1b33] antialiased">
+    <div className="relative min-h-screen text-[#191919] antialiased">
       {/* Background Ambient Glow & Subtle Grid from UI/UX design */}
       <div
         className="pointer-events-none fixed inset-0 z-0 opacity-80"
         style={{
           background: `
-            radial-gradient(700px 380px at 18% -8%, rgba(35,72,255,0.12), transparent 60%),
-            radial-gradient(600px 420px at 88% 0%, rgba(14,183,162,0.12), transparent 60%),
+            radial-gradient(700px 380px at 18% -8%, rgba(198,99,40,0.12), transparent 60%),
+            radial-gradient(600px 420px at 88% 0%, rgba(198,99,40,0.12), transparent 60%),
             radial-gradient(900px 600px at 50% 110%, rgba(198,161,91,0.10), transparent 60%)
           `,
         }}
@@ -213,7 +213,7 @@ export function ManagementDashboardPage() {
         className="pointer-events-none fixed inset-0 z-0 opacity-50"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(15,30,60,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(15,30,60,0.045) 1px, transparent 1px)',
+            'linear-gradient(rgba(25,25,25,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(25,25,25,0.035) 1px, transparent 1px)',
           backgroundSize: '28px 28px',
           maskImage: 'radial-gradient(90% 70% at 50% 0%, black 30%, transparent 100%)',
         }}
@@ -223,8 +223,8 @@ export function ManagementDashboardPage() {
         {/* Top Mini-Tabs / Action Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <span className="inline-flex items-center gap-2 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-[7px] text-[12px] font-bold text-[#1a34c8] shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)]">
-              <span className="grid size-5 place-items-center rounded-[7px] bg-[#e9edff] text-[11px] text-[#2348ff]">◈</span>
+            <span className="inline-flex items-center gap-2 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-[7px] text-[12px] font-bold text-[#9e4f20] shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)]">
+              <span className="grid size-5 place-items-center rounded-[7px] bg-[#f9ede1] text-[11px] text-[#c66328]">◈</span>
               Dashboard
             </span>
             <span className="text-[12px] text-[#8a94ad]">
@@ -235,27 +235,27 @@ export function ManagementDashboardPage() {
           </div>
           <Link
             to="/patients/new"
-            className="inline-flex items-center gap-2 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-2 text-[12.5px] font-semibold text-[#42506b] shadow-sm transition hover:border-[#c6d0e8] hover:text-[#2348ff]"
+            className="inline-flex items-center gap-2 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-2 text-[12.5px] font-semibold text-[#42506b] shadow-sm transition hover:border-[#dcc7a8] hover:text-[#c66328]"
           >
             ＋ New Registration
           </Link>
         </div>
 
         {/* Hero Header Card */}
-        <section className="relative overflow-hidden rounded-[20px] border border-[#e5e9f2] bg-gradient-to-b from-white to-[#fbfcff] shadow-[0_1px_2px_rgba(16,24,64,0.06),0_12px_32px_-12px_rgba(16,24,64,0.18)]">
+        <section className="relative overflow-hidden rounded-[20px] border border-[#e5e9f2] bg-gradient-to-b from-white to-[#fdf8f2] shadow-[0_1px_2px_rgba(16,24,64,0.06),0_12px_32px_-12px_rgba(16,24,64,0.18)]">
           {/* Animated Gradient Accent Stripe */}
-          <div className="h-[3px] w-full bg-gradient-to-r from-[#2348ff] via-[#2dd4bf] via-[#c6a15b] to-[#2348ff] animate-slide" />
+          <div className="h-[3px] w-full bg-gradient-to-r from-[#c66328] via-[#c66328] via-[#c6a15b] to-[#c66328] animate-slide" />
 
           <div className="flex flex-wrap items-end justify-between gap-4 p-5 md:p-6">
             <div className="space-y-1.5">
-              <h1 className="font-display text-[21px] font-extrabold tracking-tight text-[#0e1b33]">
+              <h1 className="font-display text-[21px] font-extrabold tracking-tight text-[#191919]">
                 Hospital{' '}
                 <span className="bg-gradient-to-r from-[#9a7a2e] to-[#d8b96a] bg-clip-text text-transparent">
                   Dashboard
                 </span>
               </h1>
               <p className="flex flex-wrap items-center gap-2 text-[12.8px] text-[#67748e]">
-                <span className="rounded-full bg-gradient-to-r from-[#2348ff] to-[#5b6cff] px-[9px] py-[3px] text-[11px] font-extrabold tracking-wider text-white">
+                <span className="rounded-full bg-gradient-to-r from-[#c66328] to-[#d07f4e] px-[9px] py-[3px] text-[11px] font-extrabold tracking-wider text-white">
                   {data?.isCrossBranch ? 'ALL BRANCHES' : 'MAIN BRANCH'}
                 </span>
                 <span>
@@ -267,7 +267,7 @@ export function ManagementDashboardPage() {
             {/* Date Range Bar */}
             <div className="flex flex-wrap items-end gap-2.5">
               {/* Presets */}
-              <div className="flex items-center gap-1.5 rounded-[12px] border border-[#e5e9f2] bg-[#eef1f8] p-1">
+              <div className="flex items-center gap-1.5 rounded-[12px] border border-[#e5e9f2] bg-[#f7f2ec] p-1">
                 {[7, 30, 90].map((d) => (
                   <button
                     key={d}
@@ -275,8 +275,8 @@ export function ManagementDashboardPage() {
                     onClick={() => applyPreset(d)}
                     className={`rounded-[9px] px-3 py-2 text-[12.5px] font-bold transition ${
                       activePreset === d
-                        ? 'bg-[#0a1330] text-white shadow-[0_6px_14px_-6px_rgba(10,19,48,0.6)]'
-                        : 'text-[#5b6a8a] hover:text-[#0e1b33]'
+                        ? 'bg-[#191919] text-white shadow-[0_6px_14px_-6px_rgba(25,25,25,0.6)]'
+                        : 'text-[#5b6a8a] hover:text-[#191919]'
                     }`}
                   >
                     {d}D
@@ -297,7 +297,7 @@ export function ManagementDashboardPage() {
                       setDraftFrom(e.target.value)
                       setActivePreset(null)
                     }}
-                    className="rounded-[12px] border-[1.5px] border-[#e1e7f2] bg-[#f8faff] px-[11px] py-[9px] text-[13px] font-medium text-[#0e1b33] outline-none transition focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/12"
+                    className="rounded-[12px] border-[1.5px] border-[#e7d6c2] bg-[#fdf8f2] px-[11px] py-[9px] text-[13px] font-medium text-[#191919] outline-none transition focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/12"
                   />
                 </div>
               </div>
@@ -315,7 +315,7 @@ export function ManagementDashboardPage() {
                       setDraftTo(e.target.value)
                       setActivePreset(null)
                     }}
-                    className="rounded-[12px] border-[1.5px] border-[#e1e7f2] bg-[#f8faff] px-[11px] py-[9px] text-[13px] font-medium text-[#0e1b33] outline-none transition focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/12"
+                    className="rounded-[12px] border-[1.5px] border-[#e7d6c2] bg-[#fdf8f2] px-[11px] py-[9px] text-[13px] font-medium text-[#191919] outline-none transition focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/12"
                   />
                 </div>
               </div>
@@ -324,7 +324,7 @@ export function ManagementDashboardPage() {
               <button
                 type="button"
                 onClick={handleApply}
-                className="inline-flex items-center gap-2 rounded-[12px] bg-gradient-to-br from-[#2b54ff] to-[#1a34c8] px-4 py-[11px] text-[13px] font-bold text-white shadow-[0_12px_22px_-10px_rgba(35,72,255,0.7),inset_0_1px_0_rgba(255,255,255,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
+                className="inline-flex items-center gap-2 rounded-[12px] bg-gradient-to-br from-[#c66328] to-[#9e4f20] px-4 py-[11px] text-[13px] font-bold text-white shadow-[0_12px_22px_-10px_rgba(198,99,40,0.7),inset_0_1px_0_rgba(255,255,255,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
               >
                 Apply →
               </button>
@@ -333,7 +333,7 @@ export function ManagementDashboardPage() {
               <button
                 type="button"
                 onClick={handleExportCsv}
-                className="inline-flex items-center gap-2 rounded-[12px] border-[1.5px] border-[#e5e9f2] bg-white px-[14px] py-[10px] text-[13px] font-bold text-[#33415e] shadow-sm transition hover:border-[#b9c4e2]"
+                className="inline-flex items-center gap-2 rounded-[12px] border-[1.5px] border-[#e5e9f2] bg-white px-[14px] py-[10px] text-[13px] font-bold text-[#33415e] shadow-sm transition hover:border-[#dcc7a8]"
               >
                 <Download className="size-3.5" />
                 ⤓ Export
@@ -352,18 +352,18 @@ export function ManagementDashboardPage() {
             <section className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
               {/* 1. Revenue */}
               <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
-                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#2348ff]" />
+                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#c66328]" />
                 <div className="flex items-center justify-between gap-1.5">
-                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#e9edff] text-[#2348ff]">
+                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#f9ede1] text-[#c66328]">
                     <Wallet className="size-3.5" />
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">Revenue</span>
                 </div>
-                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0e1b33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#191919]">
                   ₹{data.totalRevenue.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#e6fbf4] px-2 py-0.5 text-[11px] font-extrabold text-[#0a7a68]">
+                  <span className="rounded-full bg-[#f8ece5] px-2 py-0.5 text-[11px] font-extrabold text-[#9e4f20]">
                     ▲ 12.4%
                   </span>
                 </div>
@@ -371,42 +371,42 @@ export function ManagementDashboardPage() {
                 <svg viewBox="0 0 120 30" className="mt-2 h-7 w-full overflow-visible">
                   <defs>
                     <linearGradient id="grad-rev" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#2348ff" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#2348ff" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#c66328" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#c66328" stopOpacity="0" />
                     </linearGradient>
                   </defs>
                   <path d={sparkRev.area} fill="url(#grad-rev)" />
-                  <path d={sparkRev.line} fill="none" stroke="#2348ff" strokeWidth="2" strokeLinecap="round" />
+                  <path d={sparkRev.line} fill="none" stroke="#c66328" strokeWidth="2" strokeLinecap="round" />
                 </svg>
                 <p className="mt-1 text-[11px] text-[#8a94ad]">Billed across all branches</p>
               </div>
 
               {/* 2. Collection */}
               <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
-                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#0eb7a2]" />
+                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#9e4f20]" />
                 <div className="flex items-center justify-between gap-1.5">
-                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#d9f9f1] text-[#0eb7a2]">
+                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#f8ece5] text-[#9e4f20]">
                     <ReceiptIndianRupee className="size-3.5" />
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">Collection</span>
                 </div>
-                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0e1b33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#191919]">
                   ₹{data.totalCollection.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#e6fbf4] px-2 py-0.5 text-[11px] font-extrabold text-[#0a7a68]">
+                  <span className="rounded-full bg-[#f8ece5] px-2 py-0.5 text-[11px] font-extrabold text-[#9e4f20]">
                     ▲ 8.1%
                   </span>
                 </div>
                 <svg viewBox="0 0 120 30" className="mt-2 h-7 w-full overflow-visible">
                   <defs>
                     <linearGradient id="grad-col" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0eb7a2" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#0eb7a2" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#9e4f20" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#9e4f20" stopOpacity="0" />
                     </linearGradient>
                   </defs>
                   <path d={sparkCol.area} fill="url(#grad-col)" />
-                  <path d={sparkCol.line} fill="none" stroke="#0eb7a2" strokeWidth="2" strokeLinecap="round" />
+                  <path d={sparkCol.line} fill="none" stroke="#9e4f20" strokeWidth="2" strokeLinecap="round" />
                 </svg>
                 <p className="mt-1 text-[11px] text-[#8a94ad]">
                   {data.totalRevenue > 0
@@ -417,90 +417,90 @@ export function ManagementDashboardPage() {
 
               {/* 3. OP Visits */}
               <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
-                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#7a5bff]" />
+                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#d07f4e]" />
                 <div className="flex items-center justify-between gap-1.5">
-                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#ece7ff] text-[#7a5bff]">
+                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#faede4] text-[#d07f4e]">
                     <Users className="size-3.5" />
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">OP Visits</span>
                 </div>
-                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0e1b33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#191919]">
                   {data.opVisitCount.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#e6fbf4] px-2 py-0.5 text-[11px] font-extrabold text-[#0a7a68]">
+                  <span className="rounded-full bg-[#f8ece5] px-2 py-0.5 text-[11px] font-extrabold text-[#9e4f20]">
                     ▲ 6.3%
                   </span>
                 </div>
                 <svg viewBox="0 0 120 30" className="mt-2 h-7 w-full overflow-visible">
                   <defs>
                     <linearGradient id="grad-op" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#7a5bff" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#7a5bff" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#d07f4e" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#d07f4e" stopOpacity="0" />
                     </linearGradient>
                   </defs>
                   <path d={sparkOp.area} fill="url(#grad-op)" />
-                  <path d={sparkOp.line} fill="none" stroke="#7a5bff" strokeWidth="2" strokeLinecap="round" />
+                  <path d={sparkOp.line} fill="none" stroke="#d07f4e" strokeWidth="2" strokeLinecap="round" />
                 </svg>
                 <p className="mt-1 text-[11px] text-[#8a94ad]">Queue token active</p>
               </div>
 
               {/* 4. Active Inpatients */}
               <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
-                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#b98a1e]" />
+                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#c6a15b]" />
                 <div className="flex items-center justify-between gap-1.5">
-                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#fdf3dc] text-[#b98a1e]">
+                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#fdf3dc] text-[#c6a15b]">
                     <Bed className="size-3.5" />
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">Active IP</span>
                 </div>
-                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0e1b33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#191919]">
                   {data.activeInpatients.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#eef1f8] px-2 py-0.5 text-[11px] font-extrabold text-[#5b6a8a]">
+                  <span className="rounded-full bg-[#f7f2ec] px-2 py-0.5 text-[11px] font-extrabold text-[#5b6a8a]">
                     ▬ stable
                   </span>
                 </div>
                 <svg viewBox="0 0 120 30" className="mt-2 h-7 w-full overflow-visible">
                   <defs>
                     <linearGradient id="grad-ip" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#b98a1e" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#b98a1e" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#c6a15b" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#c6a15b" stopOpacity="0" />
                     </linearGradient>
                   </defs>
                   <path d={sparkIp.area} fill="url(#grad-ip)" />
-                  <path d={sparkIp.line} fill="none" stroke="#b98a1e" strokeWidth="2" strokeLinecap="round" />
+                  <path d={sparkIp.line} fill="none" stroke="#c6a15b" strokeWidth="2" strokeLinecap="round" />
                 </svg>
                 <p className="mt-1 text-[11px] text-[#8a94ad]">Wards occupied</p>
               </div>
 
               {/* 5. Bed Occupancy */}
               <div className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md">
-                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#0e9d8b]" />
+                <div className="absolute inset-x-0 top-0 h-[3px] bg-[#9e4f20]" />
                 <div className="flex items-center justify-between gap-1.5">
-                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#d9f9f1] text-[#0e9d8b]">
+                  <div className="flex size-7 items-center justify-center rounded-[10px] bg-[#f8ece5] text-[#9e4f20]">
                     <Activity className="size-3.5" />
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wider text-[#67748e] uppercase">Occupancy</span>
                 </div>
-                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#0e1b33]">
+                <div className="mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] text-[#191919]">
                   {data.bedOccupancyPercent}%
                 </div>
                 <div className="mt-1 flex items-center gap-1.5">
-                  <span className="rounded-full bg-[#eef1f8] px-2 py-0.5 text-[11px] font-extrabold text-[#5b6a8a]">
+                  <span className="rounded-full bg-[#f7f2ec] px-2 py-0.5 text-[11px] font-extrabold text-[#5b6a8a]">
                     ▬ capacity
                   </span>
                 </div>
                 <svg viewBox="0 0 120 30" className="mt-2 h-7 w-full overflow-visible">
                   <defs>
                     <linearGradient id="grad-bed" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0e9d8b" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#0e9d8b" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#9e4f20" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#9e4f20" stopOpacity="0" />
                     </linearGradient>
                   </defs>
                   <path d={sparkBed.area} fill="url(#grad-bed)" />
-                  <path d={sparkBed.line} fill="none" stroke="#0e9d8b" strokeWidth="2" strokeLinecap="round" />
+                  <path d={sparkBed.line} fill="none" stroke="#9e4f20" strokeWidth="2" strokeLinecap="round" />
                 </svg>
                 <p className="mt-1 text-[11px] text-[#8a94ad]">Main + Speed wards</p>
               </div>
@@ -516,7 +516,7 @@ export function ManagementDashboardPage() {
                 </div>
                 <div
                   className={`mt-2.5 font-display text-[21px] font-bold tracking-[-0.02em] ${
-                    effectiveAlerts > 0 ? 'text-[#ff5470]' : 'text-[#0a7a68]'
+                    effectiveAlerts > 0 ? 'text-[#ff5470]' : 'text-[#9e4f20]'
                   }`}
                 >
                   {effectiveAlerts}
@@ -557,11 +557,11 @@ export function ManagementDashboardPage() {
                   </div>
                   <div className="flex items-center gap-4 text-xs font-semibold text-[#67748e]">
                     <span className="inline-flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-[#2348ff]" />
+                      <span className="size-2.5 rounded-full bg-[#c66328]" />
                       Billed
                     </span>
                     <span className="inline-flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-[#2dd4bf]" />
+                      <span className="size-2.5 rounded-full bg-[#9e4f20]" />
                       Collected
                     </span>
                   </div>
@@ -572,12 +572,12 @@ export function ManagementDashboardPage() {
                     <svg viewBox={`0 0 ${chartW} ${chartH}`} className="w-full overflow-visible">
                       <defs>
                         <linearGradient id="billedGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#2348ff" stopOpacity="0.2" />
-                          <stop offset="100%" stopColor="#2348ff" stopOpacity="0.0" />
+                          <stop offset="0%" stopColor="#c66328" stopOpacity="0.2" />
+                          <stop offset="100%" stopColor="#c66328" stopOpacity="0.0" />
                         </linearGradient>
                         <linearGradient id="colGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.2" />
-                          <stop offset="100%" stopColor="#2dd4bf" stopOpacity="0.0" />
+                          <stop offset="0%" stopColor="#9e4f20" stopOpacity="0.2" />
+                          <stop offset="100%" stopColor="#9e4f20" stopOpacity="0.0" />
                         </linearGradient>
                       </defs>
 
@@ -613,7 +613,7 @@ export function ManagementDashboardPage() {
                         <path
                           d={trendData.billedLine}
                           fill="none"
-                          stroke="#2348ff"
+                          stroke="#c66328"
                           strokeWidth="2.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -626,7 +626,7 @@ export function ManagementDashboardPage() {
                         <path
                           d={trendData.collectedLine}
                           fill="none"
-                          stroke="#2dd4bf"
+                          stroke="#9e4f20"
                           strokeWidth="2.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -640,7 +640,7 @@ export function ManagementDashboardPage() {
                           cx={trendData.getX(i, trendData.revList.length)}
                           cy={trendData.getY(p.amount)}
                           r="3"
-                          fill="#2348ff"
+                          fill="#c66328"
                           className="transition hover:r-4"
                         >
                           <title>{`Billed (${p.date}): ₹${p.amount.toLocaleString()}`}</title>
@@ -703,9 +703,9 @@ export function ManagementDashboardPage() {
 
                 {/* Rainbow Summary Bar */}
                 <div className="mt-5 border-t border-[#eef1f7] pt-4">
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-gradient-to-r from-[#2348ff] via-[#2dd4bf] to-[#c6a15b]" />
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-gradient-to-r from-[#c66328] via-[#d07f4e] to-[#c6a15b]" />
                   <p className="mt-2 text-[11px] text-[#67748e]">
-                    Top 3 departments drive <span className="font-bold text-[#0e1b33]">{topDeptsShare}%</span> of total
+                    Top 3 departments drive <span className="font-bold text-[#191919]">{topDeptsShare}%</span> of total
                     revenue.
                   </p>
                 </div>
@@ -717,7 +717,7 @@ export function ManagementDashboardPage() {
               <section className="overflow-hidden rounded-[18px] border border-[#e5e9f2] bg-white shadow-[0_1px_2px_rgba(16,24,64,0.06),0_12px_32px_-12px_rgba(16,24,64,0.18)]">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#eef1f7] p-4 md:px-5">
                   <div>
-                    <h3 className="text-sm font-bold text-[#0e1b33]">By Branch</h3>
+                    <h3 className="text-sm font-bold text-[#191919]">By Branch</h3>
                     <p className="text-[11.5px] text-[#67748e]">Branch-wise performance for the selected range</p>
                   </div>
                   <div className="relative">
@@ -727,7 +727,7 @@ export function ManagementDashboardPage() {
                       placeholder="Search branch…"
                       value={branchSearch}
                       onChange={(e) => setBranchSearch(e.target.value)}
-                      className="rounded-xl border border-[#e1e7f2] bg-[#f8faff] py-1.5 pl-8 pr-3 text-xs text-[#0e1b33] outline-none transition focus:border-[#2348ff] focus:bg-white"
+                      className="rounded-xl border border-[#e7d6c2] bg-[#fdf8f2] py-1.5 pl-8 pr-3 text-xs text-[#191919] outline-none transition focus:border-[#c66328] focus:bg-white"
                     />
                   </div>
                 </div>
@@ -735,7 +735,7 @@ export function ManagementDashboardPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-[#eef1f7] bg-[#f8faff] text-[10.5px] font-extrabold tracking-wider text-[#67748e] uppercase">
+                      <tr className="border-b border-[#eef1f7] bg-[#fdf8f2] text-[10.5px] font-extrabold tracking-wider text-[#67748e] uppercase">
                         <th className="px-5 py-3">Branch</th>
                         <th className="px-5 py-3 text-right">Revenue</th>
                         <th className="px-5 py-3 text-right">Collection</th>
@@ -746,12 +746,12 @@ export function ManagementDashboardPage() {
                     </thead>
                     <tbody className="divide-y divide-[#eef1f7]">
                       {filteredBranches.map((b) => (
-                        <tr key={b.branchId} className="transition hover:bg-[#f8faff]">
-                          <td className="px-5 py-3 font-semibold text-[#0e1b33]">{b.branchName}</td>
-                          <td className="px-5 py-3 text-right font-mono font-medium text-[#0e1b33]">
+                        <tr key={b.branchId} className="transition hover:bg-[#fdf8f2]">
+                          <td className="px-5 py-3 font-semibold text-[#191919]">{b.branchName}</td>
+                          <td className="px-5 py-3 text-right font-mono font-medium text-[#191919]">
                             ₹{b.revenue.toLocaleString()}
                           </td>
-                          <td className="px-5 py-3 text-right font-mono font-medium text-[#0a7a68]">
+                          <td className="px-5 py-3 text-right font-mono font-medium text-[#9e4f20]">
                             ₹{b.collection.toLocaleString()}
                           </td>
                           <td className="px-5 py-3 text-right font-mono text-[#586a86]">
@@ -761,8 +761,8 @@ export function ManagementDashboardPage() {
                             {b.activeInpatients.toLocaleString()}
                           </td>
                           <td className="px-5 py-3 text-center">
-                            <span className="inline-flex items-center gap-1 rounded-full bg-[#e6fbf4] px-2.5 py-0.5 text-[10.5px] font-bold text-[#0a7a68]">
-                              <span className="size-1.5 rounded-full bg-[#0eb7a2]" />
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#f8ece5] px-2.5 py-0.5 text-[10.5px] font-bold text-[#9e4f20]">
+                              <span className="size-1.5 rounded-full bg-[#c66328]" />
                               Active
                             </span>
                           </td>
@@ -770,15 +770,15 @@ export function ManagementDashboardPage() {
                       ))}
                     </tbody>
                     <tfoot>
-                      <tr className="bg-[#0a1330] text-white text-[13px] font-semibold">
+                      <tr className="bg-[#191919] text-white text-[13px] font-semibold">
                         <td className="px-5 py-3.5 font-bold">Total • {filteredBranches.length} branch(es)</td>
                         <td className="px-5 py-3.5 text-right font-display font-bold text-white">₹{branchTotals.rev.toLocaleString()}</td>
-                        <td className="px-5 py-3.5 text-right font-display font-bold text-[#7df0dd]">
+                        <td className="px-5 py-3.5 text-right font-display font-bold text-[#eed0be]">
                           ₹{branchTotals.col.toLocaleString()}
                         </td>
                         <td className="px-5 py-3.5 text-right font-display font-bold text-white">{branchTotals.op.toLocaleString()}</td>
                         <td className="px-5 py-3.5 text-right font-display font-bold text-white">{branchTotals.ip.toLocaleString()}</td>
-                        <td className="px-5 py-3.5 text-center text-[#8fa0d6]">—</td>
+                        <td className="px-5 py-3.5 text-center text-[#a09a90]">—</td>
                       </tr>
                     </tfoot>
                   </table>
@@ -827,18 +827,18 @@ export function ManagementDashboardPage() {
                   {!ackAlerts.includes(2) && (
                     <div className="flex items-center justify-between gap-3 rounded-xl border border-[#eef1f7] bg-[#f8faff] p-3">
                       <div className="flex items-center gap-2.5">
-                        <div className="flex size-7 items-center justify-center rounded-lg bg-[#2348ff]/10 text-xs text-[#2348ff]">
+                        <div className="flex size-7 items-center justify-center rounded-lg bg-[#c66328]/10 text-xs text-[#c66328]">
                           ▤
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#0e1b33]">Bed request — General ward</p>
+                          <p className="text-xs font-bold text-[#191919]">Bed request — General ward</p>
                           <p className="text-[10.5px] text-[#8a94ad]">Speed Multi Speciality • 1 bed</p>
                         </div>
                       </div>
                       <button
                         type="button"
                         onClick={() => setAckAlerts((p) => [...p, 2])}
-                        className="rounded-lg border border-[#e1e7f2] bg-white px-2.5 py-1 text-[11px] font-bold text-[#2348ff] transition hover:bg-[#e9edff]"
+                        className="rounded-lg border border-[#e7d6c2] bg-white px-2.5 py-1 text-[11px] font-bold text-[#9e4f20] transition hover:bg-[#f8ece5]"
                       >
                         Acknowledge
                       </button>
@@ -846,7 +846,7 @@ export function ManagementDashboardPage() {
                   )}
 
                   {effectiveAlerts === 0 && (
-                    <div className="flex flex-col items-center justify-center py-6 text-center text-xs text-[#0a7a68]">
+                    <div className="flex flex-col items-center justify-center py-6 text-center text-xs text-[#9e4f20]">
                       <CheckCircle2 className="mb-1.5 size-6" />
                       <p className="font-bold">All alerts acknowledged</p>
                       <p className="text-[11px] text-[#8a94ad]">Zero pending critical incidents</p>
@@ -858,7 +858,7 @@ export function ManagementDashboardPage() {
               {/* Widget 2: Bed Occupancy by Ward */}
               <div className="rounded-[18px] border border-[#e5e9f2] bg-white p-5 shadow-[0_1px_2px_rgba(16,24,64,0.06),0_12px_32px_-12px_rgba(16,24,64,0.18)]">
                 <div className="border-b border-[#eef1f7] pb-3">
-                  <h4 className="text-sm font-bold text-[#0e1b33]">Bed Occupancy & Capacity</h4>
+                  <h4 className="text-sm font-bold text-[#191919]">Bed Occupancy & Capacity</h4>
                   <p className="text-[11.5px] text-[#67748e]">
                     {ip?.totalBeds ?? 120} beds • {ip?.occupied ?? data.activeInpatients} occupied
                   </p>
@@ -867,14 +867,14 @@ export function ManagementDashboardPage() {
                 <div className="mt-4 space-y-3">
                   <div>
                     <div className="mb-1.5 flex justify-between text-xs">
-                      <span className="font-semibold text-[#0e1b33]">General Ward (Speed Multi)</span>
+                      <span className="font-semibold text-[#191919]">General Ward (Speed Multi)</span>
                       <span className="font-mono text-[#67748e]">
                         {ip?.occupied ?? data.activeInpatients}/{ip?.totalBeds ?? 120} beds
                       </span>
                     </div>
                     <div className="h-2 w-full overflow-hidden rounded-full bg-[#f3f5f9]">
                       <div
-                        className="h-full rounded-full bg-[#2348ff]"
+                        className="h-full rounded-full bg-[#c66328]"
                         style={{
                           width: `${Math.min(100, Math.max(10, data.bedOccupancyPercent))}%`,
                         }}
@@ -883,15 +883,15 @@ export function ManagementDashboardPage() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 pt-2 text-xs">
-                    <div className="rounded-xl border border-[#eef1f7] bg-[#f8faff] p-2.5">
+                    <div className="rounded-xl border border-[#eef1f7] bg-[#fdf8f2] p-2.5">
                       <p className="text-[10.5px] font-bold text-[#8a94ad] uppercase">Admissions</p>
-                      <p className="mt-0.5 font-mono text-base font-bold text-[#0e1b33]">
+                      <p className="mt-0.5 font-mono text-base font-bold text-[#191919]">
                         {ip?.admissionsInRange ?? 8}
                       </p>
                     </div>
-                    <div className="rounded-xl border border-[#eef1f7] bg-[#f8faff] p-2.5">
+                    <div className="rounded-xl border border-[#eef1f7] bg-[#fdf8f2] p-2.5">
                       <p className="text-[10.5px] font-bold text-[#8a94ad] uppercase">Discharges</p>
-                      <p className="mt-0.5 font-mono text-base font-bold text-[#0e1b33]">
+                      <p className="mt-0.5 font-mono text-base font-bold text-[#191919]">
                         {ip?.dischargesInRange ?? 6}
                       </p>
                     </div>
@@ -899,7 +899,7 @@ export function ManagementDashboardPage() {
 
                   <Link
                     to="/ipd/admissions"
-                    className="inline-flex w-full items-center justify-center gap-1 rounded-xl border border-[#e5e9f2] py-2 text-xs font-bold text-[#42506b] transition hover:border-[#c6d0e8] hover:text-[#2348ff]"
+                    className="inline-flex w-full items-center justify-center gap-1 rounded-xl border border-[#e5e9f2] py-2 text-xs font-bold text-[#42506b] transition hover:border-[#dcc7a8] hover:text-[#c66328]"
                   >
                     View Ward Bed Board →
                   </Link>
@@ -909,7 +909,7 @@ export function ManagementDashboardPage() {
               {/* Widget 3: Payments Split */}
               <div className="rounded-[18px] border border-[#e5e9f2] bg-white p-5 shadow-[0_1px_2px_rgba(16,24,64,0.06),0_12px_32px_-12px_rgba(16,24,64,0.18)]">
                 <div className="border-b border-[#eef1f7] pb-3">
-                  <h4 className="text-sm font-bold text-[#0e1b33]">Payments Split</h4>
+                  <h4 className="text-sm font-bold text-[#191919]">Payments Split</h4>
                   <p className="text-[11.5px] text-[#67748e]">Collection mix for selected range</p>
                 </div>
 
@@ -928,7 +928,7 @@ export function ManagementDashboardPage() {
                         <span className="text-[#586a86]">{m.paymentModeName}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-[10.5px] font-bold text-[#8a94ad]">{pct}%</span>
-                          <span className="font-mono font-bold text-[#0e1b33]">₹{m.amount.toLocaleString()}</span>
+                          <span className="font-mono font-bold text-[#191919]">₹{m.amount.toLocaleString()}</span>
                         </div>
                       </div>
                     )
@@ -936,7 +936,7 @@ export function ManagementDashboardPage() {
 
                   <Link
                     to="/reports/billing"
-                    className="mt-3 inline-flex w-full items-center justify-center gap-1 rounded-xl border border-[#e5e9f2] py-2 text-xs font-bold text-[#42506b] transition hover:border-[#c6d0e8] hover:text-[#2348ff]"
+                    className="mt-3 inline-flex w-full items-center justify-center gap-1 rounded-xl border border-[#e5e9f2] py-2 text-xs font-bold text-[#42506b] transition hover:border-[#dcc7a8] hover:text-[#c66328]"
                   >
                     View Full Collection Report →
                   </Link>

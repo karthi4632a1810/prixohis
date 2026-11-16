@@ -9,7 +9,7 @@ export function TabStrip() {
   const { tabs, activeTabId, splitTabId, activateTab, closeTab, toggleSplit } = useTabWorkspace()
 
   return (
-    <div className="flex h-11 shrink-0 items-center gap-2 border-b border-[#e2e8f2] bg-[#f0f3f8] px-4 dark:border-white/8 dark:bg-[#0a1020]">
+    <div className="flex h-11 shrink-0 items-center gap-2 border-b border-[#e5e9f2] bg-[#f2ece4] px-4 dark:border-white/8 dark:bg-[#141414]">
       <div className="flex flex-1 items-center gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {tabs.map((tab) => (
           <TabChip
@@ -33,8 +33,8 @@ export function TabStrip() {
         title="Split view"
         className={`flex shrink-0 items-center gap-1.5 rounded-[11px] border px-3 py-1.5 text-[12.5px] font-semibold transition-all ${
           splitTabId
-            ? 'border-[#3b62ff] bg-gradient-to-r from-[#2348ff] to-[#1a34c8] text-white shadow-[0_4px_12px_-4px_rgba(35,72,255,0.5)]'
-            : 'border-[#e5e9f2] bg-white text-[#42506b] hover:border-[#c6d0e8] hover:text-[#0e1b33] dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3]'
+            ? 'border-[#9e4f20] bg-gradient-to-r from-[#c66328] to-[#9e4f20] text-white shadow-[0_4px_12px_-4px_rgba(198,99,40,0.5)]'
+            : 'border-[#e5e9f2] bg-white text-[#42506b] hover:border-[#dcc7a8] hover:text-[#191919] dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3]'
         }`}
       >
         <Columns2 className="size-3.5" aria-hidden />
@@ -65,8 +65,8 @@ function TabChip({
     <div
       className={`group flex shrink-0 items-center rounded-[11px] border transition-all ${
         isActive
-          ? 'border-[#e5e9f2] bg-white text-[#1a34c8] shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] dark:border-white/15 dark:bg-[#121c38] dark:text-[#7a9aff]'
-          : 'border-transparent text-[#67748e] hover:bg-white/60 hover:text-[#0e1b33] dark:text-[#8fa0d6] dark:hover:bg-white/5 dark:hover:text-white'
+          ? 'border-[#e5e9f2] bg-white text-[#9e4f20] shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(198,99,40,0.18)] dark:border-white/15 dark:bg-[#1f1f1f] dark:text-[#e0a989]'
+          : 'border-transparent text-[#67748e] hover:bg-white/60 hover:text-[#191919] dark:text-[#a09a90] dark:hover:bg-white/5 dark:hover:text-white'
       } ${isPrimary && isActive ? 'font-bold' : 'font-medium'}`}
     >
       <button
@@ -82,7 +82,7 @@ function TabChip({
         <span
           className={`flex size-5 shrink-0 items-center justify-center rounded-[7px] text-[11px] ${
             isActive
-              ? 'bg-[#e9edff] text-[#2348ff] dark:bg-[#1e2a52] dark:text-[#7a9aff]'
+              ? 'bg-[#f9ede1] text-[#c66328] dark:bg-[#2e1d12] dark:text-[#e0a989]'
               : 'text-inherit opacity-70'
           }`}
         >

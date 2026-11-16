@@ -425,7 +425,7 @@ export function PatientRegistrationWizard() {
           position: absolute;
           inset: 0 0 auto 0;
           height: 3px;
-          background: linear-gradient(90deg, #2348ff, #2dd4bf, #c6a15b, #2348ff);
+          background: linear-gradient(90deg, #c66328, #c66328, #c6a15b, #c66328);
           background-size: 200% 100%;
           animation: slide 8s linear infinite;
         }
@@ -442,28 +442,28 @@ export function PatientRegistrationWizard() {
 
       {/* Tabs navigation row */}
       <div className="mb-3.5 flex items-center gap-2.5">
-        <span className="inline-flex items-center gap-2 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#1a34c8] shadow-sm dark:border-white/10 dark:bg-[#121c38] dark:text-[#7a9aff]">
-          <i className="flex size-5 items-center justify-center rounded-[7px] bg-[#e9edff] text-[10px] not-italic dark:bg-[#1e2a52]">◈</i>
+        <span className="inline-flex items-center gap-2 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#9e4f20] shadow-sm dark:border-white/10 dark:bg-[#1f1f1f] dark:text-[#e0a989]">
+          <i className="flex size-5 items-center justify-center rounded-[7px] bg-[#f9ede1] text-[10px] not-italic text-[#c66328] dark:bg-[#2e1d12] dark:text-[#e0a989]">◈</i>
           OP Registration
         </span>
         <span className="text-xs text-[#8a94ad]">Front Office / OP / New</span>
         <Link
           to="/"
-          className="ml-auto inline-flex items-center gap-1.5 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-semibold text-[#42506b] shadow-sm hover:border-[#c6d0e8] hover:text-[#0e1b33] dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
+          className="ml-auto inline-flex items-center gap-1.5 rounded-[11px] border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-semibold text-[#42506b] shadow-sm hover:border-[#dcc7a8] hover:text-[#191919] dark:border-white/10 dark:bg-white/5 dark:text-[#c2cdf3] transition-all"
         >
           ◈ Dashboard
         </Link>
       </div>
 
       {/* Hero Header & Stepper */}
-      <section className="heroAnimated relative mb-4.5 overflow-hidden rounded-[20px] border border-[#e5e9f2] bg-gradient-to-b from-white to-[#fbfcff] shadow-sm dark:border-white/8 dark:bg-gradient-to-b dark:from-[#151d38] dark:to-[#101736]">
+      <section className="heroAnimated relative mb-4.5 overflow-hidden rounded-[20px] border border-[#e5e9f2] bg-gradient-to-b from-white to-[#fdf8f2] shadow-sm dark:border-white/8 dark:bg-gradient-to-b dark:from-[#191919] dark:to-[#141414]">
         <div className="flex flex-wrap items-start gap-4 p-5 sm:p-6 pb-4">
           <div className="min-w-0">
-            <h1 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[#0e1b33] dark:text-white">
+            <h1 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[#191919] dark:text-white">
               New Patient <span className="goldText">Registration</span>
             </h1>
-            <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[#67748e] dark:text-[#8fa0d6]">
-              <span className="rounded-full bg-gradient-to-r from-[#2348ff] to-[#5b6cff] px-2.5 py-0.5 text-[10.5px] font-extrabold text-white">
+            <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[#67748e] dark:text-[#a09a90]">
+              <span className="rounded-full bg-gradient-to-r from-[#c66328] to-[#d07f4e] px-2.5 py-0.5 text-[10.5px] font-extrabold text-white">
                 STEP {step + 1} OF 4
               </span>
               <span>{steps[step].title} — {steps[step].sub}</span>
@@ -471,20 +471,20 @@ export function PatientRegistrationWizard() {
           </div>
 
           <div className="ml-auto flex flex-wrap gap-2.5">
-            <div className="min-w-[120px] rounded-[14px] border border-[#e5e9f2] bg-[#f5f7fd] p-2.5 dark:border-white/8 dark:bg-[#1a2342]">
+            <div className="min-w-[120px] rounded-[14px] border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 dark:border-white/8 dark:bg-[#1f1f1f]">
               <small className="block text-[10px] font-extrabold tracking-wider text-[#8a94ad] uppercase">TODAY'S OP</small>
-              <b className="font-display text-base text-[#0e1b33] dark:text-white">248</b>
-              <em className="block text-[11px] text-[#67748e] not-italic dark:text-[#8fa0d6]">+18 vs yesterday</em>
+              <b className="font-display text-base text-[#191919] dark:text-white">248</b>
+              <em className="block text-[11px] text-[#67748e] not-italic dark:text-[#a09a90]">+18 vs yesterday</em>
             </div>
-            <div className="min-w-[120px] rounded-[14px] border border-[#e5e9f2] bg-[#f5f7fd] p-2.5 dark:border-white/8 dark:bg-[#1a2342]">
+            <div className="min-w-[120px] rounded-[14px] border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 dark:border-white/8 dark:bg-[#1f1f1f]">
               <small className="block text-[10px] font-extrabold tracking-wider text-[#8a94ad] uppercase">AVG WAIT</small>
-              <b className="font-display text-base text-[#0e1b33] dark:text-white">11 min</b>
-              <em className="block text-[11px] text-[#67748e] not-italic dark:text-[#8fa0d6]">token system live</em>
+              <b className="font-display text-base text-[#191919] dark:text-white">11 min</b>
+              <em className="block text-[11px] text-[#67748e] not-italic dark:text-[#a09a90]">token system live</em>
             </div>
-            <div className="min-w-[120px] rounded-[14px] border border-[#e5e9f2] bg-[#f5f7fd] p-2.5 dark:border-white/8 dark:bg-[#1a2342]">
+            <div className="min-w-[120px] rounded-[14px] border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 dark:border-white/8 dark:bg-[#1f1f1f]">
               <small className="block text-[10px] font-extrabold tracking-wider text-[#8a94ad] uppercase">QUEUE STATUS</small>
-              <b className="font-display text-base text-[#0a7a68] dark:text-[#2dd4bf]">● Flowing</b>
-              <em className="block text-[11px] text-[#67748e] not-italic dark:text-[#8fa0d6]">4 counters open</em>
+              <b className="font-display text-base text-[#9e4f20] dark:text-[#e0a989]">● Flowing</b>
+              <em className="block text-[11px] text-[#67748e] not-italic dark:text-[#a09a90]">4 counters open</em>
             </div>
           </div>
         </div>
@@ -501,10 +501,10 @@ export function PatientRegistrationWizard() {
                 onClick={() => setStep(i)}
                 className={`relative flex items-center gap-2.5 overflow-hidden rounded-[14px] border p-2.5 text-left transition-all ${
                   isCurrent
-                    ? 'border-[#203a9e] bg-gradient-to-b from-[#203a9e] to-[#16286e] text-white shadow-md'
+                    ? 'border-[#9e4f20] bg-gradient-to-b from-[#c66328] to-[#9e4f20] text-white shadow-md'
                     : isDone
-                    ? 'border-[#a7e9d8] bg-[#f6fbf9] text-[#0f1e33] dark:border-white/10 dark:bg-[#142332] dark:text-white'
-                    : 'border-[#e5e9f2] bg-[#f6f8fd] text-[#5b6a8a] hover:border-[#c6d0e8] dark:border-white/8 dark:bg-[#1a2342] dark:text-[#8fa0d6]'
+                    ? 'border-[#eed0be] bg-[#fdf8f2] text-[#191919] dark:border-white/10 dark:bg-[#1f1f1f] dark:text-white'
+                    : 'border-[#e5e9f2] bg-[#fdf8f2] text-[#5b6a8a] hover:border-[#dcc7a8] dark:border-white/8 dark:bg-[#1a1a1a] dark:text-[#a09a90]'
                 }`}
               >
                 <div
@@ -512,8 +512,8 @@ export function PatientRegistrationWizard() {
                     isCurrent
                       ? 'bg-white/20 text-white'
                       : isDone
-                      ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]'
-                      : 'bg-[#e7ebf7] text-[#5b6a8a] dark:bg-[#2a3763] dark:text-[#aebcf3]'
+                      ? 'bg-[#f8ece5] text-[#9e4f20] dark:bg-[#2e1d12] dark:text-[#e0a989]'
+                      : 'bg-[#f0eae2] text-[#5b6a8a] dark:bg-[#2a2a2a] dark:text-[#a09a90]'
                   }`}
                 >
                   {isDone ? <Check className="size-3.5 stroke-[3]" /> : `0${st.id}`}
@@ -522,12 +522,12 @@ export function PatientRegistrationWizard() {
                   <b className={`block text-xs font-bold leading-tight ${isCurrent ? 'text-white' : 'text-inherit'}`}>
                     {st.title}
                   </b>
-                  <small className={`block text-[10.5px] truncate ${isCurrent ? 'text-[#b9c4f2]' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
+                  <small className={`block text-[10.5px] truncate ${isCurrent ? 'text-[#f5ede0]' : 'text-[#67748e] dark:text-[#a09a90]'}`}>
                     {st.sub}
                   </small>
                 </div>
                 {isCurrent && (
-                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-[#2dd4bf] to-transparent" />
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-[#ffe9b8] to-transparent" />
                 )}
               </button>
             )
@@ -1546,7 +1546,7 @@ export function PatientRegistrationWizard() {
               <button
                 type="button"
                 onClick={goNext}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#2b54ff] to-[#1a34c8] px-5 py-2.5 text-xs font-bold text-white shadow-[0_8px_20px_-6px_rgba(35,72,255,0.7)] hover:shadow-lg transition-all"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#c66328] to-[#9e4f20] px-5 py-2.5 text-xs font-bold text-white shadow-[0_8px_20px_-6px_rgba(198,99,40,0.7)] hover:shadow-lg transition-all"
               >
                 Next <ArrowRight className="size-3.5" />
               </button>
@@ -1555,7 +1555,7 @@ export function PatientRegistrationWizard() {
                 type="button"
                 onClick={checkAndRegister}
                 disabled={checkDuplicates.isPending || register.isPending}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#2b54ff] to-[#1a34c8] px-5 py-2.5 text-xs font-bold text-white shadow-[0_8px_20px_-6px_rgba(35,72,255,0.7)] hover:shadow-lg disabled:opacity-50 transition-all"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#c66328] to-[#9e4f20] px-5 py-2.5 text-xs font-bold text-white shadow-[0_8px_20px_-6px_rgba(198,99,40,0.7)] hover:shadow-lg disabled:opacity-50 transition-all"
               >
                 {checkDuplicates.isPending || register.isPending ? 'Registering...' : '✓ Finish Registration'}
               </button>
@@ -1566,20 +1566,20 @@ export function PatientRegistrationWizard() {
         {/* RIGHT SIDEBAR PREVIEW & METER RAIL */}
         <aside className="space-y-4 lg:sticky lg:top-4">
           {/* Live Preview Card */}
-          <div className="overflow-hidden rounded-[18px] border border-[#e5e9f2] bg-white shadow-sm dark:border-white/8 dark:bg-[#141b31]">
-            <div className="relative overflow-hidden bg-gradient-to-br from-[#0e1c48] via-[#2238a0] to-[#0e9d8b] p-4.5 text-white">
-              <small className="block text-[9.5px] font-extrabold tracking-widest text-[#aebcf3] uppercase">
+          <div className="overflow-hidden rounded-[18px] border border-[#e5e9f2] bg-white shadow-sm dark:border-white/8 dark:bg-[#1f1f1f]">
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#191919] via-[#9e4f20] to-[#c66328] p-4.5 text-white">
+              <small className="block text-[9.5px] font-extrabold tracking-widest text-[#f5ede0] uppercase">
                 LIVE PREVIEW
               </small>
               <div className="font-display mt-1 text-lg font-bold leading-tight truncate pr-14">
                 {fullName}
               </div>
-              <div className="mt-0.5 text-xs text-[#cdd8ff] truncate">
+              <div className="mt-0.5 text-xs text-[#eed0be] truncate">
                 {ageDisplay} • {GENDER_LABELS[form.gender]} • Blood {form.bloodGroup || '—'}
               </div>
 
               <div className="mt-2.5 flex flex-wrap gap-1.5">
-                <span className="rounded-full bg-[#2dd4bf] px-2.5 py-0.5 text-[10.5px] font-extrabold text-[#063f38]">
+                <span className="rounded-full bg-[#f8ece5] px-2.5 py-0.5 text-[10.5px] font-extrabold text-[#9e4f20]">
                   {selectedCaseType}
                 </span>
                 <span className="rounded-full border border-white/20 bg-white/15 px-2.5 py-0.5 text-[10.5px] font-extrabold text-white">
@@ -1600,20 +1600,20 @@ export function PatientRegistrationWizard() {
 
             <div className="p-4 space-y-2.5 text-xs">
               <div className="flex justify-between border-b border-dashed border-[#e7ebf5] pb-2 dark:border-white/8">
-                <span className="text-[#67748e] dark:text-[#8fa0d6]">UHID</span>
-                <b className="font-bold text-[#0e1b33] dark:text-white">PRV-2026-08417</b>
+                <span className="text-[#67748e] dark:text-[#a09a90]">UHID</span>
+                <b className="font-bold text-[#191919] dark:text-white">PRV-2026-08417</b>
               </div>
               <div className="flex justify-between border-b border-dashed border-[#e7ebf5] pb-2 dark:border-white/8">
-                <span className="text-[#67748e] dark:text-[#8fa0d6]">Visit</span>
-                <b className="font-bold text-[#0e1b33] dark:text-white">OP • General • Token 249</b>
+                <span className="text-[#67748e] dark:text-[#a09a90]">Visit</span>
+                <b className="font-bold text-[#191919] dark:text-white">OP • General • Token 249</b>
               </div>
               <div className="flex justify-between border-b border-dashed border-[#e7ebf5] pb-2 dark:border-white/8">
-                <span className="text-[#67748e] dark:text-[#8fa0d6]">Language</span>
-                <b className="font-bold text-[#0e1b33] dark:text-white">{selectedLanguage}</b>
+                <span className="text-[#67748e] dark:text-[#a09a90]">Language</span>
+                <b className="font-bold text-[#191919] dark:text-white">{selectedLanguage}</b>
               </div>
               <div className="flex justify-between pt-0.5">
-                <span className="text-[#67748e] dark:text-[#8fa0d6]">SMS alerts</span>
-                <b className="font-bold text-[#0e1b33] dark:text-white">{form.smsOptIn ? 'On' : 'Off'}</b>
+                <span className="text-[#67748e] dark:text-[#a09a90]">SMS alerts</span>
+                <b className="font-bold text-[#191919] dark:text-white">{form.smsOptIn ? 'On' : 'Off'}</b>
               </div>
             </div>
           </div>
