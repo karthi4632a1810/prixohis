@@ -268,6 +268,7 @@ public class RazorpayAnalyticsService
 
             if (orderTime < custAgg.FirstOrder) custAgg.FirstOrder = orderTime;
             if (orderTime > custAgg.LastOrder) custAgg.LastOrder = orderTime;
+            custAgg.OrderItems.Add((p.Id, orderTime, amt, productText));
 
             // Update product group
             if (!productGroups.TryGetValue(productText, out var prodAgg))
@@ -296,24 +297,140 @@ public class RazorpayAnalyticsService
             });
         }
 
-        // Build Customer List
+        // Build Customer List with Buying Journey & Drop-Off Analytics
         var customerDtos = new List<CustomerAnalyticsItemDto>();
         int singleCount = 0;
         int repeatCount = 0;
         int regularCount = 0;
 
+        var anchorDate = captured.Count > 0
+            ? captured.Max(p => DateTimeOffset.FromUnixTimeSeconds(p.CreatedAt))
+            : DateTimeOffset.UtcNow;
+
+        int droppedOffCount = 0;
+        int atRiskCount = 0;
+        int slowingCount = 0;
+        int growingCount = 0;
+        int activeCount = 0;
+        decimal churnedRevenueAtRisk = 0;
+        var repeatIntervalsAll = new List<double>();
+        var exitProductCounts = new Dictionary<string, (int DroppedCount, decimal LostRev)>(StringComparer.OrdinalIgnoreCase);
+
         foreach (var c in customerGroups.Values)
         {
-            string classification = c.OrdersCount switch
+            var sortedOrders = c.OrderItems.OrderBy(o => o.Date).ToList();
+            int n = sortedOrders.Count;
+            int daysSinceLast = sortedOrders.Count > 0 ? (int)Math.Max(0, (anchorDate - sortedOrders[^1].Date).TotalDays) : 0;
+            string lastProduct = sortedOrders.Count > 0 ? sortedOrders[^1].Product : "";
+
+            var intervals = new List<int>();
+            var steps = new List<CustomerOrderStepDto>();
+
+            for (int i = 0; i < n; i++)
+            {
+                int delta = i > 0 ? (int)Math.Max(0, (sortedOrders[i].Date - sortedOrders[i - 1].Date).TotalDays) : 0;
+                if (i > 0)
+                {
+                    intervals.Add(delta);
+                    repeatIntervalsAll.Add(delta);
+                }
+                steps.Add(new CustomerOrderStepDto
+                {
+                    StepNumber = i + 1,
+                    PaymentId = sortedOrders[i].PaymentId,
+                    Date = sortedOrders[i].Date,
+                    Amount = sortedOrders[i].Amount,
+                    Product = sortedOrders[i].Product,
+                    DaysSincePrevious = delta,
+                });
+            }
+
+            int avgInterval = intervals.Count > 0 ? (int)Math.Round(intervals.Average()) : 0;
+
+            string classification = n switch
             {
                 >= 4 => "Regular Buyer",
                 >= 2 => "Repeat Buyer",
                 _ => "First Time",
             };
 
-            if (c.OrdersCount >= 4) regularCount++;
-            else if (c.OrdersCount >= 2) repeatCount++;
+            if (n >= 4) regularCount++;
+            else if (n >= 2) repeatCount++;
             else singleCount++;
+
+            string journeyStage;
+            string trend;
+
+            if (n > 1)
+            {
+                if (intervals.Count >= 2)
+                {
+                    double prevAvg = intervals.Take(intervals.Count - 1).Average();
+                    int lastInt = intervals[^1];
+                    if (lastInt > prevAvg * 1.4 && lastInt >= 25)
+                    {
+                        trend = $"Slowing Down ({Math.Round(prevAvg)}d → {lastInt}d)";
+                    }
+                    else if (lastInt < prevAvg * 0.7)
+                    {
+                        trend = $"Accelerating ({Math.Round(prevAvg)}d → {lastInt}d)";
+                    }
+                    else
+                    {
+                        trend = $"Steady (~{avgInterval}d)";
+                    }
+                }
+                else
+                {
+                    trend = $"Repeat Interval ({intervals[0]}d)";
+                }
+
+                int churnCutoff = Math.Max(avgInterval * 5 / 2, 120);
+                int overdueCutoff = Math.Max(avgInterval * 3 / 2, 45);
+
+                if (daysSinceLast > churnCutoff)
+                {
+                    journeyStage = "Dropped Off (Churned)";
+                    droppedOffCount++;
+                    churnedRevenueAtRisk += c.TotalSpend;
+
+                    if (!exitProductCounts.TryGetValue(lastProduct, out var ep)) ep = (0, 0m);
+                    exitProductCounts[lastProduct] = (ep.DroppedCount + 1, ep.LostRev + c.TotalSpend);
+                }
+                else if (daysSinceLast > overdueCutoff)
+                {
+                    journeyStage = "At Risk (Overdue)";
+                    atRiskCount++;
+                }
+                else if (trend.StartsWith("Slowing Down"))
+                {
+                    journeyStage = "Slowing Down";
+                    slowingCount++;
+                }
+                else if (trend.StartsWith("Accelerating"))
+                {
+                    journeyStage = "Growing Cadence";
+                    growingCount++;
+                }
+                else
+                {
+                    journeyStage = "Active & Healthy";
+                    activeCount++;
+                }
+            }
+            else
+            {
+                if (daysSinceLast > 90)
+                {
+                    journeyStage = "One-Time Lapsed";
+                    trend = $"Single Order ({daysSinceLast}d ago)";
+                }
+                else
+                {
+                    journeyStage = "One-Time Recent";
+                    trend = $"Single Order ({daysSinceLast}d ago)";
+                }
+            }
 
             customerDtos.Add(new CustomerAnalyticsItemDto
             {
@@ -330,6 +447,12 @@ public class RazorpayAnalyticsService
                 LastOrderAt = c.LastOrder,
                 Classification = classification,
                 ProductsBought = c.Products.Distinct().ToList(),
+                AverageIntervalDays = avgInterval,
+                DaysSinceLastOrder = daysSinceLast,
+                JourneyStage = journeyStage,
+                TrendDescription = trend,
+                LastProductBought = lastProduct,
+                OrderHistory = steps,
             });
         }
 
@@ -365,6 +488,21 @@ public class RazorpayAnalyticsService
         double duplicationRate = totalUnique > 0 ? Math.Round((double)totalRepeat / totalUnique * 100, 1) : 0;
         decimal aov = totalOrders > 0 ? Math.Round(totalRevenue / totalOrders, 2) : 0;
         double avgOrders = totalUnique > 0 ? Math.Round((double)totalOrders / totalUnique, 2) : 0;
+        double avgRepeatInterval = repeatIntervalsAll.Count > 0 ? Math.Round(repeatIntervalsAll.Average(), 1) : 0;
+
+        var topExitProducts = exitProductCounts
+            .OrderByDescending(kv => kv.Value.DroppedCount)
+            .Take(10)
+            .Select(kv => new ExitProductAnalyticsDto
+            {
+                ProductName = kv.Key,
+                DroppedOffCustomers = kv.Value.DroppedCount,
+                LostRevenueAtRisk = kv.Value.LostRev,
+                ShareOfDropOffPercent = droppedOffCount > 0
+                    ? Math.Round((double)kv.Value.DroppedCount / droppedOffCount * 100, 1)
+                    : 0,
+            })
+            .ToList();
 
         DateTimeOffset? lastSyncTime = File.Exists(_cacheFilePath)
             ? new DateTimeOffset(File.GetLastWriteTimeUtc(_cacheFilePath))
@@ -383,6 +521,14 @@ public class RazorpayAnalyticsService
             AverageOrderValue = aov,
             AverageOrdersPerCustomer = avgOrders,
             LastSyncedAt = lastSyncTime,
+            DroppedOffCustomersCount = droppedOffCount,
+            AtRiskCustomersCount = atRiskCount,
+            SlowingDownCustomersCount = slowingCount,
+            GrowingCustomersCount = growingCount,
+            ActiveCustomersCount = activeCount,
+            ChurnedRevenueAtRisk = churnedRevenueAtRisk,
+            AverageRepeatIntervalDays = avgRepeatInterval,
+            TopExitProducts = topExitProducts,
             Customers = customerDtos,
             Products = productDtos,
             RecentOrders = recentOrders.OrderByDescending(o => o.CreatedAt).Take(200).ToList(),
@@ -403,6 +549,7 @@ public class RazorpayAnalyticsService
         public HashSet<string> States { get; } = new(StringComparer.OrdinalIgnoreCase);
         public HashSet<string> Pincodes { get; } = new(StringComparer.OrdinalIgnoreCase);
         public List<string> Products { get; } = [];
+        public List<(string PaymentId, DateTimeOffset Date, decimal Amount, string Product)> OrderItems { get; } = [];
     }
 
     private class ProductAggregator

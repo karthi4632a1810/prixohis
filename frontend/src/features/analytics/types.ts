@@ -1,3 +1,19 @@
+export interface CustomerOrderStep {
+  stepNumber: number
+  paymentId: string
+  date: string
+  amount: number
+  product: string
+  daysSincePrevious: number
+}
+
+export interface ExitProductAnalytics {
+  productName: string
+  droppedOffCustomers: number
+  lostRevenueAtRisk: number
+  shareOfDropOffPercent: number
+}
+
 export interface CustomerAnalyticsItem {
   customerKey: string
   name: string
@@ -12,6 +28,12 @@ export interface CustomerAnalyticsItem {
   lastOrderAt: string
   classification: 'Regular Buyer' | 'Repeat Buyer' | 'First Time' | string
   productsBought: string[]
+  averageIntervalDays: number
+  daysSinceLastOrder: number
+  journeyStage: 'Active & Healthy' | 'Growing Cadence' | 'Slowing Down' | 'At Risk (Overdue)' | 'Dropped Off (Churned)' | 'One-Time Lapsed' | 'One-Time Recent' | string
+  trendDescription: string
+  lastProductBought: string
+  orderHistory: CustomerOrderStep[]
 }
 
 export interface ProductAnalyticsItem {
@@ -49,6 +71,14 @@ export interface CustomerAnalyticsSummary {
   averageOrderValue: number
   averageOrdersPerCustomer: number
   lastSyncedAt: string | null
+  droppedOffCustomersCount: number
+  atRiskCustomersCount: number
+  slowingDownCustomersCount: number
+  growingCustomersCount: number
+  activeCustomersCount: number
+  churnedRevenueAtRisk: number
+  averageRepeatIntervalDays: number
+  topExitProducts: ExitProductAnalytics[]
   customers: CustomerAnalyticsItem[]
   products: ProductAnalyticsItem[]
   recentOrders: RazorpayRecentOrder[]
