@@ -128,6 +128,7 @@ import { ManagementDashboardPage } from '../features/reports/pages/ManagementDas
 import { OpDashboardPage } from '../features/reports/pages/OpDashboardPage'
 import { ReportSubscriptionsPage } from '../features/reports/pages/ReportSubscriptionsPage'
 import { RevenueDashboardPage } from '../features/reports/pages/RevenueDashboardPage'
+import { CustomerAnalyticsPage } from '../features/analytics/pages/CustomerAnalyticsPage'
 import { CodingWorklistPage as MrdCodingWorklistPage } from '../features/mrd/pages/CodingWorklistPage'
 import { FileRequestsPage as MrdFileRequestsPage } from '../features/mrd/pages/FileRequestsPage'
 import { MrdReportsPage } from '../features/mrd/pages/MrdReportsPage'
@@ -224,6 +225,7 @@ import { RequirePermission } from './guards'
  */
 export const appRoutes: RouteObject[] = [
   { index: true, element: <HomePage /> },
+  { path: 'customer-analytics', element: <CustomerAnalyticsPage /> },
   { path: 'change-password', element: <ChangePasswordPage /> },
   {
     path: 'front-office',

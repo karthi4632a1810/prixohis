@@ -40,7 +40,25 @@ export function useMyMenu() {
     queryKey: ['menus', 'my'],
     queryFn: async () => {
       const { data } = await api.get<ApiResponse<MenuNode[]>>(endpoints.myMenu)
-      return data.data ?? []
+      const list = data.data ?? []
+      const hasCustomerAnalytics = list.some(
+        (m) => m.path === '/customer-analytics' || m.children.some((c) => c.path === '/customer-analytics')
+      )
+      if (!hasCustomerAnalytics) {
+        const customerAnalyticsNode: MenuNode = {
+          id: 99901,
+          parentId: null,
+          title: 'Customer Analytics',
+          icon: 'bar-chart-3',
+          path: '/customer-analytics',
+          permissionCode: null,
+          sortOrder: 2,
+          isActive: true,
+          children: [],
+        }
+        return [customerAnalyticsNode, ...list]
+      }
+      return list
     },
     staleTime: 5 * 60_000,
   })

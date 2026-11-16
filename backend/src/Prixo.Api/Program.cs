@@ -40,6 +40,8 @@ try
     builder.Services.AddApplication();
     builder.Services.AddInfrastructure(builder.Configuration);
 
+    builder.Services.AddHttpClient<Prixo.Application.Features.Analytics.RazorpayAnalyticsService>();
+
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddScoped<ICurrentUser, CurrentUserService>();
     builder.Services.AddScoped<IPortalCurrentUser, PortalCurrentUserService>();

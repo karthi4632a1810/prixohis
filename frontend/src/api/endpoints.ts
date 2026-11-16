@@ -288,4 +288,8 @@ export const endpoints = {
     claims: '/insurance/claims',
     patientPolicies: (patientId: number) => `/patients/${patientId}/insurance-policies`,
   },
+  customerAnalytics: {
+    summary: '/customer-analytics/summary',
+    sync: '/customer-analytics/sync',
+  },
 } as const

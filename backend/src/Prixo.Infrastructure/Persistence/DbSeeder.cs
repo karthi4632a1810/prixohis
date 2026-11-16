@@ -417,6 +417,7 @@ public class DbSeeder(
         await EnsureMenuAsync(doctorPortal.Id, "Opinion Requests", "send", "/doctor-portal/opinion-requests", PermissionRegistry.DoctorPortalOpinionView, 60, ct);
 
         var reports = await EnsureMenuAsync(null, "Reports & Dashboards", "activity", null, null, 5, ct);
+        await EnsureMenuAsync(reports.Id, "Customer Analytics", "bar-chart-3", "/customer-analytics", null, 5, ct);
         await EnsureMenuAsync(reports.Id, "Management Dashboard", "activity", "/reports/management", PermissionRegistry.DashboardManagementView, 10, ct);
         await EnsureMenuAsync(reports.Id, "OP Dashboard", "stethoscope", "/reports/op", PermissionRegistry.DashboardOpView, 20, ct);
         await EnsureMenuAsync(reports.Id, "IP Dashboard", "bed-double", "/reports/ip", PermissionRegistry.DashboardIpView, 30, ct);
