@@ -486,7 +486,9 @@ export function AppShell() {
                   </span>
                 </div>
                 <div className="truncate text-[11.5px] text-[#5b6a8a] dark:text-[#a09a90]">
-                  {active?.group?.title ? `${active.group.title} • ` : ''}Hospital Information System • live
+                  {active?.node.path === '/' || active?.node.title === 'Dashboard'
+                    ? 'Cross-branch reporting • live'
+                    : `${active?.group?.title ? `${active.group.title} • ` : ''}Hospital Information System • live`}
                 </div>
               </div>
             </div>

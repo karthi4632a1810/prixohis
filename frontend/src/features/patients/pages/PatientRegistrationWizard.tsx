@@ -504,7 +504,7 @@ export function PatientRegistrationWizard() {
                     ? 'border-[#9e4f20] bg-gradient-to-b from-[#c66328] to-[#9e4f20] text-white shadow-md'
                     : isDone
                     ? 'border-[#eed0be] bg-[#fdf8f2] text-[#191919] dark:border-white/10 dark:bg-[#1f1f1f] dark:text-white'
-                    : 'border-[#e5e9f2] bg-[#fdf8f2] text-[#5b6a8a] hover:border-[#dcc7a8] dark:border-white/8 dark:bg-[#1a1a1a] dark:text-[#a09a90]'
+                    : 'border-[#e5e9f2] bg-[#fdf8f2] text-[#67748e] hover:border-[#dcc7a8] dark:border-white/8 dark:bg-[#1a1a1a] dark:text-[#a09a90]'
                 }`}
               >
                 <div
@@ -513,7 +513,7 @@ export function PatientRegistrationWizard() {
                       ? 'bg-white/20 text-white'
                       : isDone
                       ? 'bg-[#f8ece5] text-[#9e4f20] dark:bg-[#2e1d12] dark:text-[#e0a989]'
-                      : 'bg-[#f0eae2] text-[#5b6a8a] dark:bg-[#2a2a2a] dark:text-[#a09a90]'
+                      : 'bg-[#f0eae2] text-[#67748e] dark:bg-[#2a2a2a] dark:text-[#a09a90]'
                   }`}
                 >
                   {isDone ? <Check className="size-3.5 stroke-[3]" /> : `0${st.id}`}
@@ -536,13 +536,13 @@ export function PatientRegistrationWizard() {
 
         {/* Progress bar */}
         <div className="px-5 sm:px-6 pt-2 pb-4">
-          <div className="mb-1.5 flex justify-between text-xs font-semibold text-[#67748e] dark:text-[#8fa0d6]">
+          <div className="mb-1.5 flex justify-between text-xs font-semibold text-[#67748e] dark:text-[#a09a90]">
             <span>Step {step + 1} of 4 • {steps[step].title}</span>
             <span>{((step + 1) / 4) * 100}% complete</span>
           </div>
           <div className="relative h-2 overflow-hidden rounded-full bg-[#e8ecf6] dark:bg-[#232e52]">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#2348ff] via-[#5b7bff] to-[#2dd4bf] shadow-[0_0_12px_rgba(35,72,255,0.5)] transition-all duration-500 ease-out"
+              className="h-full rounded-full bg-gradient-to-r from-[#c66328] via-[#d07f4e] to-[#c6a15b] shadow-[0_0_12px_rgba(35,72,255,0.5)] transition-all duration-500 ease-out"
               style={{ width: `${((step + 1) / 4) * 100}%` }}
             />
           </div>
@@ -554,18 +554,18 @@ export function PatientRegistrationWizard() {
         {/* FORM CONTAINER CARD */}
         <section className="overflow-hidden rounded-[18px] border border-[#e5e9f2] bg-white shadow-sm dark:border-white/8 dark:bg-[#141b31]">
           {/* Form Header */}
-          <div className="flex items-center gap-3 border-b border-[#eef1f7] bg-gradient-to-b from-[#f8faff] to-white px-5 py-4 dark:border-white/8 dark:from-[#17203c] dark:to-[#141b31]">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-[12px] border border-[#e5e9f2] bg-gradient-to-br from-[#e9edff] to-[#d9f9f1] text-[#2348ff] shadow-sm dark:border-white/10 dark:from-[#1f2b52] dark:to-[#153e3c]">
+          <div className="flex items-center gap-3 border-b border-[#eef1f7] bg-gradient-to-b from-[#fdf8f2] to-white px-5 py-4 dark:border-white/8 dark:from-[#17203c] dark:to-[#141b31]">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-[12px] border border-[#e5e9f2] bg-gradient-to-br from-[#e9edff] to-[#d9f9f1] text-[#c66328] shadow-sm dark:border-white/10 dark:from-[#1f2b52] dark:to-[#153e3c]">
               <User className="size-4.5" />
             </div>
             <div className="min-w-0">
-              <b className="block text-sm font-bold text-[#0e1b33] dark:text-white">
+              <b className="block text-sm font-bold text-[#191919] dark:text-white">
                 {step === 0 && 'Patient Demographics'}
                 {step === 1 && 'Contact & Address'}
                 {step === 2 && 'Guardian, IDs & Insurance'}
                 {step === 3 && 'Review & Confirm'}
               </b>
-              <small className="block text-xs text-[#67748e] dark:text-[#8fa0d6]">
+              <small className="block text-xs text-[#67748e] dark:text-[#a09a90]">
                 {step === 0 && 'Fields marked * are required for UHID generation'}
                 {step === 1 && 'Mobile is used for token SMS & electronic reports'}
                 {step === 2 && 'Government IDs, emergency attenders & insurance policies'}
@@ -574,8 +574,8 @@ export function PatientRegistrationWizard() {
             </div>
             <div className="ml-auto text-right">
               <small className="block text-[9.5px] font-extrabold tracking-wider text-[#8a94ad] uppercase">AUTO UHID</small>
-              <b className="font-display text-sm font-bold text-[#0e1b33] dark:text-white">PRV-2026-08417</b>
-              <em className="inline-block rounded-full border border-[#a7e9d8] bg-[#d9f9f1] px-2 py-0.5 text-[10px] font-extrabold text-[#0a7a68] not-italic dark:border-[#146c5e] dark:bg-[#0c3831] dark:text-[#2dd4bf] ml-1.5">
+              <b className="font-display text-sm font-bold text-[#191919] dark:text-white">PRV-2026-08417</b>
+              <em className="inline-block rounded-full border border-[#a7e9d8] bg-[#d9f9f1] px-2 py-0.5 text-[10px] font-extrabold text-[#0a7a68] not-italic dark:border-[#146c5e] dark:bg-[#0c3831] dark:text-[#c6a15b] ml-1.5">
                 ● New
               </em>
             </div>
@@ -596,13 +596,13 @@ export function PatientRegistrationWizard() {
                 {/* Salutation + Names */}
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-3.5">
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       SALUTATION
                     </label>
                     <select
                       value={form.salutationId}
                       onChange={(e) => set('salutationId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— Select —</option>
                       {salutations.map((s) => (
@@ -612,7 +612,7 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       FIRST NAME <span className="text-[#ff5470]">*</span>
                     </label>
                     <input
@@ -620,17 +620,17 @@ export function PatientRegistrationWizard() {
                       placeholder="e.g. Aarav"
                       value={form.firstName}
                       onChange={(e) => set('firstName', e.target.value)}
-                      className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                      className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                         fieldErrors.firstName
                           ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                          : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                          : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
                       }`}
                     />
                     {fieldErrors.firstName && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.firstName}</span>}
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       MIDDLE NAME
                     </label>
                     <input
@@ -638,12 +638,12 @@ export function PatientRegistrationWizard() {
                       placeholder="Optional"
                       value={form.middleName}
                       onChange={(e) => set('middleName', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     />
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       LAST NAME <span className="text-[#ff5470]">*</span>
                     </label>
                     <input
@@ -651,10 +651,10 @@ export function PatientRegistrationWizard() {
                       placeholder="e.g. Sharma"
                       value={form.lastName}
                       onChange={(e) => set('lastName', e.target.value)}
-                      className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                      className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                         fieldErrors.lastName
                           ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                          : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                          : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
                       }`}
                     />
                     {fieldErrors.lastName && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.lastName}</span>}
@@ -664,13 +664,13 @@ export function PatientRegistrationWizard() {
                 {/* Gender + Blood Group + Marital Status */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       GENDER
                     </label>
                     <select
                       value={String(form.gender)}
                       onChange={(e) => set('gender', Number(e.target.value) as Gender)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       {Object.entries(GENDER_LABELS).map(([val, lbl]) => (
                         <option key={val} value={val}>{lbl}</option>
@@ -679,13 +679,13 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       BLOOD GROUP
                     </label>
                     <select
                       value={form.bloodGroup}
                       onChange={(e) => set('bloodGroup', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">e.g. O+</option>
                       <option value="A+">A+</option>
@@ -701,13 +701,13 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       MARITAL STATUS
                     </label>
                     <select
                       value={form.maritalStatusId}
                       onChange={(e) => set('maritalStatusId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— Select —</option>
                       {maritalStatuses.map((m) => (
@@ -720,7 +720,7 @@ export function PatientRegistrationWizard() {
                 {/* Age & Date of Birth */}
                 <div>
                   <div className="mb-2 flex items-center gap-4">
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       AGE <span className="text-[#ff5470]">*</span>
                     </span>
                     <label className="flex items-center gap-1.5 text-xs font-semibold text-[#33415e] dark:text-[#c2cdf3] cursor-pointer">
@@ -728,7 +728,7 @@ export function PatientRegistrationWizard() {
                         type="radio"
                         checked={form.dobKnown}
                         onChange={() => set('dobKnown', true)}
-                        className="accent-[#2348ff]"
+                        className="accent-[#c66328]"
                       />
                       Date of birth
                     </label>
@@ -737,7 +737,7 @@ export function PatientRegistrationWizard() {
                         type="radio"
                         checked={!form.dobKnown}
                         onChange={() => set('dobKnown', false)}
-                        className="accent-[#2348ff]"
+                        className="accent-[#c66328]"
                       />
                       Estimated age
                     </label>
@@ -750,10 +750,10 @@ export function PatientRegistrationWizard() {
                           type="date"
                           value={form.dateOfBirth}
                           onChange={(e) => set('dateOfBirth', e.target.value)}
-                          className={`w-full rounded-xl border p-2.5 pr-24 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                          className={`w-full rounded-xl border p-2.5 pr-24 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                             fieldErrors.dateOfBirth
                               ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                              : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                              : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
                           }`}
                         />
                         {calculatedDobAge !== null && (
@@ -770,10 +770,10 @@ export function PatientRegistrationWizard() {
                         placeholder="e.g. 34"
                         value={form.estimatedAge}
                         onChange={(e) => set('estimatedAge', e.target.value)}
-                        className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                        className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                           fieldErrors.estimatedAge
                             ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                            : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                            : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
                         }`}
                       />
                     )}
@@ -790,13 +790,13 @@ export function PatientRegistrationWizard() {
 
                 {/* Language */}
                 <div>
-                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                     LANGUAGE
                   </label>
                   <select
                     value={form.languageId}
                     onChange={(e) => set('languageId', e.target.value)}
-                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                   >
                     <option value="">— Select preferred language —</option>
                     {languages.map((l) => (
@@ -808,13 +808,13 @@ export function PatientRegistrationWizard() {
                 {/* Patient Case Type + Patient Tag */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       PATIENT CASE TYPE
                     </label>
                     <select
                       value={form.patientCaseTypeId}
                       onChange={(e) => set('patientCaseTypeId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— Select —</option>
                       {patientCaseTypes.map((c) => (
@@ -824,13 +824,13 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       PATIENT TAG
                     </label>
                     <select
                       value={form.patientHcTagId}
                       onChange={(e) => set('patientHcTagId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— Select —</option>
                       {patientHcTags.map((t) => (
@@ -842,13 +842,13 @@ export function PatientRegistrationWizard() {
 
                 {/* Specially Abled Category */}
                 <div>
-                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                     SPECIALLY ABLED CATEGORY
                   </label>
                   <select
                     value={form.speciallyAbledCategoryId}
                     onChange={(e) => set('speciallyAbledCategoryId', e.target.value)}
-                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                   >
                     <option value="">— None —</option>
                     {speciallyAbledCategories.map((c) => (
@@ -864,7 +864,7 @@ export function PatientRegistrationWizard() {
                     className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-3 transition-all select-none ${
                       form.isVip
                         ? 'border-[#c6a15b] bg-[#fffbf0] shadow-[0_0_0_4px_rgba(198,161,91,0.16)] dark:border-[#c6a15b] dark:bg-[#2b2413]'
-                        : 'border-[#e1e7f2] bg-[#f8faff] hover:border-[#c6d0e8] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                        : 'border-[#e5e9f2] bg-[#fdf8f2] hover:border-[#c6d0e8] dark:border-[#2a3763] dark:bg-[#0f1830]'
                     }`}
                   >
                     <div
@@ -879,13 +879,13 @@ export function PatientRegistrationWizard() {
                       />
                     </div>
                     <div>
-                      <b className="flex items-center gap-1.5 text-xs font-bold text-[#0e1b33] dark:text-white">
+                      <b className="flex items-center gap-1.5 text-xs font-bold text-[#191919] dark:text-white">
                         <span className="flex size-5 items-center justify-center rounded-[6px] bg-gradient-to-br from-[#ffe9b0] to-[#c6a15b] text-[#5b430a]">
                           ♛
                         </span>
                         VIP Patient
                       </b>
-                      <small className="text-[11px] text-[#67748e] dark:text-[#8fa0d6]">
+                      <small className="text-[11px] text-[#67748e] dark:text-[#a09a90]">
                         Priority queue & lounge access
                       </small>
                     </div>
@@ -895,13 +895,13 @@ export function PatientRegistrationWizard() {
                     onClick={() => set('smsOptIn', !form.smsOptIn)}
                     className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-3 transition-all select-none ${
                       form.smsOptIn
-                        ? 'border-[#2348ff] bg-[#f0f3ff] shadow-[0_0_0_4px_rgba(35,72,255,0.1)] dark:border-[#3b82f6] dark:bg-[#16213e]'
-                        : 'border-[#e1e7f2] bg-[#f8faff] hover:border-[#c6d0e8] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                        ? 'border-[#c66328] bg-[#f8ece5] shadow-[0_0_0_4px_rgba(35,72,255,0.1)] dark:border-[#3b82f6] dark:bg-[#16213e]'
+                        : 'border-[#e5e9f2] bg-[#fdf8f2] hover:border-[#c6d0e8] dark:border-[#2a3763] dark:bg-[#0f1830]'
                     }`}
                   >
                     <div
                       className={`relative h-6 w-10 shrink-0 rounded-full transition-colors ${
-                        form.smsOptIn ? 'bg-gradient-to-r from-[#2348ff] to-[#2dd4bf]' : 'bg-[#d3dae9] dark:bg-[#2a3763]'
+                        form.smsOptIn ? 'bg-gradient-to-r from-[#c66328] to-[#c6a15b]' : 'bg-[#d3dae9] dark:bg-[#2a3763]'
                       }`}
                     >
                       <span
@@ -911,8 +911,8 @@ export function PatientRegistrationWizard() {
                       />
                     </div>
                     <div>
-                      <b className="block text-xs font-bold text-[#0e1b33] dark:text-white">✉ SMS Updates</b>
-                      <small className="text-[11px] text-[#67748e] dark:text-[#8fa0d6]">
+                      <b className="block text-xs font-bold text-[#191919] dark:text-white">✉ SMS Updates</b>
+                      <small className="text-[11px] text-[#67748e] dark:text-[#a09a90]">
                         Token, reports & payment alerts
                       </small>
                     </div>
@@ -922,7 +922,7 @@ export function PatientRegistrationWizard() {
                 {/* Occupation + Income + Mother's Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       OCCUPATION
                     </label>
                     <input
@@ -930,12 +930,12 @@ export function PatientRegistrationWizard() {
                       placeholder="e.g. Teacher"
                       value={form.occupation}
                       onChange={(e) => set('occupation', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     />
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       MONTHLY INCOME
                     </label>
                     <input
@@ -944,12 +944,12 @@ export function PatientRegistrationWizard() {
                       placeholder="e.g. ₹ 45,000"
                       value={form.monthlyIncome}
                       onChange={(e) => set('monthlyIncome', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     />
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       MOTHER'S NAME
                     </label>
                     <input
@@ -957,7 +957,7 @@ export function PatientRegistrationWizard() {
                       placeholder="For minor / verification"
                       value={form.motherName}
                       onChange={(e) => set('motherName', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     />
                   </div>
                 </div>
@@ -969,7 +969,7 @@ export function PatientRegistrationWizard() {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       MOBILE NUMBER <span className="text-[#ff5470]">*</span>
                     </label>
                     <input
@@ -977,17 +977,17 @@ export function PatientRegistrationWizard() {
                       placeholder="+91 ••••• •••••"
                       value={form.mobile}
                       onChange={(e) => set('mobile', e.target.value)}
-                      className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:text-white ${
+                      className={`w-full rounded-xl border p-2.5 text-sm outline-none transition-all focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:text-white ${
                         fieldErrors.mobile
                           ? 'border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-950/20'
-                          : 'border-[#e1e7f2] bg-[#f8faff] focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#0f1830]'
+                          : 'border-[#e5e9f2] bg-[#fdf8f2] focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#0f1830]'
                       }`}
                     />
                     {fieldErrors.mobile && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.mobile}</span>}
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       ALTERNATE PHONE
                     </label>
                     <input
@@ -995,12 +995,12 @@ export function PatientRegistrationWizard() {
                       placeholder="Optional"
                       value={form.alternateMobile}
                       onChange={(e) => set('alternateMobile', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     />
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       WHATSAPP NUMBER
                     </label>
                     <input
@@ -1008,13 +1008,13 @@ export function PatientRegistrationWizard() {
                       placeholder="Optional"
                       value={form.whatsAppNumber}
                       onChange={(e) => set('whatsAppNumber', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                     EMAIL ADDRESS
                   </label>
                   <input
@@ -1022,13 +1022,13 @@ export function PatientRegistrationWizard() {
                     placeholder="name@example.com"
                     value={form.email}
                     onChange={(e) => set('email', e.target.value)}
-                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                   />
                   {fieldErrors.email && <span className="mt-1 block text-[11px] font-semibold text-red-600">{fieldErrors.email}</span>}
                 </div>
 
                 <div>
-                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                     PRESENT ADDRESS
                   </label>
                   <input
@@ -1036,17 +1036,17 @@ export function PatientRegistrationWizard() {
                     placeholder="Flat / Building / Street address"
                     value={form.address}
                     onChange={(e) => set('address', e.target.value)}
-                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                   />
                 </div>
 
-                <div className="rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-3 dark:border-[#2a3763] dark:bg-[#0f1830]">
-                  <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold text-[#0e1b33] dark:text-white">
+                <div className="rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-3 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold text-[#191919] dark:text-white">
                     <input
                       type="checkbox"
                       checked={form.isPermanentSameAsPresent}
                       onChange={(e) => set('isPermanentSameAsPresent', e.target.checked)}
-                      className="accent-[#2348ff]"
+                      className="accent-[#c66328]"
                     />
                     Permanent address same as present address
                   </label>
@@ -1057,7 +1057,7 @@ export function PatientRegistrationWizard() {
                         placeholder="Permanent flat / street address"
                         value={form.permanentAddress}
                         onChange={(e) => set('permanentAddress', e.target.value)}
-                        className="w-full rounded-xl border border-[#e1e7f2] bg-white p-2.5 text-sm text-[#0e1b33] outline-none focus:border-[#2348ff] dark:border-[#2a3763] dark:bg-[#141b31] dark:text-white"
+                        className="w-full rounded-xl border border-[#e5e9f2] bg-white p-2.5 text-sm text-[#191919] outline-none focus:border-[#c66328] dark:border-[#2a3763] dark:bg-[#141b31] dark:text-white"
                       />
                     </div>
                   )}
@@ -1066,13 +1066,13 @@ export function PatientRegistrationWizard() {
                 {/* Country + Nationality + Pincode */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       COUNTRY
                     </label>
                     <select
                       value={form.countryId}
                       onChange={(e) => set('countryId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— India —</option>
                       {countries.map((c) => (
@@ -1082,13 +1082,13 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       NATIONALITY
                     </label>
                     <select
                       value={form.nationalityId}
                       onChange={(e) => set('nationalityId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— Indian —</option>
                       {countries.map((c) => (
@@ -1098,7 +1098,7 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       PINCODE
                     </label>
                     <input
@@ -1106,7 +1106,7 @@ export function PatientRegistrationWizard() {
                       placeholder="e.g. 411001"
                       value={form.pincode}
                       onChange={(e) => set('pincode', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     />
                   </div>
                 </div>
@@ -1114,13 +1114,13 @@ export function PatientRegistrationWizard() {
                 {/* State + City + Area */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       STATE
                     </label>
                     <select
                       value={form.stateId}
                       onChange={(e) => set('stateId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— Select State —</option>
                       {states.map((s) => (
@@ -1130,7 +1130,7 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       CITY
                     </label>
                     <select
@@ -1139,7 +1139,7 @@ export function PatientRegistrationWizard() {
                         set('cityId', e.target.value)
                         set('areaId', '')
                       }}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— Select City —</option>
                       {cities.map((c) => (
@@ -1149,14 +1149,14 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       AREA / LOCALITY
                     </label>
                     <select
                       value={form.areaId}
                       onChange={(e) => set('areaId', e.target.value)}
                       disabled={!form.cityId}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white disabled:opacity-50"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white disabled:opacity-50"
                     >
                       <option value="">— Select Area —</option>
                       {areas.map((a) => (
@@ -1169,13 +1169,13 @@ export function PatientRegistrationWizard() {
                 {/* Patient Category + Referrer */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       PATIENT CATEGORY
                     </label>
                     <select
                       value={form.patientCategoryId}
                       onChange={(e) => set('patientCategoryId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— None —</option>
                       {categories.map((c) => (
@@ -1185,13 +1185,13 @@ export function PatientRegistrationWizard() {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                    <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                       REFERRER
                     </label>
                     <select
                       value={form.referrerId}
                       onChange={(e) => set('referrerId', e.target.value)}
-                      className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                      className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                     >
                       <option value="">— None —</option>
                       {(referrersResult?.items ?? []).map((r) => (
@@ -1202,7 +1202,7 @@ export function PatientRegistrationWizard() {
                 </div>
 
                 <div>
-                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#5b6a8a] dark:text-[#8fa0d6]">
+                  <label className="mb-1.5 flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-[#67748e] dark:text-[#a09a90]">
                     SPECIAL REMARKS / NOTES
                   </label>
                   <input
@@ -1210,7 +1210,7 @@ export function PatientRegistrationWizard() {
                     placeholder="Optional notes"
                     value={form.remarks}
                     onChange={(e) => set('remarks', e.target.value)}
-                    className="w-full rounded-xl border border-[#e1e7f2] bg-[#f8faff] p-2.5 text-sm text-[#0e1b33] outline-none transition-all focus:border-[#2348ff] focus:bg-white focus:ring-4 focus:ring-[#2348ff]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                    className="w-full rounded-xl border border-[#e5e9f2] bg-[#fdf8f2] p-2.5 text-sm text-[#191919] outline-none transition-all focus:border-[#c66328] focus:bg-white focus:ring-4 focus:ring-[#c66328]/10 dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                   />
                 </div>
               </div>
@@ -1220,16 +1220,16 @@ export function PatientRegistrationWizard() {
             {step === 2 && (
               <div className="space-y-6">
                 {/* Guardian / Attender */}
-                <div className="rounded-2xl border border-[#e1e7f2] bg-[#f8faff] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
                   <div className="mb-3 flex items-center justify-between">
                     <div>
-                      <b className="block text-sm font-bold text-[#0e1b33] dark:text-white">Guardian / Attender</b>
-                      <small className="text-xs text-[#67748e] dark:text-[#8fa0d6]">Primary contact & kin details</small>
+                      <b className="block text-sm font-bold text-[#191919] dark:text-white">Guardian / Attender</b>
+                      <small className="text-xs text-[#67748e] dark:text-[#a09a90]">Primary contact & kin details</small>
                     </div>
                     <button
                       type="button"
                       onClick={addContact}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#2348ff] shadow-sm hover:border-[#2348ff] dark:border-white/10 dark:bg-white/5 dark:text-[#7a9aff] transition-all"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#c66328] shadow-sm hover:border-[#c66328] dark:border-white/10 dark:bg-white/5 dark:text-[#e0a989] transition-all"
                     >
                       <Plus className="size-3.5" /> Add Contact
                     </button>
@@ -1243,14 +1243,14 @@ export function PatientRegistrationWizard() {
 
                   <div className="space-y-3">
                     {form.contacts.map((contact, index) => (
-                      <div key={index} className="rounded-xl border border-[#e1e7f2] bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-[#141b31]">
+                      <div key={index} className="rounded-xl border border-[#e5e9f2] bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-[#141b31]">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">TYPE</label>
+                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">TYPE</label>
                             <select
                               value={String(contact.contactType)}
                               onChange={(e) => updateContact(index, { contactType: Number(e.target.value) as ContactType })}
-                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                             >
                               {Object.entries(CONTACT_TYPE_LABELS).map(([v, l]) => (
                                 <option key={v} value={v}>{l}</option>
@@ -1259,12 +1259,12 @@ export function PatientRegistrationWizard() {
                           </div>
 
                           <div>
-                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">NAME *</label>
+                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">NAME *</label>
                             <input
                               type="text"
                               value={contact.name}
                               onChange={(e) => updateContact(index, { name: e.target.value })}
-                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                             />
                             {fieldErrors[`contact-${index}-name`] && (
                               <span className="text-[10px] text-red-600">{fieldErrors[`contact-${index}-name`]}</span>
@@ -1272,23 +1272,23 @@ export function PatientRegistrationWizard() {
                           </div>
 
                           <div>
-                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">RELATIONSHIP</label>
+                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">RELATIONSHIP</label>
                             <input
                               type="text"
                               placeholder="e.g. Father, Spouse"
                               value={contact.relationship ?? ''}
                               onChange={(e) => updateContact(index, { relationship: e.target.value })}
-                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                             />
                           </div>
 
                           <div>
-                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">PHONE</label>
+                            <label className="mb-1 text-[10.5px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">PHONE</label>
                             <input
                               type="tel"
                               value={contact.phone ?? ''}
                               onChange={(e) => updateContact(index, { phone: e.target.value })}
-                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                             />
                           </div>
                         </div>
@@ -1299,7 +1299,7 @@ export function PatientRegistrationWizard() {
                               type="checkbox"
                               checked={contact.isPrimary}
                               onChange={(e) => updateContact(index, { isPrimary: e.target.checked })}
-                              className="accent-[#2348ff]"
+                              className="accent-[#c66328]"
                             />
                             Primary contact
                           </label>
@@ -1317,16 +1317,16 @@ export function PatientRegistrationWizard() {
                 </div>
 
                 {/* Identity Documents */}
-                <div className="rounded-2xl border border-[#e1e7f2] bg-[#f8faff] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
                   <div className="mb-3 flex items-center justify-between">
                     <div>
-                      <b className="block text-sm font-bold text-[#0e1b33] dark:text-white">Identity Documents</b>
-                      <small className="text-xs text-[#67748e] dark:text-[#8fa0d6]">Aadhaar, ABHA, Passport, Voter ID</small>
+                      <b className="block text-sm font-bold text-[#191919] dark:text-white">Identity Documents</b>
+                      <small className="text-xs text-[#67748e] dark:text-[#a09a90]">Aadhaar, ABHA, Passport, Voter ID</small>
                     </div>
                     <button
                       type="button"
                       onClick={addIdentifier}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#2348ff] shadow-sm hover:border-[#2348ff] dark:border-white/10 dark:bg-white/5 dark:text-[#7a9aff] transition-all"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#e5e9f2] bg-white px-3 py-1.5 text-xs font-bold text-[#c66328] shadow-sm hover:border-[#c66328] dark:border-white/10 dark:bg-white/5 dark:text-[#e0a989] transition-all"
                     >
                       <Plus className="size-3.5" /> Add ID
                     </button>
@@ -1340,13 +1340,13 @@ export function PatientRegistrationWizard() {
 
                   <div className="space-y-2.5">
                     {form.identifiers.map((identifier, index) => (
-                      <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e1e7f2] bg-white p-3 dark:border-white/10 dark:bg-[#141b31]">
+                      <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e5e9f2] bg-white p-3 dark:border-white/10 dark:bg-[#141b31]">
                         <div className="w-32">
-                          <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">TYPE</label>
+                          <label className="mb-1 text-[10px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">TYPE</label>
                           <select
                             value={String(identifier.type)}
                             onChange={(e) => updateIdentifier(index, { type: Number(e.target.value) as IdentifierType })}
-                            className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                           >
                             {Object.entries(IDENTIFIER_TYPE_LABELS).map(([v, l]) => (
                               <option key={v} value={v}>{l}</option>
@@ -1356,11 +1356,11 @@ export function PatientRegistrationWizard() {
 
                         {identifier.type === IDENTIFIER_TYPES.Other && (
                           <div className="w-40">
-                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">DOC TYPE</label>
+                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">DOC TYPE</label>
                             <select
                               value={identifier.identityDocumentTypeId ?? ''}
                               onChange={(e) => updateIdentifier(index, { identityDocumentTypeId: e.target.value ? Number(e.target.value) : null })}
-                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                             >
                               <option value="">— Select —</option>
                               {identityDocumentTypes.map((t) => (
@@ -1371,13 +1371,13 @@ export function PatientRegistrationWizard() {
                         )}
 
                         <div className="flex-1 min-w-[140px]">
-                          <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">ID NUMBER *</label>
+                          <label className="mb-1 text-[10px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">ID NUMBER *</label>
                           <input
                             type="text"
                             placeholder="Enter document number"
                             value={identifier.value}
                             onChange={(e) => updateIdentifier(index, { value: e.target.value })}
-                            className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                            className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                           />
                         </div>
 
@@ -1394,13 +1394,13 @@ export function PatientRegistrationWizard() {
                 </div>
 
                 {/* Insurance Policies */}
-                <div className="rounded-2xl border border-[#e1e7f2] bg-[#f8faff] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
-                  <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-[#0e1b33] dark:text-white">
+                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-[#191919] dark:text-white">
                     <input
                       type="checkbox"
                       checked={form.insuranceRequired}
                       onChange={(e) => set('insuranceRequired', e.target.checked)}
-                      className="size-4 accent-[#2348ff]"
+                      className="size-4 accent-[#c66328]"
                     />
                     Insurance / TPA Coverage Required
                   </label>
@@ -1408,11 +1408,11 @@ export function PatientRegistrationWizard() {
                   {form.insuranceRequired && (
                     <div className="mt-4 space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-[#67748e] dark:text-[#8fa0d6]">Add active insurance cards</span>
+                        <span className="text-xs font-semibold text-[#67748e] dark:text-[#a09a90]">Add active insurance cards</span>
                         <button
                           type="button"
                           onClick={addInsurancePolicy}
-                          className="inline-flex items-center gap-1 rounded-xl border border-[#e5e9f2] bg-white px-2.5 py-1 text-xs font-bold text-[#2348ff] shadow-sm hover:border-[#2348ff] dark:border-white/10 dark:bg-white/5 dark:text-[#7a9aff]"
+                          className="inline-flex items-center gap-1 rounded-xl border border-[#e5e9f2] bg-white px-2.5 py-1 text-xs font-bold text-[#c66328] shadow-sm hover:border-[#c66328] dark:border-white/10 dark:bg-white/5 dark:text-[#e0a989]"
                         >
                           <Plus className="size-3" /> Add Policy
                         </button>
@@ -1423,13 +1423,13 @@ export function PatientRegistrationWizard() {
                       )}
 
                       {form.insurancePolicies.map((policy, index) => (
-                        <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e1e7f2] bg-white p-3 dark:border-white/10 dark:bg-[#141b31]">
+                        <div key={index} className="flex flex-wrap items-end gap-2 rounded-xl border border-[#e5e9f2] bg-white p-3 dark:border-white/10 dark:bg-[#141b31]">
                           <div className="flex-1 min-w-[160px]">
-                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">INSURER / TPA *</label>
+                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">INSURER / TPA *</label>
                             <select
                               value={policy.insuranceCompanyId || ''}
                               onChange={(e) => updateInsurancePolicy(index, { insuranceCompanyId: Number(e.target.value) })}
-                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                             >
                               <option value="">— Select Insurer —</option>
                               {insuranceCompanies.map((c) => (
@@ -1439,23 +1439,23 @@ export function PatientRegistrationWizard() {
                           </div>
 
                           <div className="flex-1 min-w-[140px]">
-                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">POLICY NUMBER *</label>
+                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">POLICY NUMBER *</label>
                             <input
                               type="text"
                               placeholder="Policy / Card number"
                               value={policy.policyNumber}
                               onChange={(e) => updateInsurancePolicy(index, { policyNumber: e.target.value })}
-                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                             />
                           </div>
 
                           <div className="w-36">
-                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#5b6a8a] dark:text-[#8fa0d6]">VALID TO</label>
+                            <label className="mb-1 text-[10px] font-extrabold uppercase text-[#67748e] dark:text-[#a09a90]">VALID TO</label>
                             <input
                               type="date"
                               value={policy.policyValidTo ?? ''}
                               onChange={(e) => updateInsurancePolicy(index, { policyValidTo: e.target.value || null })}
-                              className="w-full rounded-lg border border-[#e1e7f2] bg-[#f8faff] p-2 text-xs text-[#0e1b33] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
+                              className="w-full rounded-lg border border-[#e5e9f2] bg-[#fdf8f2] p-2 text-xs text-[#191919] outline-none dark:border-[#2a3763] dark:bg-[#0f1830] dark:text-white"
                             />
                           </div>
 
@@ -1478,23 +1478,23 @@ export function PatientRegistrationWizard() {
             {step === 3 && (
               <div className="space-y-4">
                 {/* Photo Capture */}
-                <div className="rounded-2xl border border-[#e1e7f2] bg-[#f8faff] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
-                  <b className="mb-2 block text-xs font-extrabold tracking-wider text-[#5b6a8a] uppercase dark:text-[#8fa0d6]">
+                <div className="rounded-2xl border border-[#e5e9f2] bg-[#fdf8f2] p-4.5 dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <b className="mb-2 block text-xs font-extrabold tracking-wider text-[#67748e] uppercase dark:text-[#a09a90]">
                     PATIENT PHOTO (OPTIONAL)
                   </b>
                   <PatientPhotoCapture patientId={null} personLabel="new-patient" onCaptured={setPhotoFile} compact />
                 </div>
 
                 {/* Summary Box */}
-                <div className="rounded-2xl border border-[#cbd5ec] bg-[#f8faff] p-5 text-center dark:border-[#2a3763] dark:bg-[#0f1830]">
-                  <b className="text-sm font-bold text-[#0e1b33] dark:text-white">
+                <div className="rounded-2xl border border-[#cbd5ec] bg-[#fdf8f2] p-5 text-center dark:border-[#2a3763] dark:bg-[#0f1830]">
+                  <b className="text-sm font-bold text-[#191919] dark:text-white">
                     Review summary, capture consent & generate OP slip.
                   </b>
-                  <p className="mt-1 text-xs text-[#67748e] dark:text-[#8fa0d6]">
+                  <p className="mt-1 text-xs text-[#67748e] dark:text-[#a09a90]">
                     All required demographic details completed. Click Finish to finalize and generate token.
                   </p>
                   <div className="mt-3.5 flex flex-wrap justify-center gap-2">
-                    <span className="rounded-full border border-[#c9d4ff] bg-[#eef2ff] px-3 py-1 text-xs font-bold text-[#2348ff] dark:border-[#203a9e] dark:bg-[#1a2b66] dark:text-[#7a9aff]">
+                    <span className="rounded-full border border-[#eed0be] bg-[#fdf8f2] px-3 py-1 text-xs font-bold text-[#c66328] dark:border-[#203a9e] dark:bg-[#1a2b66] dark:text-[#e0a989]">
                       Consent ✔
                     </span>
                     <span className="rounded-full border border-[#a7e9d8] bg-[#d9f9f1] px-3 py-1 text-xs font-bold text-[#0c6b5f] dark:border-[#146c5e] dark:bg-[#0c3831] dark:text-[#7df0dd]">
@@ -1527,7 +1527,7 @@ export function PatientRegistrationWizard() {
                   key={i}
                   className={`h-2 rounded-full transition-all ${
                     i === step
-                      ? 'w-6 bg-gradient-to-r from-[#2348ff] to-[#2dd4bf]'
+                      ? 'w-6 bg-gradient-to-r from-[#c66328] to-[#c6a15b]'
                       : 'w-2 bg-[#d3dae9] dark:bg-[#2a3763]'
                   }`}
                 />
@@ -1537,7 +1537,7 @@ export function PatientRegistrationWizard() {
             <button
               type="button"
               onClick={() => showToast('Draft saved', 'You can resume from Front Office → Drafts.')}
-              className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-[#67748e] hover:text-[#0e1b33] dark:text-[#8fa0d6] dark:hover:text-white transition-colors"
+              className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-[#67748e] hover:text-[#191919] dark:text-[#a09a90] dark:hover:text-white transition-colors"
             >
               <Save className="size-3.5" /> Save draft
             </button>
@@ -1620,37 +1620,37 @@ export function PatientRegistrationWizard() {
 
           {/* Form Completeness Meter Card */}
           <div className="rounded-[18px] border border-[#e5e9f2] bg-white p-4.5 shadow-sm dark:border-white/8 dark:bg-[#141b31]">
-            <h4 className="text-xs font-bold text-[#0e1b33] dark:text-white">Form completeness</h4>
-            <p className="mt-0.5 text-[11.5px] text-[#67748e] dark:text-[#8fa0d6]">
+            <h4 className="text-xs font-bold text-[#191919] dark:text-white">Form completeness</h4>
+            <p className="mt-0.5 text-[11.5px] text-[#67748e] dark:text-[#a09a90]">
               {score}% — {score < 50 ? 'add name & age to generate UHID' : score < 85 ? 'looking good — continue to contact' : 'ready for review & print'}
             </p>
             <div className="my-2.5 h-2 overflow-hidden rounded-full bg-[#edf0f8] dark:bg-[#232e52]">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#c6a15b] via-[#2dd4bf] to-[#2348ff] transition-all duration-300"
+                className="h-full rounded-full bg-gradient-to-r from-[#c6a15b] via-[#c6a15b] to-[#c66328] transition-all duration-300"
                 style={{ width: `${score}%` }}
               />
             </div>
             <ul className="space-y-2 pt-1 text-xs">
-              <li className={`flex items-center gap-2 ${checks.name ? 'font-semibold text-[#0e1b33] dark:text-white' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
-                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.name ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+              <li className={`flex items-center gap-2 ${checks.name ? 'font-semibold text-[#191919] dark:text-white' : 'text-[#67748e] dark:text-[#a09a90]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.name ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#c6a15b]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
                   ✓
                 </span>
                 Patient full name
               </li>
-              <li className={`flex items-center gap-2 ${checks.age ? 'font-semibold text-[#0e1b33] dark:text-white' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
-                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.age ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+              <li className={`flex items-center gap-2 ${checks.age ? 'font-semibold text-[#191919] dark:text-white' : 'text-[#67748e] dark:text-[#a09a90]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.age ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#c6a15b]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
                   ✓
                 </span>
                 Age / date of birth
               </li>
-              <li className={`flex items-center gap-2 ${checks.blood ? 'font-semibold text-[#0e1b33] dark:text-white' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
-                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.blood ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+              <li className={`flex items-center gap-2 ${checks.blood ? 'font-semibold text-[#191919] dark:text-white' : 'text-[#67748e] dark:text-[#a09a90]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.blood ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#c6a15b]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
                   ✓
                 </span>
                 Blood group
               </li>
-              <li className={`flex items-center gap-2 ${checks.contact ? 'font-semibold text-[#0e1b33] dark:text-white' : 'text-[#67748e] dark:text-[#8fa0d6]'}`}>
-                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.contact ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#2dd4bf]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
+              <li className={`flex items-center gap-2 ${checks.contact ? 'font-semibold text-[#191919] dark:text-white' : 'text-[#67748e] dark:text-[#a09a90]'}`}>
+                <span className={`flex size-4.5 items-center justify-center rounded-full text-[10px] font-extrabold ${checks.contact ? 'bg-[#d9f9f1] text-[#0a7a68] dark:bg-[#0c3831] dark:text-[#c6a15b]' : 'bg-[#edf0f8] text-[#8a94ad] dark:bg-[#232e52]'}`}>
                   ✓
                 </span>
                 Contact (mobile number)
@@ -1675,7 +1675,7 @@ export function PatientRegistrationWizard() {
               <button
                 type="button"
                 onClick={() => showToast('Supervisor paged', 'Desk support in ~2 min.')}
-                className="flex-1 rounded-xl bg-white py-1.5 text-xs font-bold text-[#16286e] shadow-sm hover:bg-[#eef2ff] transition-all"
+                className="flex-1 rounded-xl bg-white py-1.5 text-xs font-bold text-[#16286e] shadow-sm hover:bg-[#fdf8f2] transition-all"
               >
                 Call supervisor
               </button>
@@ -1687,7 +1687,7 @@ export function PatientRegistrationWizard() {
       {/* Toast popup */}
       {toastMsg && (
         <div className="fixed bottom-5 right-5 z-50 flex items-start gap-3 rounded-2xl border border-white/15 bg-[#0a1330] p-3.5 text-white shadow-2xl animate-fade-in max-w-sm">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#2dd4bf] to-[#2348ff] text-white">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#c6a15b] to-[#c66328] text-white">
             <Check className="size-4 stroke-[3]" />
           </div>
           <div>

@@ -4,13 +4,12 @@
 
 @theme {
   /* Prixo HIS design tokens — the single place to adjust branding.
-     Classic corporate palette (2026-08-08): navy/blue instead of teal-indigo-violet,
-     flat panels instead of glass, tighter radii instead of pill-shaped "shell" corners. */
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
+     Warm Charcoal & Terracotta palette from dashboard.html */
+  --color-primary-50: #fbf5ef;
+  --color-primary-100: #f8ece5;
+  --color-primary-500: #e07f45;
+  --color-primary-600: #c66328;
+  --color-primary-700: #9e4f20;
 
   /* Shell tokens — Pravo Hospital OS Warm Charcoal & Terracotta palette from dashboard.html */
   --color-shell-bg: #f7f2ec;
@@ -201,6 +200,24 @@ body {
 }
 .dark .text-blue-700 {
   color: var(--color-info);
+}
+
+/* Global brand remapping for legacy blue classes to warm terracotta */
+.bg-blue-600,
+.bg-blue-700 {
+  background-color: var(--color-accent) !important;
+}
+.hover\:bg-blue-700:hover,
+.hover\:bg-blue-800:hover {
+  background-color: var(--color-accent-2) !important;
+}
+.text-blue-600,
+.text-blue-700 {
+  color: var(--color-accent) !important;
+}
+.border-blue-500,
+.border-blue-600 {
+  border-color: var(--color-accent) !important;
 }
 
 /*

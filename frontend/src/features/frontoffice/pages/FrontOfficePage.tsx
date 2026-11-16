@@ -116,7 +116,7 @@ function StatCard({
     <button
       type="button"
       onClick={onClick}
-      className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-4 text-left shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-[#141b31]"
+      className="group relative overflow-hidden rounded-[16px] border border-[#e5e9f2] bg-white p-4 text-left shadow-[0_1px_2px_rgba(16,24,64,0.07),0_8px_20px_-10px_rgba(16,24,64,0.18)] transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-[#1f1f1f]"
     >
       <div className="absolute inset-x-0 top-0 h-[3px]" style={{ backgroundColor: accent }} />
       <div className="flex items-center justify-between">
