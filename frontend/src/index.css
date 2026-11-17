@@ -242,6 +242,10 @@ body {
 :where(input, select, textarea):focus-visible {
   outline-offset: 0;
 }
+:where(a, button, input, select, textarea, summary, [tabindex]).outline-none:focus-visible,
+:where(a, button, input, select, textarea, summary, [tabindex])[class*="outline-none"]:focus-visible {
+  outline: none !important;
+}
 
 /* Disabled controls should read as unavailable before they're clicked. */
 :where(button, [role='button']):disabled {

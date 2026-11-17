@@ -282,7 +282,7 @@ export function LoginPage() {
                   autoComplete="username"
                   autoFocus
                   placeholder="e.g. admin or staff ID"
-                  className="w-full bg-transparent py-2.5 pl-2.5 pr-3 text-sm font-medium text-[#191919] outline-none placeholder:text-[#8a94ad] dark:text-white"
+                  className="w-full bg-transparent py-2.5 pl-2.5 pr-3 text-sm font-medium text-[#191919] placeholder:text-[#8a94ad] outline-none ring-0 border-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 !outline-none [outline:none] dark:text-white"
                   {...register('username')}
                 />
               </div>
@@ -306,7 +306,7 @@ export function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
                   placeholder="Enter your password"
-                  className="w-full bg-transparent py-2.5 pl-2.5 pr-14 text-sm font-medium text-[#191919] outline-none placeholder:text-[#8a94ad] dark:text-white"
+                  className="w-full bg-transparent py-2.5 pl-2.5 pr-14 text-sm font-medium text-[#191919] placeholder:text-[#8a94ad] outline-none ring-0 border-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 !outline-none [outline:none] dark:text-white"
                   {...register('password')}
                 />
                 <button
